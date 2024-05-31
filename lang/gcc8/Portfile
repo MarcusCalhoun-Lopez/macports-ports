@@ -10,25 +10,10 @@ version             8.5.0
 revision            2
 subport             libgcc8 { revision 1 }
 platforms           {darwin >= 10 < 15}
-categories          lang
-maintainers         nomaintainer
-# an exception in the license allows dependents to not be GPL
-license             {GPL-3+ Permissive}
+
 description         The GNU compiler collection.
 long_description    The GNU compiler collection, including front ends for \
                     C, C++, Objective-C, Objective-C++ and Fortran.
-
-homepage            https://gcc.gnu.org/
-master_sites        ftp://ftp.funet.fi/pub/mirrors/sources.redhat.com/pub/gcc/releases/gcc-${version}/ \
-                    http://mirror.koddos.net/gcc/releases/gcc-${version}/ \
-                    https://www.mirrorservice.org/sites/ftp.gnu.org/gnu/gcc/gcc-${version}/ \
-                    ftp://ftp.gwdg.de/pub/linux/gcc/releases/gcc-${version}/ \
-                    ftp://gcc.ftp.nluug.nl/mirror/languages/gcc/releases/gcc-${version}/ \
-                    ftp://gcc.gnu.org/pub/gcc/releases/gcc-${version}/ \
-                    gnu:gcc/gcc-${version}
-
-distname            gcc-${version}
-use_xz              yes
 
 checksums           rmd160  e7f3dedec67864006bf9f7e358817ce713b4476e \
                     sha256  d308841a511bb830a6100397b0042db24ce11f642dab6ea6ee44842e5325ed50 \

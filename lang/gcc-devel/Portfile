@@ -6,13 +6,7 @@ PortGroup           gcc_build           1.0
 epoch               5
 name                gcc-devel
 
-homepage            https://gcc.gnu.org/
-
 platforms           {darwin >= 10}
-categories          lang
-maintainers         nomaintainer
-# an exception in the license allows dependents to not be GPL
-license             {GPL-3+ Permissive}
 
 description         The GNU compiler collection
 long_description    {*}${description}, including front ends for \
@@ -32,27 +26,12 @@ checksums       rmd160  daa8953ee2718a28b7c67170fce2300d29e4ebee \
                 sha256  c432cf29aa1f0f362533a868e9c89ed0b21df50bc438ec0d77ba2a2a31571f00 \
                 size    87667912
 
-# Primary releases
-master_sites    https://ftpmirror.gnu.org/gcc/gcc-${version}/ \
-                https://mirror.its.dal.ca/gnu/gcc/gcc-${version}/ \
-                https://mirrors.kernel.org/gnu/gcc/gcc-${version}/ \
-                https://www.mirrorservice.org/sites/ftp.gnu.org/gnu/gcc/gcc-${version}/ \
-                https://ftp-stud.hs-esslingen.de/pub/Mirrors/ftp.gnu.org/gcc/gcc-${version}/ \
-                https://mirror.yongbok.net/gnu/gcc/gcc-${version}/ \
-                http://mirror.koddos.net/gcc/releases/gcc-${version}/ \
-                ftp://ftp.gwdg.de/pub/linux/gcc/releases/gcc-${version}/ \
-                ftp://gcc.ftp.nluug.nl/mirror/languages/gcc/releases/gcc-${version}/ \
-                ftp://gcc.gnu.org/pub/gcc/releases/gcc-${version}/ \
-                gnu:gcc/gcc-${version}
 # snapshots and RC candidates
 master_sites-append \
                 https://mirror.koddos.net/gcc/snapshots/${version}/ \
                 https://bigsearcher.com/mirrors/gcc/snapshots/${version}/ \
                 ftp://ftp.funet.fi/pub/mirrors/sources.redhat.com/pub/gcc/snapshots/${version}/ \
                 ftp://gcc.gnu.org/pub/gcc/snapshots/${version}/
-
-distname        gcc-${version}
-use_xz          yes
 
 depends_build-append \
                     port:texinfo

@@ -11,32 +11,10 @@ version             11.4.0
 revision            1
 
 platforms           {darwin >= 10 < 22}
-categories          lang
-maintainers         nomaintainer
-# an exception in the license allows dependents to not be GPL
-license             {GPL-3+ Permissive}
 
 description         The GNU compiler collection
 long_description    The GNU compiler collection, including front ends for \
                     C, C++, Objective-C, Objective-C++ and Fortran.
-
-homepage            https://gcc.gnu.org/
-
-# Primary releases
-master_sites        https://ftpmirror.gnu.org/gcc/gcc-${version}/ \
-                    https://mirror.its.dal.ca/gnu/gcc/gcc-${version}/ \
-                    https://mirrors.kernel.org/gnu/gcc/gcc-${version}/ \
-                    https://www.mirrorservice.org/sites/ftp.gnu.org/gnu/gcc/gcc-${version}/ \
-                    https://ftp-stud.hs-esslingen.de/pub/Mirrors/ftp.gnu.org/gcc/gcc-${version}/ \
-                    https://mirror.yongbok.net/gnu/gcc/gcc-${version}/ \
-                    http://mirror.koddos.net/gcc/releases/gcc-${version}/ \
-                    ftp://ftp.gwdg.de/pub/linux/gcc/releases/gcc-${version}/ \
-                    ftp://gcc.ftp.nluug.nl/mirror/languages/gcc/releases/gcc-${version}/ \
-                    ftp://gcc.gnu.org/pub/gcc/releases/gcc-${version}/ \
-                    gnu:gcc/gcc-${version}
-
-distname            gcc-${version}
-use_xz              yes
 
 checksums           rmd160  a43fd21a3887af24daa550c4b52fb634e33b633c \
                     sha256  3f2db222b007e8a4a23cd5ba56726ef08e8b1f1eb2055ee72c1402cea73a8dd9 \

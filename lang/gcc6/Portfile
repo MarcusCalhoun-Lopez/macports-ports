@@ -10,23 +10,10 @@ version             6.5.0
 revision            7
 subport             libgcc6 { revision 4 }
 platforms           {darwin < 15}
-categories          lang
-maintainers         nomaintainer
-# an exception in the license allows dependents to not be GPL
-license             {GPL-3+ Permissive}
+
 description         The GNU compiler collection
 long_description    The GNU compiler collection, including front ends for \
                     C, C++, Objective-C, Objective-C++ and Fortran.
-
-homepage            https://gcc.gnu.org/
-master_sites        ftp://ftp.funet.fi/pub/mirrors/sources.redhat.com/pub/gcc/releases/gcc-${version}/ \
-                    ftp://ftp.gwdg.de/pub/linux/gcc/releases/gcc-${version}/ \
-                    ftp://gcc.ftp.nluug.nl/mirror/languages/gcc/releases/gcc-${version}/ \
-                    ftp://gcc.gnu.org/pub/gcc/releases/gcc-${version}/ \
-                    gnu:gcc/gcc-${version}
-
-distname            gcc-${version}
-use_xz              yes
 
 checksums           rmd160  66782b17cff89f22e5e8869fa96bd9a8985f5067 \
                     sha256  7ef1796ce497e89479183702635b14bb7a46b53249209a5e0f999bebf4740945 \

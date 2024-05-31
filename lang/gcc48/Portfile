@@ -9,23 +9,10 @@ epoch               2
 version             4.8.5
 revision            6
 platforms           darwin
-categories          lang
-maintainers         nomaintainer
-# an exception in the license allows dependents to not be GPL
-license             {GPL-3+ Permissive}
+
 description         The GNU compiler collection
 long_description    The GNU compiler collection, including front ends for \
                     C, C++, Objective-C, Objective-C++, Fortran and Java.
-
-homepage            https://gcc.gnu.org/
-master_sites        ftp://ftp.funet.fi/pub/mirrors/sources.redhat.com/pub/gcc/releases/gcc-${version}/ \
-                    ftp://ftp.gwdg.de/pub/linux/gcc/releases/gcc-${version}/ \
-                    ftp://gcc.ftp.nluug.nl/mirror/languages/gcc/releases/gcc-${version}/ \
-                    ftp://gcc.gnu.org/pub/gcc/releases/gcc-${version}/ \
-                    gnu:gcc/gcc-${version}
-
-distname            gcc-${version}
-use_bzip2           yes
 
 checksums           rmd160  98e84aa59bd668c4ab58afea9c7a2d1cc0c6ef7e \
                     sha256  22fb1e7e0f68a63cee631d85b20461d1ea6bda162f03096350e38c8d427ecf23 \

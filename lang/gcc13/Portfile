@@ -6,13 +6,7 @@ PortGroup           gcc_build           1.0
 epoch               0
 name                gcc13
 
-homepage            https://gcc.gnu.org/
-
 platforms           {darwin >= 10}
-categories          lang
-maintainers         nomaintainer
-# an exception in the license allows dependents to not be GPL
-license             {GPL-3+ Permissive}
 
 description         The GNU compiler collection
 long_description    {*}${description}, including front ends for \
@@ -30,22 +24,6 @@ set libcxxname      ${name}-libcxx
 checksums           rmd160  a6d646ed9765f973d3f63ef560edf4a50cf686c3 \
                     sha256  e275e76442a6067341a27f04c5c6b83d8613144004c0413528863dc6b5c743da \
                     size    87858592
-
-# Primary releases
-master_sites        https://ftpmirror.gnu.org/gcc/gcc-${version}/ \
-                    https://mirror.its.dal.ca/gnu/gcc/gcc-${version}/ \
-                    https://mirrors.kernel.org/gnu/gcc/gcc-${version}/ \
-                    https://www.mirrorservice.org/sites/ftp.gnu.org/gnu/gcc/gcc-${version}/ \
-                    https://ftp-stud.hs-esslingen.de/pub/Mirrors/ftp.gnu.org/gcc/gcc-${version}/ \
-                    https://mirror.yongbok.net/gnu/gcc/gcc-${version}/ \
-                    http://mirror.koddos.net/gcc/releases/gcc-${version}/ \
-                    ftp://ftp.gwdg.de/pub/linux/gcc/releases/gcc-${version}/ \
-                    ftp://gcc.ftp.nluug.nl/mirror/languages/gcc/releases/gcc-${version}/ \
-                    ftp://gcc.gnu.org/pub/gcc/releases/gcc-${version}/ \
-                    gnu:gcc/gcc-${version}
-
-distname            gcc-${version}
-use_xz              yes
 
 depends_build-append \
                     port:texinfo
