@@ -8,10 +8,6 @@ version             4.3.6
 revision            16
 platforms           darwin
 
-description         The GNU compiler collection
-long_description    The GNU compiler collection, including front ends for \
-                    C, C++, Objective-C, Objective-C++, Fortran, and Java.
-
 set dcore           gcc-core-${version}.tar.bz2
 set dfort           gcc-fortran-${version}.tar.bz2
 set dcxx            gcc-g++-${version}.tar.bz2
@@ -97,7 +93,7 @@ platform darwin {
 
 configure.dir       ${workpath}/build
 configure.cmd       ${worksrcpath}/configure
-configure.args      --enable-languages=c,c++,objc,obj-c++,java,fortran \
+configure.args      \
                     --libdir=${prefix}/lib/${name} \
                     --includedir=${prefix}/include/${name} \
                     --infodir=${prefix}/share/info \
@@ -232,10 +228,10 @@ select.group        gcc
 select.file         ${filespath}/mp-${name}
 
 # Java support does not compile on 10.4/x86
-platform darwin 8 i386 {
-    configure.args-replace \
-        --enable-languages=c,c++,objc,obj-c++,java,fortran \
-        --enable-languages=c,c++,objc,obj-c++,fortran
+platform darwin 8 {
+    foreach arch [list x86_64 i386] {
+        gcc.languages.${arch}-delete java
+    }
 }
 
 platform powerpc {

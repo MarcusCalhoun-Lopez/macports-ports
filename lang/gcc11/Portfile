@@ -12,10 +12,6 @@ revision            1
 
 platforms           {darwin >= 10 < 22}
 
-description         The GNU compiler collection
-long_description    The GNU compiler collection, including front ends for \
-                    C, C++, Objective-C, Objective-C++ and Fortran.
-
 checksums           rmd160  a43fd21a3887af24daa550c4b52fb634e33b633c \
                     sha256  3f2db222b007e8a4a23cd5ba56726ef08e8b1f1eb2055ee72c1402cea73a8dd9 \
                     size    79837032
@@ -96,13 +92,6 @@ platform darwin {
     configure.pre_args-append --build=${build_arch}-apple-darwin${os.major}
 }
 
-set gcc_configure_langs {c c++ objc obj-c++ lto fortran}
-if {${subport} eq ${name} && ${build_arch} ne "i386"} {
-    # jit compiler is not building on i386 systems
-    #   https://trac.macports.org/ticket/61130
-    lappend gcc_configure_langs jit
-}
-
 set gcc_as ${prefix}/bin/as
 set gcc_ld ${prefix}/bin/ld
 set gcc_ar ${prefix}/bin/ar
@@ -112,7 +101,7 @@ set mp_extra_rpath  ${prefix}/lib/libgcc
 
 configure.dir       ${workpath}/build
 configure.cmd       ${worksrcpath}/configure
-configure.args      --enable-languages=[join ${gcc_configure_langs} ","] \
+configure.args      \
                     --libdir=${prefix}/lib/${name} \
                     --includedir=${prefix}/include/${name} \
                     --infodir=${prefix}/share/info \

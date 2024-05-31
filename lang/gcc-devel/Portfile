@@ -8,11 +8,8 @@ name                gcc-devel
 
 platforms           {darwin >= 10}
 
-description         The GNU compiler collection
-long_description    {*}${description}, including front ends for \
-                    C, C++, Objective-C, Objective-C++ and Fortran. \
-                    This is an !experimental!, !BETA! version \
-                    built from GCC snapshots.
+long_description    This is an !experimental!, !BETA! version \
+                    built from GCC snapshots. The GNU compiler collection,
 
 set libgccname      lib${name}
 
@@ -59,13 +56,6 @@ platform darwin {
     configure.pre_args-append --build=${build_arch}-apple-darwin${os.major}
 }
 
-set gcc_configure_langs {c c++ objc obj-c++ lto fortran}
-if {${subport} eq ${name} && ${build_arch} ne "i386"} {
-    # jit compiler is not building on i386 systems
-    # https://trac.macports.org/ticket/61130
-    lappend gcc_configure_langs jit
-}
-
 proc get_clean_sysroot {} {
     global configure.sdkroot
     # if the sdkroot is one of the current, rapidly changing SDKS, use the generic one
@@ -76,7 +66,7 @@ set mp_extra_rpath  ${prefix}/lib/libgcc
 
 configure.dir       ${workpath}/build
 configure.cmd       ${worksrcpath}/configure
-configure.args      --enable-languages=[join ${gcc_configure_langs} ","] \
+configure.args      \
                     --libdir=${prefix}/lib/${name} \
                     --includedir=${prefix}/include/${name} \
                     --infodir=${prefix}/share/info \

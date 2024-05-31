@@ -9,10 +9,6 @@ version             4.4.7
 revision            15
 platforms           darwin
 
-description         The GNU compiler collection
-long_description    The GNU compiler collection, including front ends for \
-                    C, C++, Objective-C, Objective-C++, Fortran, and Java.
-
 set dcore           gcc-core-${version}.tar.bz2
 set dfort           gcc-fortran-${version}.tar.bz2
 set dcxx            gcc-g++-${version}.tar.bz2
@@ -91,7 +87,7 @@ platform darwin {
 
 configure.dir       ${workpath}/build
 configure.cmd       ${worksrcpath}/configure
-configure.args      --enable-languages=c,c++,objc,obj-c++,java,fortran \
+configure.args      \
                     --libdir=${prefix}/lib/${name} \
                     --includedir=${prefix}/include/${name} \
                     --infodir=${prefix}/share/info \

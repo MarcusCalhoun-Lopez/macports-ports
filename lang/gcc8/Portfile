@@ -11,10 +11,6 @@ revision            2
 subport             libgcc8 { revision 1 }
 platforms           {darwin >= 10 < 15}
 
-description         The GNU compiler collection.
-long_description    The GNU compiler collection, including front ends for \
-                    C, C++, Objective-C, Objective-C++ and Fortran.
-
 checksums           rmd160  e7f3dedec67864006bf9f7e358817ce713b4476e \
                     sha256  d308841a511bb830a6100397b0042db24ce11f642dab6ea6ee44842e5325ed50 \
                     size    63841008
@@ -91,20 +87,9 @@ platform darwin {
     configure.pre_args-append --build=${build_arch}-apple-darwin${os.major}
 }
 
-set gcc_configure_langs {c c++ objc obj-c++ lto fortran}
-if {${subport} eq "gcc8"} {
-
-    # the jit is not building on i386 systems
-    # see https://trac.macports.org/ticket/61130
-    if {${build_arch} ne "i386"} {
-        lappend gcc_configure_langs jit
-    }
-
-}
-
 configure.dir       ${workpath}/build
 configure.cmd       ${worksrcpath}/configure
-configure.args      --enable-languages=[join ${gcc_configure_langs} ","] \
+configure.args      \
                     --libdir=${prefix}/lib/${name} \
                     --includedir=${prefix}/include/${name} \
                     --infodir=${prefix}/share/info \

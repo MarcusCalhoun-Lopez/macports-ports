@@ -11,10 +11,6 @@ revision            17
 subport             libgcc45 { revision 16 }
 platforms           darwin
 
-description         The GNU compiler collection
-long_description    The GNU compiler collection, including front ends for \
-                    C, C++, Objective-C, Objective-C++, Fortran, and Java.
-
 set dcore           gcc-core-${version}.tar.bz2
 set dfort           gcc-fortran-${version}.tar.bz2
 set dcxx            gcc-g++-${version}.tar.bz2
@@ -112,7 +108,7 @@ platform darwin {
 
 configure.dir       ${workpath}/build
 configure.cmd       ${worksrcpath}/configure
-configure.args      --enable-languages=c,c++,objc,obj-c++,java,fortran \
+configure.args      \
                     --libdir=${prefix}/lib/${name} \
                     --includedir=${prefix}/include/${name} \
                     --infodir=${prefix}/share/info \
@@ -230,9 +226,9 @@ if {${subport} == "libgcc45"} {
         --libdir=${prefix}/lib/${name} \
         --libdir=${prefix}/lib/libgcc
 
-    configure.args-replace \
-        --enable-languages=c,c++,objc,obj-c++,java,fortran \
-        --enable-languages=c,c++,objc,obj-c++
+    foreach arch {arm64 x86_64 i386 ppc ppc64} {
+        gcc.languages.${arch} c c++ objc obj-c++
+    }
 
     # TODO: Possibly disable bootstrap with appropriate configure flags.
     #       the problem is that libstdc++'s configure script tests for tls support

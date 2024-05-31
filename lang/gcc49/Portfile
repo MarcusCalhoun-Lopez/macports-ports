@@ -9,10 +9,6 @@ version             4.9.4
 revision            6
 platforms           darwin
 
-description         The GNU compiler collection
-long_description    The GNU compiler collection, including front ends for \
-                    C, C++, Objective-C, Objective-C++, Fortran and Java.
-
 distname            gcc-${version}
 
 checksums           rmd160  180d4aaa9d2c34084f3f01261f8cb00ddb921529 \
@@ -71,7 +67,7 @@ platform darwin {
 
 configure.dir       ${workpath}/build
 configure.cmd       ${worksrcpath}/configure
-configure.args      --enable-languages=c,c++,objc,obj-c++,lto,fortran,java \
+configure.args      \
                     --libdir=${prefix}/lib/${name} \
                     --includedir=${prefix}/include/${name} \
                     --infodir=${prefix}/share/info \

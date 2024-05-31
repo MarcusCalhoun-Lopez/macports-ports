@@ -11,10 +11,6 @@ revision            7
 subport             libgcc6 { revision 4 }
 platforms           {darwin < 15}
 
-description         The GNU compiler collection
-long_description    The GNU compiler collection, including front ends for \
-                    C, C++, Objective-C, Objective-C++ and Fortran.
-
 checksums           rmd160  66782b17cff89f22e5e8869fa96bd9a8985f5067 \
                     sha256  7ef1796ce497e89479183702635b14bb7a46b53249209a5e0f999bebf4740945 \
                     size    74355588
@@ -81,7 +77,7 @@ platform darwin 8 i386 {
 
 configure.dir       ${workpath}/build
 configure.cmd       ${worksrcpath}/configure
-configure.args      --enable-languages=c,c++,objc,obj-c++,lto,fortran \
+configure.args      \
                     --libdir=${prefix}/lib/${name} \
                     --includedir=${prefix}/include/${name} \
                     --infodir=${prefix}/share/info \
@@ -189,9 +185,9 @@ if {${subport} eq "libgcc6"} {
         --libdir=${prefix}/lib/${name} \
         --libdir=${prefix}/lib/libgcc
 
-    configure.args-replace \
-        --enable-languages=c,c++,objc,obj-c++,lto,fortran \
-        --enable-languages=fortran
+    foreach arch {arm64 x86_64 i386 ppc ppc64} {
+        gcc.languages.${arch} fortran
+    }
 
     # TODO: Possibly disable bootstrap with appropriate configure flags.
     #       the problem is that libstdc++'s configure script tests for tls support

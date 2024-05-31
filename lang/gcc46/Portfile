@@ -10,10 +10,6 @@ version             4.6.4
 revision            15
 platforms           darwin
 
-description         The GNU compiler collection
-long_description    The GNU compiler collection, including front ends for \
-                    C, C++, Objective-C, Objective-C++, and Fortran.
-
 set ecj             ecj-4.5.jar
 
 gcc.tag             :gcc
@@ -92,10 +88,14 @@ platform darwin {
     configure.pre_args-append --build=${build_arch}-apple-darwin${os.major}
 }
 
+# 'java' and 'go' lead to compilation errors on 10.5/Xcode 3.x
+foreach arch {arm64 x86_64 i386 ppc ppc64} {
+    gcc.languages.${arch}-delete java
+}
+
 configure.dir       ${workpath}/build
 configure.cmd       ${worksrcpath}/configure
-# 'java' and 'go' lead to compilation errors on 10.5/Xcode 3.x
-configure.args      --enable-languages=c,c++,objc,obj-c++,lto,fortran \
+configure.args      \
                     --libdir=${prefix}/lib/${name} \
                     --includedir=${prefix}/include/${name} \
                     --infodir=${prefix}/share/info \
