@@ -89,8 +89,6 @@ license_noconflict  gmp mpfr ppl libmpc
 # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=81797
 patchfiles-append   notparallel-install-headers.patch
 
-set major           [lindex [split ${version} .-] 0]
-
 platform darwin {
     configure.pre_args-append --build=${build_arch}-apple-darwin${os.major}
 }
@@ -106,11 +104,11 @@ configure.args      --enable-languages=c,c++,objc,obj-c++,lto,fortran \
                     --includedir=${prefix}/include/${name} \
                     --infodir=${prefix}/share/info \
                     --mandir=${prefix}/share/man \
-                    --datarootdir=${prefix}/share/gcc-${major} \
+                    --datarootdir=${prefix}/share/gcc-${gcc.suffix} \
                     --with-local-prefix=${prefix} \
                     --with-system-zlib \
                     --disable-nls \
-                    --program-suffix=-mp-${major} \
+                    --program-suffix=-mp-${gcc.suffix} \
                     --with-gxx-include-dir=${prefix}/include/${name}/c++/ \
                     --with-gmp=${prefix} \
                     --with-mpfr=${prefix} \
@@ -324,7 +322,7 @@ if {${subport} eq "libgcc7"} {
 
         foreach file [glob ${destroot}${prefix}/share/{info,man/man7}/*] {
             set extension [file extension ${file}]
-            set newfile [regsub "${extension}$" ${file} "-mp-${major}${extension}"]
+            set newfile [regsub "${extension}$" ${file} "-mp-${gcc.suffix}${extension}"]
 
             file rename ${file} ${newfile}
         }
@@ -389,4 +387,4 @@ configure.universal_args
 
 livecheck.type      regex
 livecheck.url       https://ftp.gnu.org/gnu/gcc/
-livecheck.regex     gcc-(${major}\\.\[0-9.\]+)/
+livecheck.regex     gcc-(${gcc.major}\\.\[0-9.\]+)/

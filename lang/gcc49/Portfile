@@ -76,8 +76,6 @@ post-extract {
     ln -s ${prefix}/libexec/isl18/include/isl ${worksrcpath}/gcc
 }
 
-set major           [join [lrange [split ${version} .-] 0 1] .]
-
 platform darwin {
     configure.pre_args-append --build=${build_arch}-apple-darwin${os.major}
 }
@@ -89,11 +87,11 @@ configure.args      --enable-languages=c,c++,objc,obj-c++,lto,fortran,java \
                     --includedir=${prefix}/include/${name} \
                     --infodir=${prefix}/share/info \
                     --mandir=${prefix}/share/man \
-                    --datarootdir=${prefix}/share/gcc-${major} \
+                    --datarootdir=${prefix}/share/gcc-${gcc.suffix} \
                     --with-local-prefix=${prefix} \
                     --with-system-zlib \
                     --disable-nls \
-                    --program-suffix=-mp-${major} \
+                    --program-suffix=-mp-${gcc.suffix} \
                     --with-gxx-include-dir=${prefix}/include/${name}/c++/ \
                     --with-gmp=${prefix} \
                     --with-mpfr=${prefix} \
@@ -197,7 +195,7 @@ post-destroot {
 
     foreach file [glob ${destroot}${prefix}/share/{info,man/man7}/*] {
         set extension [file extension ${file}]
-        set newfile [regsub "${extension}$" ${file} "-mp-${major}${extension}"]
+        set newfile [regsub "${extension}$" ${file} "-mp-${gcc.suffix}${extension}"]
 
         file rename ${file} ${newfile}
     }
@@ -220,7 +218,7 @@ post-destroot {
             }
         }
     }
-    move ${destroot}${prefix}/lib/${name}/pkgconfig/libgcj-${major}.pc ${destroot}${prefix}/lib/pkgconfig/
+    move ${destroot}${prefix}/lib/${name}/pkgconfig/libgcj-${gcc.suffix}.pc ${destroot}${prefix}/lib/pkgconfig/
 }
 
 select.group        gcc
@@ -255,4 +253,4 @@ configure.universal_args
 
 livecheck.type      regex
 livecheck.url       https://ftp.gnu.org/gnu/gcc/
-livecheck.regex     gcc-(${major}\\.\[0-9.\]+)/
+livecheck.regex     gcc-(${gcc.major}\\.\[0-9.\]+)/

@@ -110,8 +110,6 @@ if { ${configure.build_arch} eq "i386" } {
       "DISABLE_XCODE_AS_CLANG_SEARCH=1"
 }
 
-set major           [join [lrange [split ${version} .-] 0 1] .]
-
 worksrcdir          gcc-${version}
 
 post-extract {
@@ -129,12 +127,12 @@ configure.args      --enable-languages=c,c++,objc,obj-c++,java,fortran \
                     --includedir=${prefix}/include/${name} \
                     --infodir=${prefix}/share/info \
                     --mandir=${prefix}/share/man \
-                    --datarootdir=${prefix}/share/gcc-${major} \
+                    --datarootdir=${prefix}/share/gcc-${gcc.suffix} \
                     --with-local-prefix=${prefix} \
                     --with-libiconv-prefix=${prefix} \
                     --with-system-zlib \
                     --disable-nls \
-                    --program-suffix=-mp-${major} \
+                    --program-suffix=-mp-${gcc.suffix} \
                     --with-gxx-include-dir=${prefix}/include/${name}/c++/ \
                     --with-gmp=${prefix} \
                     --with-mpfr=${prefix} \
@@ -308,7 +306,7 @@ post-destroot {
 
     foreach file [glob ${destroot}${prefix}/share/{info,man/man7}/*] {
         set extension [file extension ${file}]
-        set newfile [regsub "${extension}$" ${file} "-mp-${major}${extension}"]
+        set newfile [regsub "${extension}$" ${file} "-mp-${gcc.suffix}${extension}"]
 
         file rename ${file} ${newfile}
     }
@@ -374,4 +372,4 @@ configure.universal_args
 
 livecheck.type      regex
 livecheck.url       https://ftp.gnu.org/gnu/gcc/
-livecheck.regex     gcc-(${major}\\.\[0-9.\]+)/
+livecheck.regex     gcc-(${gcc.major}\\.\[0-9.\]+)/
