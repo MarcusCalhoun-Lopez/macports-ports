@@ -369,7 +369,3 @@ configure.universal_cflags
 configure.universal_cxxflags
 configure.universal_ldflags
 configure.universal_args
-
-livecheck.type      regex
-livecheck.url       https://ftp.gnu.org/gnu/gcc/
-livecheck.regex     gcc-(${gcc.major}\\.\[0-9.\]+)/

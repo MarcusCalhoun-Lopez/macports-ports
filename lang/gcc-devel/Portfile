@@ -544,7 +544,5 @@ if { ${subport} ne ${libcxxname} } {
 
 }
 
-livecheck.type      regex
 livecheck.url       ftp://gcc.gnu.org/pub/gcc/snapshots/
-set                 maj [lindex [split ${version} .-] 0]
-livecheck.regex     LATEST-${maj} -> (${maj}-\[0-9\]+)
+livecheck.regex     LATEST-${gcc.major} -> (${gcc.major}-\[0-9\]+)

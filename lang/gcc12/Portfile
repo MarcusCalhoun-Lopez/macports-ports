@@ -483,7 +483,3 @@ if { ${subport} ne ${libcxxname} } {
     configure.universal_args
 
 }
-
-livecheck.type      regex
-livecheck.url       http://mirror.koddos.net/gcc/releases/
-livecheck.regex     gcc-(${gcc.major}\\.\[0-9.\]+)/
