@@ -93,10 +93,115 @@ default gcc.major   {[expr {[vercmp ${version} >= 5] ? [lindex [split ${version}
 options gcc.suffix
 default gcc.suffix  {[expr {${name} eq "gcc-devel" ? "devel" : ${gcc.major}}]}
 
+# convenience options for include directory stricture (gcc for Libgcc and gccX for GCC version X)
+options gcc.gcc_name
+default gcc.gcc_name {[expr {${subport} eq ${name} ? ${name} : "gcc"}]}
+
+# convenience options for library directory strictures (libgcc for Libgcc and gccX for GCC version X)
+options gcc.libgcc_name
+default gcc.libgcc_name {[expr {${subport} eq ${name} ? ${name} : "libgcc"}]}
+
+# SDK to be used by GCC if configure.sdkroot is not empty
+#     avoid current, rapidly changing SDKS and use the generic one instread
+options gcc.sdkroot
+default gcc.sdkroot {[regsub {MacOSX[1-9]+\.[0-9]+\.sdk} ${configure.sdkroot} {MacOSX.sdk}]}
+
+# tools to be used by GCC
+options gcc.as
+default gcc.as {${prefix}/bin/as}
+options gcc.ld
+default gcc.ld {${prefix}/bin/ld}
+options gcc.ar
+default gcc.ar {${prefix}/bin/ar}
+
+# recent GCC versions use rpath
+#     see https://trac.macports.org/ticket/65472
+#     see https://trac.macports.org/ticket/63115
+options gcc.rpath
+default gcc.rpath {${prefix}/lib/libgcc}
+
+# GCC configure options
+#     each option can have up to three parts
+#         value for `configure` script
+#         GCC version option was introduced (all versions if does not exist)
+#         GCC version option was removed (not removed if does not exist)
+#
+# `--disable-tls` does not limit functionality
+#     it only determines how std::call_once works
+#     see https://lists.macports.org/pipermail/macports-dev/2017-August/036209.html
+# we should be using `--with-build-sysroot`
+#     using `--with-sysroot` changes the behavior of the installed gcc to look in that sysroot by default instead of /
+#     using `--with-build-sysroot` is supposed to be used during the build but not impact the installed product
+#     unfortunately, the build fails because the value doesn't get plumbed everywhere it is supposed to
+#     see https://trac.macports.org/ticket/53726
+#     see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79885
+# for `--with-build-config=bootstrap-debug`,
+#     see https://trac.macports.org/ticket/47410
+#     see https://trac.macports.org/ticket/51245
+options gcc.pre_args
+default gcc.pre_args    {}
+options gcc.args
+default gcc.args    {   --libdir=${prefix}/lib/${gcc.libgcc_name} \
+                        --includedir=${prefix}/include/${gcc.gcc_name} \
+                        --infodir=${prefix}/share/info \
+                        --mandir=${prefix}/share/man \
+                        {--datarootdir=${prefix}/share/gcc-${gcc.suffix}    4.5} \
+                        {--datadir=${prefix}/share/${name}                  4.3 4.5} \
+                        --with-local-prefix=${prefix} \
+                        --with-system-zlib \
+                        --disable-nls \
+                        --program-suffix=-mp-${gcc.suffix} \
+                        --with-gxx-include-dir=${prefix}/include/${gcc.gcc_name}/c++ \
+                        --with-gmp=${prefix} \
+                        --with-mpfr=${prefix} \
+                        {--with-mpc=${prefix}               4.5} \
+                        {--with-isl=${prefix}               6} \
+                        {--with-isl=${prefix}/libexec/isl18 4.9 6} \
+                        {--with-isl=${prefix}/libexec/isl14 4.8 4.9} \
+                        {--disable-isl-version-check        4.8 5} \
+                        {--with-cloog=${prefix}             4.6 5} \
+                        {--disable-cloog-version-check      4.6 5} \
+                        {--enable-cloog-backend=isl         4.6 4.8} \
+                        {--with-ppl=${prefix}               4.6 4.8} \
+                        {--disable-ppl-version-check        4.6 4.8} \
+                        {--with-zstd=${prefix}      10} \
+                        {--enable-checking=release  10} \
+                        {--enable-stage1-checking   4.3 10} \
+                        --disable-multilib \
+                        {--enable-lto               4.6} \
+                        {--enable-libstdcxx-time    4.6} \
+                        {--with-build-config=bootstrap-debug    4.5} \
+                        --with-as=${gcc.as} \
+                        --with-ld=${gcc.ld} \
+                        --with-ar=${gcc.ar} \
+                        --with-bugurl=https://trac.macports.org/newticket \
+                        {--enable-host-shared   8} \
+                        {--with-darwin-extra-rpath=${gcc.rpath} 10} \
+                        --with-libiconv-prefix=${prefix} \
+                        --disable-tls \
+                    }
+options gcc.post_args
+default gcc.post_args   {[expr {${configure.sdkroot} eq "" ? "" : "--with-sysroot=${gcc.sdkroot}"}] \
+                        --with-pkgversion="MacPorts\ ${name}\ ${version}_${revision}${portvariants}" \
+                        }
+
 ####################################################################################################################################
 # internal procedures
 ####################################################################################################################################
 namespace eval gcc_build {}
+
+# utility function to add args based on `${version}`
+proc gcc_build::add_args {args gcc.args} {
+    foreach arg ${gcc.args} {
+        if { [llength ${arg}] == 1 ||
+             ([llength ${arg}] == 2 && [vercmp [lindex ${arg} 1] <= [option version]]) ||
+             ([llength ${arg}] == 3 && [vercmp [lindex ${arg} 1] <= [option version]] && [vercmp [option version] < [lindex ${arg} 2]])
+         } {
+            configure.${args}-delete [lindex ${arg} 0]
+            configure.${args}-append [lindex ${arg} 0]
+        }
+    }
+}
 
 proc gcc_build::callback {} {
     global prefix name subport version
@@ -105,6 +210,15 @@ proc gcc_build::callback {} {
         use_xz      yes
     } else {
         use_bzip2   yes
+    }
+
+    # set `--configure` arguments
+    gcc_build::add_args pre_args    [option gcc.pre_args]
+    gcc_build::add_args args        [option gcc.args]
+    gcc_build::add_args post_args   [option gcc.post_args]
+
+    if { [variant_exists universal] && [variant_isset universal] } {
+        configure.args-delete   --disable-multilib
     }
 
     # set `--enable-languages`

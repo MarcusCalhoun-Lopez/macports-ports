@@ -95,41 +95,6 @@ foreach arch {arm64 x86_64 i386 ppc ppc64} {
 
 configure.dir       ${workpath}/build
 configure.cmd       ${worksrcpath}/configure
-configure.args      \
-                    --libdir=${prefix}/lib/${name} \
-                    --includedir=${prefix}/include/${name} \
-                    --infodir=${prefix}/share/info \
-                    --mandir=${prefix}/share/man \
-                    --datarootdir=${prefix}/share/gcc-${gcc.suffix} \
-                    --with-local-prefix=${prefix} \
-                    --with-libiconv-prefix=${prefix} \
-                    --with-system-zlib \
-                    --disable-nls \
-                    --program-suffix=-mp-${gcc.suffix} \
-                    --with-gxx-include-dir=${prefix}/include/${name}/c++/ \
-                    --with-gmp=${prefix} \
-                    --with-mpfr=${prefix} \
-                    --with-mpc=${prefix} \
-                    --with-ppl=${prefix} \
-                    --with-cloog=${prefix} --enable-cloog-backend=isl \
-                    --disable-cloog-version-check \
-                    --enable-stage1-checking \
-                    --disable-multilib \
-                    --enable-lto \
-                    --enable-libstdcxx-time \
-                    --with-build-config=bootstrap-debug \
-                    --with-as=${prefix}/bin/as \
-                    --with-ld=${prefix}/bin/ld \
-                    --with-ar=${prefix}/bin/ar \
-                    --with-bugurl=https://trac.macports.org/newticket
-# remove this asap when upstream implements a check for ppl 1.0
-configure.args-append --disable-ppl-version-check
-
-# see https://lists.macports.org/pipermail/macports-dev/2017-August/036209.html
-# --disable-tls does not limit functionality
-# it only determines how std::call_once works
-configure.args-append \
-                    --disable-tls
 
 configure.env-append \
                     AR_FOR_TARGET=${prefix}/bin/ar \
@@ -153,35 +118,16 @@ if {${os.platform} eq "darwin" && ([vercmp $xcodeversion 9.0] > 0)} {
     }
 }
 
-pre-configure {
-    configure.args-append --with-pkgversion="MacPorts ${name} ${version}_${revision}${portvariants}"
-
-    if {${configure.sdkroot} ne ""} {
-        # We should be using --with-build-sysroot here.  Using --with-sysroot
-        # changes the behavior of the installed gcc to look in that sysroot
-        # by default instead of /.  Using --with-build-sysroot is supposed
-        # to be used during the build but not impact the installed product.
-        # Unfortunately, the build fails because the value doesn't get
-        # plumbed everywhere it is supposed to.
-        #
-        # https://trac.macports.org/ticket/53726
-        # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79885
-        #
-        # Note that macports toolchains will fail to compile gcc unless
-        # the DevSDK is installed due to another gcc build system bug:
-        # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=80203
-        configure.args-append --with-sysroot="${configure.sdkroot}"
-    }
-
-    # TODO: Remove when base automatically creates configure.dir (2.2.1?).
-    file mkdir ${configure.dir}
-}
-
 # http://trac.macports.org/ticket/29067
 compiler.blacklist-append gcc-4.0
 
 # http://trac.macports.org/ticket/29104
 compiler.blacklist-append {llvm-gcc-4.2 < 2336.1}
+
+platform darwin 8 {
+    # see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=45248
+    configure.args-append --with-dwarf2
+}
 
 # "-stdlib" would be passed on to the bootstrap compiler if present
 configure.cxx_stdlib
@@ -230,19 +176,11 @@ post-destroot {
 select.group        gcc
 select.file         ${filespath}/mp-${name}
 
-platform darwin 8 {
-    # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=45248
-    configure.args-append --with-dwarf2
-}
-
 platform powerpc {
     configure.universal_archs ppc ppc64
 }
 platform i386 {
     configure.universal_archs i386 x86_64
-}
-variant universal {
-    configure.args-delete --disable-multilib
 }
 # the generated compiler doesn't accept -arch
 configure.env-append \

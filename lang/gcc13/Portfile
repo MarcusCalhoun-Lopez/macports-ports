@@ -42,49 +42,10 @@ platform darwin {
     configure.pre_args-append --build=${build_arch}-apple-darwin${os.major}
 }
 
-proc get_clean_sysroot {} {
-    global configure.sdkroot
-    # if the sdkroot is one of the current, rapidly changing SDKS, use the generic one
-    return [regsub {MacOSX1[1-9]\.[0-9]+\.sdk} ${configure.sdkroot} {MacOSX.sdk}]
-}
-
 set mp_extra_rpath  ${prefix}/lib/libgcc
 
 configure.dir       ${workpath}/build
 configure.cmd       ${worksrcpath}/configure
-configure.args      \
-                    --libdir=${prefix}/lib/${name} \
-                    --includedir=${prefix}/include/${name} \
-                    --infodir=${prefix}/share/info \
-                    --mandir=${prefix}/share/man \
-                    --datarootdir=${prefix}/share/gcc-${gcc.suffix} \
-                    --with-local-prefix=${prefix} \
-                    --with-system-zlib \
-                    --disable-nls \
-                    --program-suffix=-mp-${gcc.suffix} \
-                    --with-gxx-include-dir=${prefix}/include/${name}/c++/ \
-                    --with-gmp=${prefix} \
-                    --with-mpfr=${prefix} \
-                    --with-mpc=${prefix} \
-                    --with-isl=${prefix} \
-                    --with-zstd=${prefix} \
-                    --enable-checking=release \
-                    --disable-multilib \
-                    --enable-lto \
-                    --enable-libstdcxx-time \
-                    --with-build-config=bootstrap-debug \
-                    --with-as=${prefix}/bin/as \
-                    --with-ld=${prefix}/bin/ld \
-                    --with-ar=${prefix}/bin/ar \
-                    --with-bugurl=https://trac.macports.org/newticket \
-                    --enable-host-shared \
-                    --with-darwin-extra-rpath=${mp_extra_rpath} \
-                    --with-libiconv-prefix=${prefix}
-
-# see https://lists.macports.org/pipermail/macports-dev/2017-August/036209.html
-# --disable-tls does not limit functionality
-# it only determines how std::call_once works
-configure.args-append  --disable-tls
 
 # Disable ccache
 configure.ccache    no
@@ -99,7 +60,9 @@ if { ${subport} ne ${libcxxname} && ${os.platform} eq "darwin" } {
              ${os.major} < 11 || ${os.major} == 17 } \
     {
         # Skip bootstrap comparison entirely
+        pre-configure {
         configure.args-replace --with-build-config=bootstrap-debug --without-build-config
+        }
         post-patch {
             reinplace {s|^do-compare =|do-compare = /usr/bin/true|g} \
                 ${worksrcpath}/Makefile.in \
@@ -164,30 +127,10 @@ if {${os.platform} eq "darwin" && ${os.major} >= 22} {
         # https://discussions.apple.com/thread/255137447
         # https://developer.apple.com/forums/thread/737707
         # https://github.com/Homebrew/homebrew-core/issues/145991
-        configure.args-replace --with-ld=${prefix}/bin/ld --with-ld=${prefix}/bin/ld-classic
+        gcc.ld      ${prefix}/bin/ld-classic
         # Ensure ld64 is installed with the correct variant need for ld-classic
         require_active_variants ld64 ld64_xcode
     }
-}
-
-pre-configure {
-
-    # Set package info
-    configure.args-append --with-pkgversion="MacPorts ${name} ${version}_${revision}${portvariants}"
-
-    if {${configure.sdkroot} ne ""} {
-        # We should be using --with-build-sysroot here.  Using --with-sysroot
-        # changes the behavior of the installed gcc to look in that sysroot
-        # by default instead of /.  Using --with-build-sysroot is supposed
-        # to be used during the build but not impact the installed product.
-        # Unfortunately, the build fails because the value doesn't get
-        # plumbed everywhere it is supposed to.
-        #
-        # https://trac.macports.org/ticket/53726
-        # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79885
-        configure.args-append --with-sysroot="[get_clean_sysroot]"
-    }
-
 }
 
 set libcxx_incpath ${prefix}/libexec/${name}/libc++/include/c++/v1
@@ -373,19 +316,6 @@ if {${subport} eq ${libgccname}} {
     depends_build-append {*}${depends_lib}
     depends_lib          port:zlib port:libiconv
 
-    configure.args-replace \
-        --libdir=${prefix}/lib/${name} \
-        --libdir=${prefix}/lib/libgcc
-
-    # see https://trac.macports.org/ticket/54766
-    configure.args-replace \
-        --includedir=${prefix}/include/${name} \
-        --includedir=${prefix}/include/gcc
-
-    configure.args-replace \
-        --with-gxx-include-dir=${prefix}/include/${name}/c++/ \
-        --with-gxx-include-dir=${prefix}/include/gcc/c++/
-
     post-destroot {
 
         # Temporary working dir for dylibs
@@ -515,9 +445,6 @@ if { ${subport} ne ${libcxxname} } {
         platform i386 {
             configure.universal_archs i386 x86_64
         }
-    }
-    variant universal {
-        configure.args-delete --disable-multilib
     }
     # the generated compiler doesn't accept -arch
     configure.env-append \
