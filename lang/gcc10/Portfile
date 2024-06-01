@@ -71,9 +71,6 @@ platform darwin {
 
 set mp_extra_rpath  ${prefix}/lib/libgcc
 
-configure.dir       ${workpath}/build
-configure.cmd       ${worksrcpath}/configure
-
 if { ${subport} ne ${libcxxname} && ${os.platform} eq "darwin" } {
     # Bootstrap comparison fails on 10.6, so disable
     #   https://trac.macports.org/ticket/65280
@@ -181,11 +178,7 @@ compiler.blacklist-append {clang < 800}  gcc-4.0 *gcc-4.2 {macports-clang-3.[4-7
 # "-stdlib" would be passed on to the bootstrap compiler if present
 configure.cxx_stdlib
 
-build.dir           ${configure.dir}
-build.target        bootstrap-lean
 use_parallel_build  yes
-
-destroot.target     install install-info-host
 
 # gcc cannot build if libunwind-headers is active
 conflicts_build-append libunwind-headers binutils

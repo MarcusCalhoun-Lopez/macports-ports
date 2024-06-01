@@ -78,9 +78,6 @@ platform darwin 8 i386 {
     patchfiles-append patch-gcc7-tiger-intel.diff
 }
 
-configure.dir       ${workpath}/build
-configure.cmd       ${worksrcpath}/configure
-
 configure.env-append \
                     AR_FOR_TARGET=${prefix}/bin/ar \
                     AS_FOR_TARGET=${prefix}/bin/as \
@@ -107,11 +104,7 @@ compiler.blacklist-append {clang < 300}
 # "-stdlib" would be passed on to the bootstrap compiler if present
 configure.cxx_stdlib
 
-build.dir           ${configure.dir}
-build.target        bootstrap-lean
 use_parallel_build  yes
-
-destroot.target     install install-info-host
 
 # List of all dylibs to possibly be installed
 set alldylibs {libgcc_ext.10.4.dylib libgcc_ext.10.5.dylib libgcc_s.1.dylib libgfortran.4.dylib libquadmath.0.dylib libstdc++.6.dylib libobjc-gnu.4.dylib libgomp.1.dylib libitm.1.dylib libssp.0.dylib libasan.4.dylib libubsan.0.dylib libcilkrts.5.dylib libatomic.1.dylib}

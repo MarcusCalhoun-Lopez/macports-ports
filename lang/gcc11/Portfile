@@ -99,9 +99,6 @@ set gcc_nm ${prefix}/bin/nm
 
 set mp_extra_rpath  ${prefix}/lib/libgcc
 
-configure.dir       ${workpath}/build
-configure.cmd       ${worksrcpath}/configure
-
 # Disable ccache
 configure.ccache    no
 
@@ -237,11 +234,7 @@ compiler.blacklist-append {clang < 1000}
 # "-stdlib" would be passed on to the bootstrap compiler if present
 configure.cxx_stdlib
 
-build.dir           ${configure.dir}
-build.target        bootstrap-lean
 use_parallel_build  yes
-
-destroot.target     install install-info-host
 
 # gcc cannot build if libunwind-headers is active
 conflicts_build-append libunwind-headers binutils

@@ -106,9 +106,6 @@ platform darwin {
     configure.pre_args-append --build=${build_arch}-apple-darwin${os.major}
 }
 
-configure.dir       ${workpath}/build
-configure.cmd       ${worksrcpath}/configure
-
 configure.env-append \
                     AR_FOR_TARGET=${prefix}/bin/ar \
                     AS_FOR_TARGET=${prefix}/bin/as \
@@ -163,11 +160,7 @@ if { ([variant_isset universal] && "ppc" ni ${configure.universal_archs} || "ppc
 # "-stdlib" would be passed on to the bootstrap compiler if present
 configure.cxx_stdlib
 
-build.dir           ${configure.dir}
-build.target        bootstrap-lean
 use_parallel_build  yes
-
-destroot.target     install install-info-host
 
 if {${subport} == "libgcc45"} {
     # http://trac.macports.org/ticket/35770

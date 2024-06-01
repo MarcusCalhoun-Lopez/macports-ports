@@ -117,9 +117,6 @@ platform darwin 11 {
     depends_build-append port:clang-9.0
 }
 
-configure.dir       ${workpath}/build
-configure.cmd       ${worksrcpath}/configure
-
 configure.env-append \
                     AR_FOR_TARGET=${prefix}/bin/ar \
                     AS_FOR_TARGET=${prefix}/bin/as \
@@ -146,11 +143,7 @@ compiler.blacklist-append {clang < 300}
 # "-stdlib" would be passed on to the bootstrap compiler if present
 configure.cxx_stdlib
 
-build.dir           ${configure.dir}
-build.target        bootstrap-lean
 use_parallel_build  yes
-
-destroot.target     install install-info-host
 
 post-destroot {
     file delete ${destroot}${prefix}/share/info/dir

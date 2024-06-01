@@ -91,9 +91,6 @@ platform darwin {
     configure.pre_args-append --build=${build_arch}-apple-darwin${os.major}
 }
 
-configure.dir       ${workpath}/build
-configure.cmd       ${worksrcpath}/configure
-
 configure.env-append \
                     AR_FOR_TARGET=${prefix}/bin/ar \
                     AS_FOR_TARGET=${prefix}/bin/as \
@@ -133,11 +130,7 @@ configure.cxx_stdlib
 #                       Yes, we need to set both BOOT_CFLAGS and STAGE1_CFLAGS
 #                       because STAGE1_CFLAGS is used with xgcc for libgcc
 build.args-append BOOT_CFLAGS="-O2 -g -D_FORTIFY_SOURCE=0" STAGE1_CFLAGS="-O2 -fkeep-inline-functions -D_FORTIFY_SOURCE=0 -std=gnu89"
-build.dir           ${configure.dir}
-build.target        bootstrap-lean
 use_parallel_build  yes
-
-destroot.target     install install-info-host
 
 post-destroot {
     # install/copy ffitarget.h only if we have it

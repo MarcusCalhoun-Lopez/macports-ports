@@ -44,6 +44,14 @@ default master_sites    {https://ftpmirror.gnu.org/gcc/gcc-${version}/${gcc.tag}
 
 default distname        {gcc-${version}}
 
+default configure.dir   {${workpath}/build}
+default configure.cmd   {${worksrcpath}/configure}
+
+default build.dir       {${configure.dir}}
+default build.target    {bootstrap-lean}
+
+default destroot.target {install install-info-host}
+
 default livecheck.type  {regex}
 default livecheck.url   {http://mirror.koddos.net/gcc/releases/}
 default livecheck.regex {gcc-([option gcc.major].\[0-9.\]+)/}
