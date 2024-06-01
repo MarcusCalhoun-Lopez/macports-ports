@@ -193,6 +193,13 @@ default gcc.post_args   {[expr {${configure.sdkroot} eq "" ? "" : "--with-sysroo
                         --with-pkgversion="MacPorts\ ${name}\ ${version}_${revision}${portvariants}" \
                         }
 
+# MacPorts-specific values that should be exported to all phases of the build
+#     see https://trac.macports.org/ticket/68683
+#     see https://github.com/gcc-mirror/gcc/commit/b410cf1dc056aab195c5408871ffca932df8a78a
+options gcc.macports_exports
+default gcc.macports_exports    {DISABLE_MACPORTS_AS_CLANG_SEARCH=1 \
+                                DISABLE_XCODE_AS_CLANG_SEARCH=1}
+
 ####################################################################################################################################
 # internal procedures
 ####################################################################################################################################
@@ -229,6 +236,16 @@ proc gcc_build::callback {} {
         configure.args-delete   --disable-multilib
     }
 
+    # see description of `gcc.macports_exports`
+    foreach e [option gcc.macports_exports] {
+        # as these exports are MacPorts-specific, `configure` does not recognize them, so
+        #     add them to build environment as well
+        configure.env-delete    ${e}
+        configure.env-append    ${e}
+        build.env-delete        ${e}
+        build.env-append        ${e}
+    }
+
     # set `--enable-languages`
     array set languages_info [option gcc.languages_info] ; # gcc.languages_info as an associative array
     set languages [list] ; # record front ends that are actually languages (for port description)
@@ -257,3 +274,15 @@ proc gcc_build::callback {} {
     }
 }
 port::register_callback gcc_build::callback
+
+post-patch {
+    # add to "the list of variables to export in the environment when configuring any subdirectory"
+    # see https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=Makefile.in;hb=HEAD
+    set makefile [open "${worksrcpath}/Makefile.in" a]
+    puts ${makefile} ""
+    puts ${makefile} "# MacPorts additions"
+    foreach e [option gcc.macports_exports] {
+        puts ${makefile} "BASE_EXPORTS += ${e}; export ${e};"
+    }
+    close ${makefile}
+}

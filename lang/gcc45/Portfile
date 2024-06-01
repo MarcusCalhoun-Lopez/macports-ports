@@ -79,21 +79,10 @@ patchfiles-append   macosx-version-min.patch
 # later (#45483).
 patchfiles-append   yosemite-libtool.patch
 
-if { ${configure.build_arch} eq "i386" } {
-
-    # build with traditional "gas" assembler in all cases
-    # upstream does not typically test gcc with clang as assembler on i386 systems
-    # gcc configuration changes with assembler features
-    # also innumerable warnings about text section naming suppressed
-    patchfiles-append  patch-gcc5-disable-macports-cctools-as-changes.diff
-
-    configure.env-append \
-      "DISABLE_MACPORTS_AS_CLANG_SEARCH=1" \
-      "DISABLE_XCODE_AS_CLANG_SEARCH=1"
-
-    build.env-append \
-      "DISABLE_MACPORTS_AS_CLANG_SEARCH=1" \
-      "DISABLE_XCODE_AS_CLANG_SEARCH=1"
+if { ${configure.build_arch} ne "i386" } {
+    # TODO: most other GCC ports apply this to all architectures
+    gcc.macports_exports-delete DISABLE_MACPORTS_AS_CLANG_SEARCH=1 \
+                                DISABLE_XCODE_AS_CLANG_SEARCH=1
 }
 
 worksrcdir          gcc-${version}
