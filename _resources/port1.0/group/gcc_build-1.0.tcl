@@ -101,6 +101,33 @@ default gcc.major   {[expr {[vercmp ${version} >= 5] ? [lindex [split ${version}
 options gcc.suffix
 default gcc.suffix  {[expr {${name} eq "gcc-devel" ? "devel" : ${gcc.major}}]}
 
+# GCC dependencies based on `${version}`
+# each dependency can have up to three parts
+#     dependency
+#     GCC version dependency started being necessary (all versions if does not exist)
+#.    GCC version dependency was ceased bing necessary (still necessary if does not exist)
+options gcc.depends_build
+default gcc.depends_build   {{port:texinfo 10}}
+
+options gcc.depends_lib
+default gcc.depends_lib     {port:cctools \
+                            {path:lib/pkgconfig/cloog-isl.pc:cloog 4.6 5} \
+                            port:gmp \
+                            {path:lib/pkgconfig/isl.pc:isl 6} \
+                            {port:isl18 4.9 6} \
+                            {port:isl14 4.8 4.9} \
+                            port:ld64 \
+                            port:libiconv \
+                            {port:libmpc 4.5} \
+                            port:mpfr \
+                            {port:ppl 4.6 4.8}
+                            port:zlib \
+                            {port:zstd 10}}
+
+
+options gcc.depends_run
+default gcc.depends_run     {port:gcc_select}
+
 # convenience options for include directory stricture (gcc for Libgcc and gccX for GCC version X)
 options gcc.gcc_name
 default gcc.gcc_name {[expr {${subport} eq ${name} ? ${name} : "gcc"}]}
@@ -193,6 +220,10 @@ default gcc.post_args   {[expr {${configure.sdkroot} eq "" ? "" : "--with-sysroo
                         --with-pkgversion="MacPorts\ ${name}\ ${version}_${revision}${portvariants}" \
                         }
 
+# convenience option to determine if subport is a full Libgcc installation
+options libgcc.is_full
+default libgcc.is_full {[expr {${subport} ne ${name} && (${subport} eq "libgcc-devel") || ${gcc.major} eq ${libgcc.latest_version}}]}
+
 # MacPorts-specific values that should be exported to all phases of the build
 #     see https://trac.macports.org/ticket/68683
 #     see https://github.com/gcc-mirror/gcc/commit/b410cf1dc056aab195c5408871ffca932df8a78a
@@ -204,6 +235,19 @@ default gcc.macports_exports    {DISABLE_MACPORTS_AS_CLANG_SEARCH=1 \
 # internal procedures
 ####################################################################################################################################
 namespace eval gcc_build {}
+
+# utility function to add dependencies based on `${version}`
+proc gcc_build::add_dependencies {type depends} {
+    foreach dep ${depends} {
+        if { [llength ${dep}] == 1 ||
+             ([llength ${dep}] == 2 && [vercmp [lindex ${dep} 1] <= [option version]]) ||
+             ([llength ${dep}] == 3 && [vercmp [lindex ${dep} 1] <= [option version]] && [vercmp [option version] < [lindex ${dep} 2]])
+         } {
+            depends_${type}-delete [lindex ${dep} 0]
+            depends_${type}-append [lindex ${dep} 0]
+        }
+    }
+}
 
 # utility function to add args based on `${version}`
 proc gcc_build::add_args {args gcc.args} {
@@ -226,6 +270,57 @@ proc gcc_build::callback {} {
     } else {
         use_bzip2   yes
     }
+
+    # set dependencies
+    if { ${subport} eq ${name} } {
+        gcc_build::add_dependencies build [option gcc.depends_build]
+        gcc_build::add_dependencies lib   [option gcc.depends_lib]
+        gcc_build::add_dependencies run   [option gcc.depends_run]
+
+        # depend on earliest possible Libgcc
+        #     found Libgcc is then responsible for later Libgcc dependencies
+        if { ${subport} ne "gcc-devel" } {
+            set libgcc_dep  "path:share/doc/libgcc/README:libgcc"
+        } else {
+            set libgcc_dep  "port:libgcc-devel"
+        }
+        foreach v [lrange [option libgcc.versions] 0 end-1] {
+            if { [vercmp ${v} >= [option gcc.major]] } {
+                set libgcc_dep port:[libgcc_from_version ${v}]
+                break
+            }
+        }
+        depends_run-delete ${libgcc_dep}
+        depends_run-append ${libgcc_dep}
+    } else {
+        # even if little of it is retained, building Libgcc requires the same dependencies as GCC
+        gcc_build::add_dependencies build [list {*}[option gcc.depends_build] {*}[option gcc.depends_lib]]
+        if { [exists depends_lib] } {
+            # avoid duplicates
+            depends_build-delete    {*}[option depends_lib]
+        }
+
+        # depend on earliest possible subsequent Libgcc
+        if { ![option libgcc.is_full] } {
+            set libgcc_dep  "path:share/doc/libgcc/README:libgcc"
+            foreach v [lrange [option libgcc.versions] 0 end-1] {
+                if { [vercmp ${v} > [option gcc.major]] } {
+                    set libgcc_dep port:[libgcc_from_version ${v}]
+                    break
+                }
+            }
+            depends_run-delete ${libgcc_dep}
+            depends_run-append ${libgcc_dep}
+        }
+    }
+
+    # GCC uses neither headers nor libraries from these dependencies
+    depends_skip_archcheck-delete gcc_select ld64 cctools
+    depends_skip_archcheck-append gcc_select ld64 cctools
+
+    # TODO: GCC is marked Permissive, so is the following necessary or a historical artifact?
+    license_noconflict-delete  gmp mpfr ppl libmpc zlib
+    license_noconflict-append  gmp mpfr ppl libmpc zlib
 
     # set `--configure` arguments
     gcc_build::add_args pre_args    [option gcc.pre_args]

@@ -45,24 +45,6 @@ if { ${configure.build_arch} eq "i386" && ${os.major} >= 10 } {
     patchfiles-append  patch-gcc10-i686-clang-bootstrap-fix.diff
 }
 
-depends_lib         port:cctools \
-                    port:gmp \
-                    path:lib/pkgconfig/isl.pc:isl \
-                    port:ld64 \
-                    port:libiconv \
-                    port:libmpc \
-                    port:mpfr \
-                    port:zlib
-depends_run         port:gcc_select
-if { ${isLastSupported} } {
-    depends_run-append  path:share/doc/libgcc/README:libgcc
-} else {
-    depends_run-append  port:libgcc8
-}
-
-depends_skip_archcheck-append gcc_select ld64 cctools
-license_noconflict  gmp mpfr ppl libmpc zlib
-
 platform darwin {
     configure.pre_args-append --build=${build_arch}-apple-darwin${os.major}
 }
@@ -157,11 +139,6 @@ if {${subport} eq "libgcc8"} {
         # version should continue to provide a subport for that and older gcc
         # versions.
 
-        depends_run
-        depends_lib-delete   port:zlib
-        depends_build-append {*}${depends_lib}
-        depends_lib          port:zlib
-
         # TODO: Possibly disable bootstrap with appropriate configure flags.
         #       the problem is that libstdc++'s configure script tests for tls support
         #       using the running compiler (not gcc for which libstdc++ is being built).
@@ -220,9 +197,6 @@ if {${subport} eq "libgcc8"} {
         # gcc8 runtime versions are identical to that in gcc9, so libgcc8 does not
         # need to provide anything, hence do not build anything.
         # port still defined as needed to satisfy dependency tree
-
-        depends_run port:libgcc9
-        depends_lib
 
         fetch.type    none
         build         { }

@@ -38,18 +38,6 @@ checksums           gcc-core-${version}.tar.bz2 \
                     sha256  ea90cb8676910ec09907859a4b60ac3d1e3afb27e17a5b99343489894bcb63e1 \
                     size    240658
 
-depends_lib         port:cctools \
-                    port:gmp \
-                    port:ld64 \
-                    port:zlib \
-                    port:libiconv \
-                    port:mpfr
-depends_run         port:gcc_select \
-                    port:libgcc45
-
-depends_skip_archcheck-append gcc_select ld64 cctools
-license_noconflict  gmp mpfr
-
 patchfiles          ppc_fde_encoding.diff \
                     texinfo5.patch \
                     patch-gcc-texi.diff

@@ -26,20 +26,6 @@ if { ${configure.build_arch} eq "i386" && ${os.major} >= 10 } {
                                 DISABLE_XCODE_AS_CLANG_SEARCH=1
 }
 
-depends_lib         port:cctools \
-                    port:gmp \
-                    path:lib/pkgconfig/isl.pc:isl \
-                    port:ld64 \
-                    port:zlib \
-                    port:libiconv \
-                    port:libmpc \
-                    port:mpfr
-depends_run         port:gcc_select \
-                    port:libgcc6
-
-depends_skip_archcheck-append gcc_select ld64 cctools
-license_noconflict  gmp mpfr ppl libmpc
-
 # Work around parallel building issue on APFS
 # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=81797
 patchfiles-append   notparallel-install-headers.patch
@@ -105,10 +91,6 @@ if {${subport} eq "libgcc6"} {
     # version of gcc, then the latest version of gcc to provide a given ABI
     # version should continue to provide a subport for that and older gcc
     # versions.
-
-    depends_run port:libgcc7
-    depends_build-append {*}${depends_lib}
-    depends_lib
 
     foreach arch {arm64 x86_64 i386 ppc ppc64} {
         gcc.languages.${arch} fortran

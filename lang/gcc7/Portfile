@@ -15,36 +15,12 @@ checksums           rmd160  91d46ec088badec75f41a2ad2a0ba228a6715107 \
                     sha256  b81946e7f01f90528a1f7352ab08cc602b9ccc05d4e44da4bd501c5a189ee661 \
                     size    62783088
 
-# Check if this is the last supported gcc version for this system.
-# If it is, libgcc7 installs a full runtime, otherwise it only installs
-# what is missing from newer libgccX builds.
-# NOTE : The logic here must match that in the libgcc port.
-set isLastSupported [ expr ${os.major} < 10 ]
-
 if { ${configure.build_arch} eq "i386" && ${os.major} >= 10 } {
 
     # fix no-pie clang bug bootstrapping gcc on i386
     # https://trac.macports.org/ticket/63161
     patchfiles-append  patch-gcc7-i686-clang-bootstrap-fix.diff
 }
-
-depends_lib         port:cctools \
-                    port:gmp \
-                    path:lib/pkgconfig/isl.pc:isl \
-                    port:ld64 \
-                    port:zlib \
-                    port:libiconv \
-                    port:libmpc \
-                    port:mpfr
-depends_run         port:gcc_select
-if { ${isLastSupported} } {
-    depends_run-append  path:share/doc/libgcc/README:libgcc
-} else {
-    depends_run-append  port:libgcc7
-}
-
-depends_skip_archcheck-append gcc_select ld64 cctools
-license_noconflict  gmp mpfr ppl libmpc
 
 # Work around parallel building issue on APFS
 # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=81797
@@ -92,7 +68,7 @@ set alldylibs {libgcc_ext.10.4.dylib libgcc_ext.10.5.dylib libgcc_s.1.dylib libg
 if {${subport} eq "libgcc7"} {
 
     # If providing the primary runtime, add conflict against libgcc-devel
-    if { ${isLastSupported} } {
+    if { ${libgcc.is_full} } {
         conflicts libgcc-devel
     }
 
@@ -121,15 +97,8 @@ if {${subport} eq "libgcc7"} {
     # version should continue to provide a subport for that and older gcc
     # versions.
 
-    if { ${isLastSupported} } {
-        depends_run
-        depends_lib-delete   port:zlib
-        depends_build-append {*}${depends_lib}
-        depends_lib          port:zlib
-    } else {
-        depends_run port:libgcc8
-        depends_build-append {*}${depends_lib}
-        depends_lib
+    if { ${libgcc.is_full} } {
+        depends_lib      port:zlib
     }
 
     # TODO: Possibly disable bootstrap with appropriate configure flags.
@@ -147,7 +116,7 @@ if {${subport} eq "libgcc7"} {
         # Note that we really don't want to include libgcc_ext.10.[45].dylib here, but install_name_tool
         # doesn't know how to change the id of stubs, and it's easier than recreating them for each
         # gcc port.
-        if { ${isLastSupported} } {
+        if { ${libgcc.is_full} } {
             # Install all
             set dylibs ${alldylibs}
         } else {
@@ -191,7 +160,7 @@ if {${subport} eq "libgcc7"} {
 
         move ${destroot}${prefix}/lib/libgcc.merged ${destroot}${prefix}/lib/libgcc
 
-        if { ${isLastSupported} } {
+        if { ${libgcc.is_full} } {
             # For binary compatibility with binaries that linked against the old libstdcxx port
             ln -s libgcc/libstdc++.6.dylib ${destroot}${prefix}/lib/libstdc++.6.dylib
         } else {

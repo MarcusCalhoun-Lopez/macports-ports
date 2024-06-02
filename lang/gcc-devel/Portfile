@@ -30,23 +30,6 @@ master_sites-append \
                 ftp://ftp.funet.fi/pub/mirrors/sources.redhat.com/pub/gcc/snapshots/${version}/ \
                 ftp://gcc.gnu.org/pub/gcc/snapshots/${version}/
 
-depends_build-append \
-                    port:texinfo
-depends_lib-append  port:cctools \
-                    port:gmp \
-                    path:lib/pkgconfig/isl.pc:isl \
-                    port:ld64 \
-                    port:libiconv \
-                    port:libmpc \
-                    port:mpfr \
-                    port:zlib \
-                    port:zstd
-depends_run-append  port:gcc_select \
-                    port:libgcc-devel
-
-depends_skip_archcheck-append gcc_select ld64 cctools
-license_noconflict  gmp mpfr ppl libmpc zlib
-
 # For release
 #set major           [lindex [split ${version} .-] 0]
 # For devel builds
@@ -252,9 +235,6 @@ if {${subport} eq ${libgccname}} {
     # version should continue to provide a subport for that and older gcc
     # versions.
 
-    depends_run
-    depends_lib-delete   port:zlib port:libiconv
-    depends_build-append {*}${depends_lib}
     depends_lib          port:zlib port:libiconv
 
     post-destroot {

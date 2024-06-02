@@ -21,23 +21,6 @@ checksums           rmd160  bcc2a72fbbee69d031e1ca31c7236c65352397d4 \
                     sha256  949a5d4f99e786421a93b532b22ffab5578de7321369975b91aec97adfda8c3b \
                     size    85491976
 
-depends_build-append \
-                    port:texinfo
-depends_lib-append  port:cctools \
-                    port:gmp \
-                    path:lib/pkgconfig/isl.pc:isl \
-                    port:ld64 \
-                    port:libiconv \
-                    port:libmpc \
-                    port:mpfr \
-                    port:zlib \
-                    port:zstd
-depends_run-append  port:gcc_select \
-                    port:libgcc12
-
-depends_skip_archcheck-append gcc_select ld64 cctools
-license_noconflict  gmp mpfr ppl libmpc zlib
-
 platform darwin {
     configure.pre_args-append --build=${build_arch}-apple-darwin${os.major}
 }
@@ -255,9 +238,6 @@ if {${subport} eq ${libgccname}} {
 
     # No need to build as nothing that isn't provided by libgcc13
     platforms   any
-
-    depends_run path:share/doc/libgcc/README:libgcc
-    depends_lib
 
     fetch.type    none
     build         { }

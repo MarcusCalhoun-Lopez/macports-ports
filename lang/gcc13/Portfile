@@ -21,23 +21,6 @@ checksums           rmd160  a6d646ed9765f973d3f63ef560edf4a50cf686c3 \
                     sha256  e275e76442a6067341a27f04c5c6b83d8613144004c0413528863dc6b5c743da \
                     size    87858592
 
-depends_build-append \
-                    port:texinfo
-depends_lib-append  port:cctools \
-                    port:gmp \
-                    path:lib/pkgconfig/isl.pc:isl \
-                    port:ld64 \
-                    port:libiconv \
-                    port:libmpc \
-                    port:mpfr \
-                    port:zlib \
-                    port:zstd
-depends_run-append  port:gcc_select \
-                    path:share/doc/libgcc/README:libgcc
-
-depends_skip_archcheck-append gcc_select ld64 cctools
-license_noconflict  gmp mpfr ppl libmpc zlib
-
 platform darwin {
     configure.pre_args-append --build=${build_arch}-apple-darwin${os.major}
 }
@@ -283,9 +266,6 @@ if {${subport} eq ${libgccname}} {
     # version should continue to provide a subport for that and older gcc
     # versions.
 
-    depends_run
-    depends_lib-delete   port:zlib port:libiconv
-    depends_build-append {*}${depends_lib}
     depends_lib          port:zlib port:libiconv
 
     post-destroot {
