@@ -1,0 +1,81 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:filetype=tcl:et:sw=4:ts=4:sts=4
+
+PortSystem                      1.0
+
+if { ${os.arch} ne "powerpc" } {
+PortGroup           compilers   1.0
+
+} else {
+PortGroup           stub        1.0
+
+}
+
+name                gcc-devel-libcxx
+categories          lang
+license             NCSA
+maintainers         nomaintainer
+description         libc++ header implementation to be used by [lindex [split ${subport} -] 0]
+long_description    {*}${description}
+homepage            https://llvm.org/
+
+subport gcc-devel-libcxx {
+    version         14-20240303
+    revision        0
+    epoch           5
+}
+
+subport gcc13-libcxx {
+    version         13.2.0
+    revision        4
+    epoch           0
+}
+
+subport gcc12-libcxx {
+    version         12.3.0
+    revision        4
+    epoch           1
+}
+
+subport gcc11-libcxx {
+    version         11.4.0
+    revision        1
+    epoch           2
+}
+
+subport gcc10-libcxx {
+    version         10.4.0
+    revision        6
+    epoch           7
+}
+
+distfiles
+use_configure       no
+supported_archs     noarch
+platforms           any
+
+if { ${os.arch} ne "powerpc" } {
+compilers.choose    cxx
+compilers.setup     -gcc -fortran -clangdevel -clang34 -clang35 -clang36 \
+                    -clang37 -clang50 -clang60 -clang70 -clang80 -clang90
+
+if { ![clang_variant_isset] } {
+    set clang_compiler      [lindex [portconfigure::get_clang_compilers] 0]
+    default_variants-append +[join [lrange [split ${clang_compiler} -] 1 end] ""]
+}
+
+build {}
+
+destroot {
+    # remove -libcxx from end of subport name
+    set gcc         [join [lrange [split ${subport} -] 0 end-1] -]
+
+    if { ![regexp {clang(.*)} [clang_variant_name] -> mp_clang_ver] } {
+        ui_error    "${subport} requires a Clang variant to be selected"
+        return      -code error "nonexistent Clang variant"
+    }
+
+    xinstall -d -m 755 ${destroot}${prefix}/libexec/${gcc}/libc++/include/c++
+    file copy       ${prefix}/libexec/llvm-${mp_clang_ver}/include/c++/v1 \
+                    ${destroot}${prefix}/libexec/${gcc}/libc++/include/c++/
+}
+}

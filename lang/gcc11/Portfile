@@ -65,7 +65,7 @@ set mp_extra_rpath  ${prefix}/lib/libgcc
 # Disable ccache
 configure.ccache    no
 
-if { ${subport} ne ${libcxxname} && ${os.platform} eq "darwin" } {
+if { ${os.platform} eq "darwin" } {
     # gcc has build issues on macOS 11.3 with the use of Xcode 12.5 clang via cctools for ld
     #   https://gcc.gnu.org/bugzilla/show_bug.cgi?id=100340
     #   https://trac.macports.org/ticket/62775
@@ -115,54 +115,6 @@ if {${os.platform} eq "darwin" && ${os.major} >= 22} {
 
 set libcxx_incpath ${prefix}/libexec/${name}/libc++/include/c++/v1
 
-subport ${libcxxname} {
-    PortGroup compilers     1.0
-    compilers.choose        cxx
-    compilers.setup         -gcc -fortran -clangdevel -clang34 -clang35 -clang36 \
-                            -clang37 -clang50 -clang60 -clang70 -clang80 -clang90
-    if { ![clang_variant_isset] } {
-        if { ${os.platform} eq "darwin" && ${os.major} < 11 } {
-            default_variants-append +clang11
-        } else {
-            default_variants-append +clang14
-        }
-    }
-    revision                [ expr ${revision} + 0 ]
-    description             libc++ header implementation to be used by ${name}
-    long_description        {*}${description}
-    homepage                https://llvm.org/
-    license                 NCSA
-    depends_build
-    depends_extract
-    depends_run
-    depends_lib
-    distfiles
-    patchfiles
-    use_configure           no
-    supported_archs         noarch
-    platforms               any
-    # Find clang/llvm version to use from active variant
-    proc getClangVersion {} {
-        if { [regexp {clang(.*)} [clang_variant_name] -> clang_v] } {
-            return ${clang_v}
-        }
-        return ""
-    }
-    set mp_clang_ver [getClangVersion]
-    build {
-        # Copy headers from clang-N during build
-        file mkdir ${worksrcpath}/headers
-        file copy ${prefix}/libexec/llvm-${mp_clang_ver}/include/c++/v1 ${worksrcpath}/headers/
-    }
-    destroot {
-        set base_dir [file dirname ${libcxx_incpath}]
-        file mkdir ${destroot}${base_dir}
-        file copy ${worksrcpath}/headers/v1 ${destroot}${base_dir}
-    }
-}
-
-if { ${subport} ne ${libcxxname} } {
-
     variant stdlib_flag description {Enable stdlib command line flag to select c++ runtime} {
         # Enables support for specifying the c++ runtime via `-stdlib=` in a similar
         # way to clang. For more details see the later comments in
@@ -181,8 +133,6 @@ if { ${subport} ne ${libcxxname} } {
     if {${build_arch} ni [list ppc ppc64]} {
         default_variants-append +stdlib_flag
     }
-
-}
 
 # https://trac.macports.org/ticket/29067
 # https://trac.macports.org/ticket/29104
@@ -352,8 +302,6 @@ if {${subport} eq ${name}} {
 
 }
 
-if { ${subport} ne ${libcxxname} } {
-
     post-destroot {
         # Ensure all dylibs in destroot have our extra rpath added ..
         # https://trac.macports.org/ticket/65503
@@ -399,5 +347,3 @@ if { ${subport} ne ${libcxxname} } {
     configure.universal_cxxflags
     configure.universal_ldflags
     configure.universal_args
-
-}
