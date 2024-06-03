@@ -58,9 +58,6 @@ set gcc_ld ${prefix}/bin/ld
 set gcc_ar ${prefix}/bin/ar
 set gcc_nm ${prefix}/bin/nm
 
-# Disable ccache
-configure.ccache    no
-
 if { ${os.platform} eq "darwin" } {
     # gcc has build issues on macOS 11.3 with the use of Xcode 12.5 clang via cctools for ld
     #   https://gcc.gnu.org/bugzilla/show_bug.cgi?id=100340

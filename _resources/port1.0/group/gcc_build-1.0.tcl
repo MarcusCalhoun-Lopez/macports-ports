@@ -74,6 +74,10 @@ proc portconfigure::configure_get_compiler {type {compiler {}}} {
     }
 }
 
+# TODO it is not entirely clear why this is needed
+#     see https://github.com/macports/macports-ports/commit/dd17e940bc80e9902dc1969ebf27e4de00d246b0
+default configure.ccache    {no}
+
 default livecheck.type  {regex}
 default livecheck.url   {http://mirror.koddos.net/gcc/releases/}
 default livecheck.regex {gcc-([option gcc.major].\[0-9.\]+)/}
