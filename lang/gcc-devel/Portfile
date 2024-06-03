@@ -13,8 +13,6 @@ long_description    This is an !experimental!, !BETA! version \
 
 set libgccname      lib${name}
 
-set libcxxname      ${name}-libcxx
-
 version         14-20240303
 revision        0
 subport         ${libgccname} { revision [ expr ${revision} + 0 ] }
@@ -29,11 +27,6 @@ master_sites-append \
                 https://bigsearcher.com/mirrors/gcc/snapshots/${version}/ \
                 ftp://ftp.funet.fi/pub/mirrors/sources.redhat.com/pub/gcc/snapshots/${version}/ \
                 ftp://gcc.gnu.org/pub/gcc/snapshots/${version}/
-
-# For release
-#set major           [lindex [split ${version} .-] 0]
-# For devel builds
-set major           devel
 
 platform darwin {
     configure.pre_args-append --build=${build_arch}-apple-darwin${os.major}
@@ -118,30 +111,10 @@ configure.cxx_stdlib
 # gcc cannot build if libunwind-headers is active
 conflicts_build-append libunwind-headers
 
-# Find dylibs at a given location
-proc dylib_list {location} {
-    # Note *.*.dylib is to only match versioned dylibs, not the versionless sym links
-    set dylibs [glob -directory ${location} -tails *.*.dylib]
-    ui_debug "Found at ${location} dylibs : ${dylibs}"
-    return ${dylibs}
-}
-
 # Moving libgccjit.0.dylib to libgcc failed for some reason
 # https://github.com/macports/macports-ports/commit/ce950c5729c9178cd6c61f9f4096888a026bb87f#commitcomment-78932371
 
 if {${subport} eq ${libgccname}} {
-    # http://trac.macports.org/ticket/35770
-    # http://trac.macports.org/ticket/38814
-    # While there can be multiple versions of these runtimes in a single
-    # process, it is not possible to pass objects between different versions,
-    # so we simplify this by having the libgcc port provide the newest version
-    # of these runtimes for all versions of gcc to use.
-    #
-    # If there is a binary incompatible change to the runtime in a future
-    # version of gcc, then the latest version of gcc to provide a given ABI
-    # version should continue to provide a subport for that and older gcc
-    # versions.
-
     depends_lib          port:zlib port:libiconv
 }
 

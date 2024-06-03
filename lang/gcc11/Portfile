@@ -19,8 +19,6 @@ checksums           rmd160  a43fd21a3887af24daa550c4b52fb634e33b633c \
 set libgccname      lib${name}
 subport             ${libgccname} { revision [ expr ${revision} + 0 ] }
 
-set libcxxname      ${name}-libcxx
-
 if { ${os.platform} eq "darwin" } {
     # Patch generated from https://github.com/iains/gcc-11-branch
     # git diff --no-prefix releases/gcc-11.3.0 gcc-11.3-darwin-r2

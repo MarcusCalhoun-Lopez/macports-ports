@@ -15,8 +15,6 @@ revision            4
 set libgccname      lib${name}
 subport             ${libgccname} { revision [ expr ${revision} + 0 ] }
 
-set libcxxname      ${name}-libcxx
-
 checksums           rmd160  bcc2a72fbbee69d031e1ca31c7236c65352397d4 \
                     sha256  949a5d4f99e786421a93b532b22ffab5578de7321369975b91aec97adfda8c3b \
                     size    85491976
@@ -103,14 +101,6 @@ configure.cxx_stdlib
 
 # gcc cannot build if these are active
 conflicts_build-append libunwind-headers binutils gdb
-
-# Find dylibs at a given location
-proc dylib_list {location} {
-    # Note *.*.dylib is to only match versioned dylibs, not the versionless sym links
-    set dylibs [glob -directory ${location} -tails *.*.dylib]
-    ui_debug "Found at ${location} dylibs : ${dylibs}"
-    return ${dylibs}
-}
 
 if {${subport} eq ${libgccname}} {
 
