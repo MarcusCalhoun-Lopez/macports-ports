@@ -306,6 +306,22 @@ proc gcc_build::add_args {args gcc.args} {
     }
 }
 
+# unfortunate hack to add variants after Portfile is run
+#     see https://github.com/macports/macports-base/blob/master/src/port1.0/portutil.tcl
+#     see https://github.com/macports/macports-base/blob/master/src/macports1.0/macports.tcl
+rename ::eval_variants ::real_gcc_eval_variants
+proc eval_variants {variations} {
+    # TODO: do not add for Libgcc?
+    if { [vercmp [option gcc.major] >= 10] } {
+        variant stdlib_flag description {Enable stdlib command line flag to select c++ runtime} {}
+    }
+    if { [option configure.build_arch] ni [list ppc ppc64] } {
+        # libcxx is unavailable on PPC
+        default_variants-append +stdlib_flag
+    }
+    uplevel ::real_gcc_eval_variants ${variations}
+}
+
 proc gcc_build::callback {} {
     global prefix name subport version
 
@@ -370,6 +386,15 @@ proc gcc_build::callback {} {
     gcc_build::add_args pre_args    [option gcc.pre_args]
     gcc_build::add_args args        [option gcc.args]
     gcc_build::add_args post_args   [option gcc.post_args]
+
+    # ensure configure script finds libc++ headers
+    if { [variant_exists stdlib_flag] && [variant_isset stdlib_flag] } {
+        # libcxx is unavailable on PPC
+            configure.args-delete --with-gxx-libcxx-include-dir=${prefix}/libexec/${name}/libc++/include/c++/v1
+            configure.args-append --with-gxx-libcxx-include-dir=${prefix}/libexec/${name}/libc++/include/c++/v1
+        depends_run-delete port:${name}-libcxx
+        depends_run-append port:${name}-libcxx
+    }
 
     if { [variant_exists universal] && [variant_isset universal] } {
         configure.args-delete   --disable-multilib

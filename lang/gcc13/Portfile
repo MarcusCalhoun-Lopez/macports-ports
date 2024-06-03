@@ -80,27 +80,6 @@ if {${os.platform} eq "darwin" && ${os.major} >= 22} {
     }
 }
 
-set libcxx_incpath ${prefix}/libexec/${name}/libc++/include/c++/v1
-
-    variant stdlib_flag description {Enable stdlib command line flag to select c++ runtime} {
-        # Enables support for specifying the c++ runtime via `-stdlib=` in a similar
-        # way to clang. For more details see the later comments in
-        #   https://www.mail-archive.com/gcc-patches@gcc.gnu.org/msg257385.html
-        # Note : This 'bakes' the libc++ include directory into gcc,
-        # which is then used as the default search location when `-stdlib=libc++`
-        # is given. Therefore to have consistency across various OS versions, and to enable
-        # modern c++ standards, use a recent macports clang port to provide this.
-        if {${subport} eq ${name}} {
-            depends_run-append port:${libcxxname}
-        }
-        configure.args-append --with-gxx-libcxx-include-dir="${libcxx_incpath}"
-    }
-
-    # libcxx is unavailable on PPC
-    if {${build_arch} ni [list ppc ppc64]} {
-        default_variants-append +stdlib_flag
-    }
-
 # https://trac.macports.org/ticket/29067
 # https://trac.macports.org/ticket/29104
 # https://trac.macports.org/ticket/47996
