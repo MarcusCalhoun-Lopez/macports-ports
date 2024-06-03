@@ -55,9 +55,6 @@ compiler.blacklist-append {clang < 800}  gcc-4.0 *gcc-4.2 {macports-clang-3.[4-7
 # "-stdlib" would be passed on to the bootstrap compiler if present
 configure.cxx_stdlib
 
-# gcc cannot build if libunwind-headers is active
-conflicts_build-append libunwind-headers binutils
-
 # clang (as) from Xcode 12.5 has various problems with gcc build
 if { ${os.platform} eq "darwin" && \
          ([vercmp ${xcodeversion} >= 12.5] || [vercmp ${xcodecltversion} >= 12.5]) } {

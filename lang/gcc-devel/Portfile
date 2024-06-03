@@ -105,9 +105,6 @@ platform darwin {
 # "-stdlib" would be passed on to the bootstrap compiler if present
 configure.cxx_stdlib
 
-# gcc cannot build if libunwind-headers is active
-conflicts_build-append libunwind-headers
-
 # Moving libgccjit.0.dylib to libgcc failed for some reason
 # https://github.com/macports/macports-ports/commit/ce950c5729c9178cd6c61f9f4096888a026bb87f#commitcomment-78932371
 

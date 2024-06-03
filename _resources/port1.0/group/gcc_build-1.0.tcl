@@ -393,6 +393,22 @@ proc gcc_build::callback {} {
     license_noconflict-delete  gmp mpfr ppl libmpc zlib
     license_noconflict-append  gmp mpfr ppl libmpc zlib
 
+    # TODO: are all these necessary for all versions of GCC and is an actual fix available?
+    #
+    # `conflicts_build` is a workaround not a fix (see https://trac.macports.org/ticket/67412#comment:18)
+    # best fix: work with upstream to ensure `-I` are in the right order (see https://trac.macports.org/ticket/67412#comment:13)
+    # hack fix: avoid -I${prefix}/include and temporarily copy necessary header files (from e.g. gmp) from ${prefix}/include to an isolated location
+    #
+    # for binutils,
+    #     see https://github.com/macports/macports-ports/commit/f2c9687dbe5da91bc44628bec6a3370e17c89ae8
+    # for gdb,
+    #     see https://trac.macports.org/ticket/67412
+    # for libunwind-headers,
+    #     see https://trac.macports.org/ticket/43869
+    #     see https://trac.macports.org/ticket/57198
+    conflicts_build-delete binutils gdb libunwind-headers
+    conflicts_build-append binutils gdb libunwind-headers
+
     if { [option libgcc.is_full] } {
         # this subport has been marked as providing a full Libgcc installation
         if { ${subport} ne "libgcc-devel" } {

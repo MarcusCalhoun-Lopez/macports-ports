@@ -92,9 +92,6 @@ platform darwin 11 {
     depends_build-append port:clang-9.0
 }
 
-# gcc cannot build if libunwind-headers is active
-conflicts_build-append libunwind-headers
-
 # http://trac.macports.org/ticket/29067
 compiler.blacklist-append gcc-4.0
 

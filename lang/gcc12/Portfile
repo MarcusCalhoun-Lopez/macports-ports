@@ -96,9 +96,6 @@ platform darwin {
 # "-stdlib" would be passed on to the bootstrap compiler if present
 configure.cxx_stdlib
 
-# gcc cannot build if these are active
-conflicts_build-append libunwind-headers binutils gdb
-
 if {${subport} eq ${libgccname}} {
 
     # No need to build as nothing that isn't provided by libgcc13

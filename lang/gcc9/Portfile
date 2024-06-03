@@ -63,9 +63,6 @@ compiler.blacklist-append {macports-clang-1[2-9]}
 # "-stdlib" would be passed on to the bootstrap compiler if present
 configure.cxx_stdlib
 
-# gcc cannot build if libunwind-headers is active
-conflicts_build-append libunwind-headers
-
 libgcc.keep libasan.5.dylib libgcc_ext.10.4.dylib libgcc_ext.10.5.dylib
 
 platform powerpc {

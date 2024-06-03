@@ -88,9 +88,6 @@ if { ${os.major} >= 19 } {
     }
 }
 
-# gcc cannot build if libunwind-headers is active
-conflicts_build-append libunwind-headers
-
 if {${subport} eq "libgcc8"} {
 
         # gcc8 runtime versions are identical to that in gcc9, so libgcc8 does not
