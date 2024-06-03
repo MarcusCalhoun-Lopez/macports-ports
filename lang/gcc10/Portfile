@@ -73,30 +73,6 @@ if { ${os.platform} eq "darwin" && \
     configure.args-append  --without-build-config
 }
 
-if {${subport} eq ${libgccname}} {
-
-    # Activate hack for new libgcc
-    # https://trac.macports.org/wiki/PortfileRecipes#deactivatehack
-    pre-activate {
-        if {![catch {set installed [lindex [registry_active libgcc9] 0]}]} {
-            # Extract the epoch of the installed libgcc9
-            set _epoch [lindex $installed 5]
-            # If < 3 need to deactivate
-            if {[vercmp $_epoch < 3]} {
-                registry_deactivate_composite libgcc9 "" [list ports_nodepcheck 1]
-            }
-        }
-        if {![catch {set installed [lindex [registry_active libgcc-devel] 0]}]} {
-            # Extract the epoch of the installed libgcc-devel
-            set _epoch [lindex $installed 5]
-            # If < 4 need to deactivate
-            if {[vercmp $_epoch < 4]} {
-                registry_deactivate_composite libgcc-devel "" [list ports_nodepcheck 1]
-            }
-        }
-    }
-}
-
     platform powerpc {
         configure.universal_archs ppc ppc64
     }

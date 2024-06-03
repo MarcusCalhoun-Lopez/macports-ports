@@ -118,38 +118,6 @@ conflicts_build-append libunwind-headers binutils
 
 libgcc.keep libasan.6.dylib
 
-if {${subport} eq ${libgccname}} {
-
-    # Activate hack for new libgcc
-    # https://trac.macports.org/wiki/PortfileRecipes#deactivatehack
-    pre-activate {
-        if {![catch {set installed [lindex [registry_active libgcc8] 0]}]} {
-            # Extract the epoch of the installed libgcc8
-            set _epoch [lindex $installed 5]
-            # If < 5 need to deactivate
-            if {[vercmp $_epoch < 5]} {
-                registry_deactivate_composite libgcc8 "" [list ports_nodepcheck 1]
-            }
-        }
-        if {![catch {set installed [lindex [registry_active libgcc10] 0]}]} {
-            # Extract the epoch of the installed libgcc10
-            set _epoch [lindex $installed 5]
-            # If < 6 need to deactivate
-            if {[vercmp $_epoch < 6]} {
-                registry_deactivate_composite libgcc10 "" [list ports_nodepcheck 1]
-            }
-        }
-        if {![catch {set installed [lindex [registry_active libgcc-devel] 0]}]} {
-            # Extract the epoch of the installed libgcc-devel
-            set _epoch [lindex $installed 5]
-            # If < 5 need to deactivate
-            if {[vercmp $_epoch < 5]} {
-                registry_deactivate_composite libgcc-devel "" [list ports_nodepcheck 1]
-            }
-        }
-    }
-}
-
     platform powerpc {
         configure.universal_archs ppc ppc64
     }

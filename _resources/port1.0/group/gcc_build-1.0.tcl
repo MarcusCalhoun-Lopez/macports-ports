@@ -613,3 +613,28 @@ post-destroot {
         }
     }
 }
+
+pre-activate {
+    if { ${libgcc.is_full} } {
+        #
+        # this subport has been marked as providing a full Libgcc installation
+        # the port that provides the bulk of Libgcc changes as new versions of GCC are released, yet
+        #     the old full Libgcc port may still install files and depend on the new full Libgcc port
+        # to ease upgrades, apply activate hack on any older Libgcc port that attempted to provide full Libgcc
+        #     see https://trac.macports.org/wiki/PortfileRecipes#deactivatehack
+        #
+        # libgcc-devel and latest working libgcc\d+ should be marked as conflicting, so this libgcc-devel should not unintentionally deactivate full libgcc\d+ installation
+        #
+        set fl ${prefix}/lib/libgcc/libgcc_s.dylib ; # see https://gcc.gnu.org/onlinedocs/gccint/Libgcc.html
+        if { [file exists ${fl}] } {
+            set provider [registry_file_registered ${fl}]
+            if { [regexp {^libgcc(\d+|-devel)$} ${provider}] && ${provider} ne ${subport} } {
+                if { ![catch {set installed [lindex [registry_active ${provider}] 0]}] } {
+                    if { [vercmp [lindex ${installed} 1] < ${version}] } {
+                        registry_deactivate_composite ${provider} "" [list ports_nodepcheck 1]
+                    }
+                }
+            }
+        }
+    }
+}
