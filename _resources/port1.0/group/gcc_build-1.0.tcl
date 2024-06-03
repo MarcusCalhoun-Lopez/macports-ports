@@ -63,6 +63,17 @@ default build.target    {bootstrap-lean}
 
 default destroot.target {install install-info-host}
 
+# allow configure scripts to set CPP variants to something like `$(CC) -arch ... -E`
+# `/usr/bin/cpp` does not work
+rename portconfigure::configure_get_compiler portconfigure::real_gcc_configure_get_compiler
+proc portconfigure::configure_get_compiler {type {compiler {}}} {
+    if { ${type} eq "cpp" } {
+        return ""
+    } else {
+        return [portconfigure::real_gcc_configure_get_compiler ${type} ${compiler}]
+    }
+}
+
 default livecheck.type  {regex}
 default livecheck.url   {http://mirror.koddos.net/gcc/releases/}
 default livecheck.regex {gcc-([option gcc.major].\[0-9.\]+)/}

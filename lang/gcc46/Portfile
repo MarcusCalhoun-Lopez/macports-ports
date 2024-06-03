@@ -110,13 +110,6 @@ platform powerpc {
 platform i386 {
     configure.universal_archs i386 x86_64
 }
-# the generated compiler doesn't accept -arch
-configure.env-append \
-    "CPP=${configure.cc} -E" \
-    "CXXCPP=${configure.cxx} -E"
-build.env-append \
-    "CPP=${configure.cc} -E" \
-    "CXXCPP=${configure.cxx} -E"
 configure.cc-append [get_canonical_archflags]
 configure.cc_archflags
 configure.cxx_archflags
