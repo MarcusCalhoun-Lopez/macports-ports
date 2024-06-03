@@ -8,7 +8,7 @@ name                gcc47
 epoch               1
 version             4.7.4
 revision            12
-platforms           darwin
+platforms           {darwin < 17}
 
 set ecj             ecj-4.5.jar
 
@@ -60,16 +60,10 @@ platform darwin {
     configure.pre_args-append --build=${build_arch}-apple-darwin${os.major}
 }
 
-if {${os.platform} eq "darwin" && ([vercmp $xcodeversion 9.0] > 0)} {
-    known_fail      yes
-    depends_lib
-    depends_run
-    archive_sites
-    pre-fetch {
-        ui_error "building ${name} is not supported with Xcode 9 or greater"
-        return -code error {unsupported platform}
-    }
-}
+# TODO: check if `known_fail` is needed for `[vercmp ${xcodeversion} >=  9]`
+# see https://github.com/macports/macports-ports/commit/449b6b5b24b65a8caa2521dbd7ca83a43780e0a9
+# see https://github.com/macports/macports-ports/commit/9986b5f971d504de2e6c479a7f96cd6276cfb38e
+compiler.blacklist-append {clang >= 900}
 
 # http://trac.macports.org/ticket/29067
 compiler.blacklist-append gcc-4.0
