@@ -130,14 +130,6 @@ proc dylib_list {location} {
 # https://github.com/macports/macports-ports/commit/ce950c5729c9178cd6c61f9f4096888a026bb87f#commitcomment-78932371
 
 if {${subport} eq ${libgccname}} {
-
-    # Set conflict against port providing primary runtime
-    if { ${os.major} < 10 } {
-        conflicts libgcc libgcc7
-    } else {
-        conflicts libgcc libgcc12
-    }
-
     # http://trac.macports.org/ticket/35770
     # http://trac.macports.org/ticket/38814
     # While there can be multiple versions of these runtimes in a single

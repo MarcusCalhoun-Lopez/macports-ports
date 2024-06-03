@@ -389,6 +389,17 @@ proc gcc_build::callback {} {
     license_noconflict-delete  gmp mpfr ppl libmpc zlib
     license_noconflict-append  gmp mpfr ppl libmpc zlib
 
+    if { [option libgcc.is_full] } {
+        # this subport has been marked as providing a full Libgcc installation
+        if { ${subport} ne "libgcc-devel" } {
+            conflicts-delete  libgcc-devel
+            conflicts-append  libgcc-devel
+        } else {
+            conflicts-delete  [libgcc_from_version [option libgcc.latest_version]]
+            conflicts-append  [libgcc_from_version [option libgcc.latest_version]]
+        }
+    }
+
     # set `--configure` arguments
     gcc_build::add_args pre_args    [option gcc.pre_args]
     gcc_build::add_args args        [option gcc.args]

@@ -51,11 +51,6 @@ configure.cxx_stdlib
 
 if {${subport} eq "libgcc7"} {
 
-    # If providing the primary runtime, add conflict against libgcc-devel
-    if { ${libgcc.is_full} } {
-        conflicts libgcc-devel
-    }
-
     # Activate hack for new libgcc
     # https://trac.macports.org/wiki/PortfileRecipes#deactivatehack
     pre-activate {
