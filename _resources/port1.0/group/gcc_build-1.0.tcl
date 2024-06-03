@@ -17,6 +17,17 @@ PortGroup   select                      1.0
 # tweak MacPorts defaults
 ####################################################################################################################################
 
+# from several of the GCC ports
+# still relevant?
+# TODO: Possibly disable bootstrap with appropriate configure flags.
+#       the problem is that libstdc++'s configure script tests for tls support
+#       using the running compiler (not gcc for which libstdc++ is being built).
+#       Thus when we build with clang, we get a mismatch
+# http://trac.macports.org/ticket/36116
+#compiler.blacklist-append {clang < 425}
+#configure.args-append --disable-bootstrap
+#build.target        all
+
 default maintainers     {nomaintainer}
 
 default homepage        {https://gcc.gnu.org/}
@@ -224,6 +235,16 @@ default gcc.post_args   {[expr {${configure.sdkroot} eq "" ? "" : "--with-sysroo
 options libgcc.is_full
 default libgcc.is_full {[expr {${subport} ne ${name} && (${subport} eq "libgcc-devel") || ${gcc.major} eq ${libgcc.latest_version}}]}
 
+# Libgcc library names to keep if subport is not full Libgcc installation
+options libgcc.keep
+default libgcc.keep     {}
+
+# if they exist, libraries from which to stip debug symbols to supress debugger warnings
+#     see https://trac.macports.org/ticket/34831
+#     see https://github.com/macports/macports-ports/commit/f1c52ce5b1946eaaed2d69f192fe6f7e3e62935e
+options libgcc.strip
+default libgcc.strip {libgcc_ext.10.4.dylib libgcc_ext.10.5.dylib}
+
 # MacPorts-specific values that should be exported to all phases of the build
 #     see https://trac.macports.org/ticket/68683
 #     see https://github.com/gcc-mirror/gcc/commit/b410cf1dc056aab195c5408871ffca932df8a78a
@@ -380,4 +401,143 @@ post-patch {
         puts ${makefile} "BASE_EXPORTS += ${e}; export ${e};"
     }
     close ${makefile}
+}
+
+post-destroot {
+    if { [vercmp ${gcc.major} >= 10] } {
+        # ensure all dylibs in destroot have our extra rpath
+        #     see https://trac.macports.org/ticket/65503
+        foreach dylib [ exec find ${destroot}${prefix} -type f -and -name "*.dylib" ] {
+            ui_debug "Ensuring DYLIB '${dylib}' has RPATH '${gcc.rpath}'"
+            # install_name_tool returns a failure if the dylib already has the entry
+            #     we don't want that here so force final status to be true...
+            system "install_name_tool -add_rpath ${gcc.rpath} ${dylib} > /dev/null 2>&1 ; true"
+        }
+    }
+
+    if { ${subport} eq ${name} } {
+        ######################
+        # GCC compiler subport
+        ######################
+
+        # avoid extraneous file
+        #     see https://github.com/macports/macports-ports/commit/f1c52ce5b1946eaaed2d69f192fe6f7e3e62935e
+        # it is not clear which GCC versions require it, but `file delete` works fine for nonexistent files
+        # for more information on share/info/dir,
+        #     see https://bbs.archlinux.org/viewtopic.php?pid=420728#p420728
+        file delete ${destroot}${prefix}/share/info/dir
+
+        # avoid conflict between various GCC ports
+        foreach file [glob ${destroot}${prefix}/share/{info,man/man7}/*] {
+            set extension [file extension ${file}]
+            set newfile [regsub "${extension}$" ${file} "-mp-${gcc.suffix}${extension}"]
+            file rename ${file} ${newfile}
+        }
+
+        # while there can be multiple versions of these runtimes in a single
+        #     process, it is not possible to pass objects between different versions,
+        #     so we simplify this by having the libgcc port provide the newest version
+        #     of these runtimes for all versions of gcc to use.
+        # see http://trac.macports.org/ticket/35770
+        # see http://trac.macports.org/ticket/38814
+        foreach dylib [glob -directory ${destroot}${prefix}/lib/${name} -tails *.*.dylib] {
+            file delete ${destroot}${prefix}/lib/${name}/${dylib}
+            ln -s ${prefix}/lib/libgcc/${dylib} ${destroot}${prefix}/lib/${name}/${dylib}
+        }
+        if { [variant_exists universal] && [variant_isset universal] } {
+            foreach archdir [glob ${destroot}${prefix}/lib/${name}/*/] {
+                if { [file exists ${archdir}/${dylib}] } {
+                    delete ${archdir}/${dylib}
+                    ln -s ${prefix}/lib/libgcc/${dylib} ${archdir}/${dylib}
+                }
+            }
+        }
+    } else {
+        ######################
+        # Libgcc subport
+        ######################
+
+        # delete most files
+        # keep library files (either all of them or ones specified by libgcc.keep)
+        # keep header files but only for full Libgcc installation
+        #     see https://trac.macports.org/ticket/54766 and
+        #     see https://trac.macports.org/ticket/53194
+        file delete -force ${destroot}${prefix}/bin
+        file delete -force ${destroot}${prefix}/share
+        file delete -force ${destroot}${prefix}/libexec
+        if { ![option libgcc.is_full] } {
+            # this subport is not a full Libgcc installation, so only keep the specified files
+            file delete -force ${destroot}${prefix}/include
+            foreach dylib [glob -directory ${destroot}${prefix}/lib/libgcc -tails *] {
+                if { ${dylib} ni [option libgcc.keep] } {
+                    file delete -force ${destroot}${prefix}/lib/libgcc/${dylib}
+                }
+            }
+        }
+
+        # temporary working dir for dylibs
+        xinstall -d -m 0755 ${destroot}${prefix}/lib/libgcc.merged
+        # loop over libs to install
+        foreach dylib [glob -directory ${destroot}${prefix}/lib/libgcc -tails *.*.dylib] {
+            # move dylib to temp area
+            move ${destroot}${prefix}/lib/libgcc/${dylib} ${destroot}${prefix}/lib/libgcc.merged
+
+            # if needed create versionless sym link to dylib
+            set dylib_split [split ${dylib} "."]
+            set dylib_nover ${destroot}${prefix}/lib/libgcc.merged/[lindex ${dylib_split} 0].[lindex ${dylib_split} end]
+            if { ![file exists ${dylib_nover}]  } {
+                ln -s ${dylib} ${dylib_nover}
+            }
+
+            # universal support
+            if { [variant_exists universal] && [variant_isset universal] } {
+                foreach archdir [glob ${destroot}${prefix}/lib/libgcc/*/] {
+                    set archdir_nodestroot [string map "${destroot}/ /" ${archdir}]
+                    if { [file exists ${archdir}/${dylib}] } {
+                        system "install_name_tool -id ${prefix}/lib/libgcc/${dylib} ${archdir}/${dylib}"
+                        foreach link [glob -tails -directory ${archdir} *.dylib] {
+                            system "install_name_tool -change ${archdir_nodestroot}${link} ${prefix}/lib/libgcc/${link} ${archdir}/${dylib}"
+                        }
+                        system "lipo -create -output ${destroot}${prefix}/lib/libgcc.merged/${dylib}~ ${destroot}${prefix}/lib/libgcc.merged/${dylib} ${archdir}/${dylib} && mv ${destroot}${prefix}/lib/libgcc.merged/${dylib}~ ${destroot}${prefix}/lib/libgcc.merged/${dylib}"
+                    }
+                }
+            }
+        }
+        file delete -force ${destroot}${prefix}/lib/libgcc
+        move ${destroot}${prefix}/lib/libgcc.merged ${destroot}${prefix}/lib/libgcc
+
+        # see description of `libgcc.strip`
+        foreach dylib [option libgcc.strip] {
+            # not all files exist in all Libgcc versions
+            # see https://trac.macports.org/ticket/65055
+            if { [file exists ${destroot}${prefix}/lib/libgcc/${dylib}] } {
+                system "${prefix}/bin/strip -x ${destroot}${prefix}/lib/libgcc/${dylib}"
+            }
+        }
+
+        # TODO: is this fix still needed?
+        # for binary compatibility with binaries that linked against the old libstdcxx port
+        # see https://github.com/macports/macports-ports/commit/ac5a416fd8dc537e38f9c55b39e5e9e873c3454d
+        ln -s libgcc/libstdc++.6.dylib ${destroot}${prefix}/lib/libstdc++.6.dylib
+
+        # TODO: fix inconsistent creation of README
+        switch -- [option gcc.suffix] {
+            10 -
+            11 {
+                set doc_dir ${destroot}${prefix}/share/doc/${subport}
+                xinstall -m 755 -d ${doc_dir}
+                system "echo ${subport} provides additional runtime > ${doc_dir}/README"
+            }
+            8  -
+            12 {
+                set doc_dir ${destroot}${prefix}/share/doc/${subport}
+                xinstall -m 755 -d ${doc_dir}
+                system "echo ${subport} provides no runtime > ${doc_dir}/README"
+            }
+            -devel {
+                xinstall -d ${destroot}${prefix}/share/doc/libgcc
+                system "echo 'libgcc runtime is provided by ${subport}' > ${destroot}${prefix}/share/doc/libgcc/README"
+            }
+        }
+    }
 }

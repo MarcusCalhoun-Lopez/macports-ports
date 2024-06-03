@@ -25,8 +25,6 @@ platform darwin {
     configure.pre_args-append --build=${build_arch}-apple-darwin${os.major}
 }
 
-set mp_extra_rpath  ${prefix}/lib/libgcc
-
 # Disable ccache
 configure.ccache    no
 
@@ -203,55 +201,10 @@ if {${subport} eq ${libgccname}} {
 
 if {${subport} eq ${name}} {
 
-    post-destroot {
-
-        file delete ${destroot}${prefix}/share/info/dir
-
-        foreach file [glob ${destroot}${prefix}/share/{info,man/man7}/*] {
-            set extension [file extension ${file}]
-            set newfile [regsub "${extension}$" ${file} "-mp-${gcc.suffix}${extension}"]
-            file rename ${file} ${newfile}
-        }
-
-        # loop over libs to install
-        set dylibs [dylib_list ${destroot}${prefix}/lib/${name}]
-        foreach dylib ${dylibs} {
-            if { [file exists ${prefix}/lib/libgcc/${dylib}] } {
-                # Different OS versions (e.g. Leopard) or architectures (e.g. PPC) don't produce all the dylibs
-                # https://trac.macports.org/ticket/40098
-                # https://trac.macports.org/ticket/40100
-                if {[file exists ${destroot}${prefix}/lib/${name}/${dylib}]} {
-                    delete ${destroot}${prefix}/lib/${name}/${dylib}
-                    ln -s ${prefix}/lib/libgcc/${dylib} ${destroot}${prefix}/lib/${name}/${dylib}
-                }
-                if {[variant_exists universal] && [variant_isset universal]} {
-                    foreach archdir [glob ${destroot}${prefix}/lib/${name}/*/] {
-                        if {[file exists ${archdir}/${dylib}]} {
-                            delete ${archdir}/${dylib}
-                            ln -s ${prefix}/lib/libgcc/${dylib} ${archdir}/${dylib}
-                        }
-                    }
-                }
-            }
-        }
-
-    }
-
     select.group        gcc
     select.file         ${filespath}/mp-${name}
 
 }
-
-    post-destroot {
-        # Ensure all dylibs in destroot have our extra rpath added ..
-        # https://trac.macports.org/ticket/65503
-        foreach dlib [ exec find ${destroot}${prefix} -type f -and -name "*.dylib" ] {
-            ui_debug "Ensuring DYLIB '${dlib}' has RPATH '${mp_extra_rpath}'"
-            # Note install_name_tool returns a failure if the dylib already has the entry
-            # We don't want that here so force final status to be true...
-            system "install_name_tool -add_rpath ${mp_extra_rpath} ${dlib} > /dev/null 2>&1 ; true"
-        }
-    }
 
     platform powerpc {
         configure.universal_archs ppc ppc64

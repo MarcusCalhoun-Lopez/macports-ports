@@ -39,8 +39,6 @@ platform darwin {
     configure.pre_args-append --build=${build_arch}-apple-darwin${os.major}
 }
 
-set mp_extra_rpath  ${prefix}/lib/libgcc
-
 # Disable ccache
 configure.ccache    no
 
@@ -185,122 +183,13 @@ if {${subport} eq ${libgccname}} {
     # versions.
 
     depends_lib          port:zlib port:libiconv
-
-    post-destroot {
-
-        # Temporary working dir for dylibs
-        file mkdir ${destroot}${prefix}/lib/libgcc.merged
-
-        # loop over libs to install
-        set dylibs [dylib_list ${destroot}${prefix}/lib/libgcc]
-        foreach dylib ${dylibs} {
-
-            # Different OS versions (e.g. Leopard) or architectures (e.g. PPC) don't produce all the dylibs
-            # https://trac.macports.org/ticket/40098
-            # https://trac.macports.org/ticket/40100
-            if {! [file exists ${destroot}${prefix}/lib/libgcc/${dylib}]} {
-                continue
-            }
-
-            # Move dylib to temp area
-            move ${destroot}${prefix}/lib/libgcc/${dylib} ${destroot}${prefix}/lib/libgcc.merged
-
-            # If needed create versionless sym link to dylib
-            set dylib_split [split ${dylib} "."]
-            set dylib_nover ${destroot}${prefix}/lib/libgcc.merged/[lindex ${dylib_split} 0].[lindex ${dylib_split} end]
-            if { ![file exists ${dylib_nover}]  } {
-                ln -s ${dylib} ${dylib_nover}
-            }
-
-            # Universal support
-            if {[variant_exists universal] && [variant_isset universal]} {
-                foreach archdir [glob ${destroot}${prefix}/lib/libgcc/*/] {
-                    set archdir_nodestroot [string map "${destroot}/ /" ${archdir}]
-                    if {[file exists ${archdir}/${dylib}]} {
-                        system "install_name_tool -id ${prefix}/lib/libgcc/${dylib} ${archdir}/${dylib}"
-                        foreach link [glob -tails -directory ${archdir} *.dylib] {
-                            system "install_name_tool -change ${archdir_nodestroot}${link} ${prefix}/lib/libgcc/${link} ${archdir}/${dylib}"
-                        }
-                        system "lipo -create -output ${destroot}${prefix}/lib/libgcc.merged/${dylib}~ ${destroot}${prefix}/lib/libgcc.merged/${dylib} ${archdir}/${dylib} && mv ${destroot}${prefix}/lib/libgcc.merged/${dylib}~ ${destroot}${prefix}/lib/libgcc.merged/${dylib}"
-                    }
-                }
-            }
-
-            # strip debug symbols to supress debugger warnings:
-            # http://trac.macports.org/attachment/ticket/34831
-            if {! [string match *libgcc_ext* ${dylib}]} {
-                system "strip -x ${destroot}${prefix}/lib/libgcc.merged/${dylib}"
-            }
-        }
-
-        file delete -force ${destroot}${prefix}/bin
-        file delete -force ${destroot}${prefix}/share
-        file delete -force ${destroot}${prefix}/lib/libgcc
-        file delete -force ${destroot}${prefix}/libexec
-
-        move ${destroot}${prefix}/lib/libgcc.merged ${destroot}${prefix}/lib/libgcc
-
-        # For binary compatibility with binaries that linked against the old libstdcxx port
-        ln -s libgcc/libstdc++.6.dylib ${destroot}${prefix}/lib/libstdc++.6.dylib
-
-        # Create README detailing runtime installed.
-        # Also used as file checked for path-like port dependency for libgcc/libgcc-devel deps.
-        xinstall -d ${destroot}${prefix}/share/doc/libgcc
-        system "echo 'libgcc runtime is provided by ${subport}' > ${destroot}${prefix}/share/doc/libgcc/README"
-
-    }
-
 }
 
 if {${subport} eq ${name}} {
-
-    post-destroot {
-
-        file delete ${destroot}${prefix}/share/info/dir
-
-        foreach file [glob ${destroot}${prefix}/share/{info,man/man7}/*] {
-            set extension [file extension ${file}]
-            set newfile [regsub "${extension}$" ${file} "-mp-${gcc.suffix}${extension}"]
-            file rename ${file} ${newfile}
-        }
-
-        # loop over libs to install
-        set dylibs [dylib_list ${destroot}${prefix}/lib/${name}]
-        foreach dylib ${dylibs} {
-            # Different OS versions (e.g. Leopard) or architectures (e.g. PPC) don't produce all the dylibs
-            # https://trac.macports.org/ticket/40098
-            # https://trac.macports.org/ticket/40100
-            if {[file exists ${destroot}${prefix}/lib/${name}/${dylib}]} {
-                delete ${destroot}${prefix}/lib/${name}/${dylib}
-                ln -s ${prefix}/lib/libgcc/${dylib} ${destroot}${prefix}/lib/${name}/${dylib}
-            }
-            if {[variant_exists universal] && [variant_isset universal]} {
-                foreach archdir [glob ${destroot}${prefix}/lib/${name}/*/] {
-                    if {[file exists ${archdir}/${dylib}]} {
-                        delete ${archdir}/${dylib}
-                        ln -s ${prefix}/lib/libgcc/${dylib} ${archdir}/${dylib}
-                    }
-                }
-            }
-        }
-
-    }
-
     select.group        gcc
     select.file         ${filespath}/mp-${name}
 
 }
-
-    post-destroot {
-        # Ensure all dylibs in destroot have our extra rpath added ..
-        # https://trac.macports.org/ticket/65503
-        foreach dlib [ exec find ${destroot}${prefix} -type f -and -name "*.dylib" ] {
-            ui_debug "Ensuring DYLIB '${dlib}' has RPATH '${mp_extra_rpath}'"
-            # Note install_name_tool returns a failure if the dylib already has the entry
-            # We don't want that here so force final status to be true...
-            system "install_name_tool -add_rpath ${mp_extra_rpath} ${dlib} > /dev/null 2>&1 ; true"
-        }
-    }
 
     platform powerpc {
         configure.universal_archs ppc ppc64
