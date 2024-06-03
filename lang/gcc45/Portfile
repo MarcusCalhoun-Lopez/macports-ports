@@ -152,10 +152,6 @@ post-destroot {
         file copy ${worksrcpath}/../gcc-${version}/gcc/config/darwin-sections.def {*}[glob ${destroot}${prefix}/lib/${name}/gcc/*/${version}/plugin/include/config]
     }
 }
-
-select.group        gcc
-select.file         ${filespath}/mp-${name}
-
 }
 
 platform powerpc {

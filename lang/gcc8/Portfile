@@ -110,11 +110,6 @@ if {${subport} eq "libgcc8"} {
             system "echo ${subport} provides no runtime > ${doc_dir}/README"
         }
 
-} else {
-
-    select.group        gcc
-    select.file         ${filespath}/mp-${name}
-
 }
 
 platform powerpc {

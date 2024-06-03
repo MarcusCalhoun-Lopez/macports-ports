@@ -87,11 +87,6 @@ if {${subport} eq "libgcc6"} {
 
     # TODO: check https://trac.macports.org/ticket/54768
     libgcc.keep libgfortran.3.dylib libasan.3.dylib
-} else {
-
-    select.group        gcc
-    select.file         ${filespath}/mp-${name}
-
 }
 
 platform powerpc {

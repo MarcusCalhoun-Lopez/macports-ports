@@ -153,12 +153,6 @@ if {${subport} eq ${libgccname}} {
     depends_lib          port:zlib port:libiconv
 }
 
-if {${subport} eq ${name}} {
-    select.group        gcc
-    select.file         ${filespath}/mp-${name}
-
-}
-
     platform powerpc {
         configure.universal_archs ppc ppc64
     }

@@ -88,11 +88,6 @@ if {${subport} eq "libgcc7"} {
     } else {
         libgcc.keep      libgfortran.4.dylib libasan.4.dylib libubsan.0.dylib libcilkrts.5.dylib
     }
-} else {
-
-    select.group        gcc
-    select.file         ${filespath}/mp-${name}
-
 }
 
 platform powerpc {

@@ -93,11 +93,6 @@ if {${subport} eq "libgcc9"} {
             }
         }
     }
-} else {
-
-    select.group        gcc
-    select.file         ${filespath}/mp-${name}
-
 }
 
 platform powerpc {

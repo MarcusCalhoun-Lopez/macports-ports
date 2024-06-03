@@ -167,13 +167,6 @@ if {${subport} eq ${libgccname}} {
 
 }
 
-if {${subport} eq ${name}} {
-
-    select.group        gcc
-    select.file         ${filespath}/mp-${name}
-
-}
-
     platform powerpc {
         configure.universal_archs ppc ppc64
     }

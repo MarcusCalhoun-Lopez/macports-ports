@@ -113,9 +113,6 @@ post-destroot {
     move ${destroot}${prefix}/lib/${name}/pkgconfig/libgcj-${gcc.suffix}.pc ${destroot}${prefix}/lib/pkgconfig/
 }
 
-select.group        gcc
-select.file         ${filespath}/mp-${name}
-
 platform powerpc {
     configure.universal_archs ppc ppc64
 }

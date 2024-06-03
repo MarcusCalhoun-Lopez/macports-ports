@@ -103,9 +103,6 @@ post-destroot {
                 ${destroot}${prefix}/share/python/classfile-44.py
 }
 
-select.group        gcc
-select.file         ${filespath}/mp-${name}
-
 platform powerpc {
     configure.universal_archs ppc ppc64
 }
