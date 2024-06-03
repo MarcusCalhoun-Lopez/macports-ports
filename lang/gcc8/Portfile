@@ -71,8 +71,6 @@ compiler.blacklist-append {clang < 300}
 # "-stdlib" would be passed on to the bootstrap compiler if present
 configure.cxx_stdlib
 
-use_parallel_build  yes
-
 # On Darwin19+ fails to build for Xcode < 11.3
 # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=90835
 # https://trac.macports.org/ticket/59351

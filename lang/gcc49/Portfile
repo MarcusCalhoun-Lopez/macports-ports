@@ -53,8 +53,6 @@ compiler.blacklist-append {llvm-gcc-4.2 < 2336.1}
 # "-stdlib" would be passed on to the bootstrap compiler if present
 configure.cxx_stdlib
 
-use_parallel_build  yes
-
 post-destroot {
     move ${destroot}${prefix}/lib/${name}/pkgconfig/libgcj-${gcc.suffix}.pc ${destroot}${prefix}/lib/pkgconfig/
 }

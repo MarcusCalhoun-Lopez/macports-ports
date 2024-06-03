@@ -49,8 +49,6 @@ compiler.blacklist-append {clang < 300}
 # "-stdlib" would be passed on to the bootstrap compiler if present
 configure.cxx_stdlib
 
-use_parallel_build  yes
-
 if {${subport} eq "libgcc7"} {
 
     # If providing the primary runtime, add conflict against libgcc-devel

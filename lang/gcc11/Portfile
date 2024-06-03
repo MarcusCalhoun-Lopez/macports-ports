@@ -113,8 +113,6 @@ compiler.blacklist-append {clang < 1000}
 # "-stdlib" would be passed on to the bootstrap compiler if present
 configure.cxx_stdlib
 
-use_parallel_build  yes
-
 # gcc cannot build if libunwind-headers is active
 conflicts_build-append libunwind-headers binutils
 

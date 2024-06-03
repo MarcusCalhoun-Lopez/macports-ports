@@ -117,8 +117,6 @@ if { ([variant_isset universal] && "ppc" ni ${configure.universal_archs} || "ppc
 # "-stdlib" would be passed on to the bootstrap compiler if present
 configure.cxx_stdlib
 
-use_parallel_build  yes
-
 if {${subport} eq "libgcc45"} {
     foreach arch {arm64 x86_64 i386 ppc ppc64} {
         gcc.languages.${arch} c c++ objc obj-c++

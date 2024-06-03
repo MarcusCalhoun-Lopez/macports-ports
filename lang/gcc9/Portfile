@@ -63,8 +63,6 @@ compiler.blacklist-append {macports-clang-1[2-9]}
 # "-stdlib" would be passed on to the bootstrap compiler if present
 configure.cxx_stdlib
 
-use_parallel_build  yes
-
 # gcc cannot build if libunwind-headers is active
 conflicts_build-append libunwind-headers
 
