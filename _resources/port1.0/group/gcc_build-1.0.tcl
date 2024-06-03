@@ -239,6 +239,18 @@ default libgcc.is_full {[expr {${subport} ne ${name} && (${subport} eq "libgcc-d
 options libgcc.keep
 default libgcc.keep     {}
 
+# ensure configure script and Makefile.in find the right tools
+options gcc.exports
+default gcc.exports {AR_FOR_TARGET=${gcc.ar} \
+                     AS_FOR_TARGET=${gcc.as} \
+                     LD_FOR_TARGET=${gcc.ld} \
+                     NM_FOR_TARGET=${prefix}/bin/nm \
+                     OBJDUMP_FOR_TARGET=${prefix}/bin/objdump \
+                     RANLIB_FOR_TARGET=${prefix}/bin/ranlib \
+                     STRIP_FOR_TARGET=${prefix}/bin/strip \
+                     OTOOL=${prefix}/bin/otool \
+                     OTOOL64=${prefix}/bin/otool}
+
 # if they exist, libraries from which to stip debug symbols to supress debugger warnings
 #     see https://trac.macports.org/ticket/34831
 #     see https://github.com/macports/macports-ports/commit/f1c52ce5b1946eaaed2d69f192fe6f7e3e62935e
@@ -350,6 +362,12 @@ proc gcc_build::callback {} {
 
     if { [variant_exists universal] && [variant_isset universal] } {
         configure.args-delete   --disable-multilib
+    }
+
+    # see description of `gcc.exports`
+    foreach e [option gcc.exports] {
+        configure.env-delete    ${e}
+        configure.env-append    ${e}
     }
 
     # see description of `gcc.macports_exports`

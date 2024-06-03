@@ -67,17 +67,6 @@ foreach arch {arm64 x86_64 i386 ppc ppc64} {
     gcc.languages.${arch}-delete java
 }
 
-configure.env-append \
-                    AR_FOR_TARGET=${prefix}/bin/ar \
-                    AS_FOR_TARGET=${prefix}/bin/as \
-                    LD_FOR_TARGET=${prefix}/bin/ld \
-                    NM_FOR_TARGET=${prefix}/bin/nm \
-                    OBJDUMP_FOR_TARGET=${prefix}/bin/objdump \
-                    RANLIB_FOR_TARGET=${prefix}/bin/ranlib \
-                    STRIP_FOR_TARGET=${prefix}/bin/strip \
-                    OTOOL=${prefix}/bin/otool \
-                    OTOOL64=${prefix}/bin/otool
-
 if {${os.platform} eq "darwin" && ([vercmp $xcodeversion 9.0] > 0)} {
     known_fail      yes
     depends_lib

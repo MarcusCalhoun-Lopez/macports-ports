@@ -92,17 +92,6 @@ platform darwin 11 {
     depends_build-append port:clang-9.0
 }
 
-configure.env-append \
-                    AR_FOR_TARGET=${prefix}/bin/ar \
-                    AS_FOR_TARGET=${prefix}/bin/as \
-                    LD_FOR_TARGET=${prefix}/bin/ld \
-                    NM_FOR_TARGET=${prefix}/bin/nm \
-                    OBJDUMP_FOR_TARGET=${prefix}/bin/objdump \
-                    RANLIB_FOR_TARGET=${prefix}/bin/ranlib \
-                    STRIP_FOR_TARGET=${prefix}/bin/strip \
-                    OTOOL=${prefix}/bin/otool \
-                    OTOOL64=${prefix}/bin/otool
-
 # gcc cannot build if libunwind-headers is active
 conflicts_build-append libunwind-headers
 
