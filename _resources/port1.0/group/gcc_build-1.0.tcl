@@ -344,6 +344,10 @@ proc gcc_build::callback {} {
 
     # set dependencies
     if { ${subport} eq ${name} } {
+        ######################
+        # GCC compiler subport
+        ######################
+
         gcc_build::add_dependencies build [option gcc.depends_build]
         gcc_build::add_dependencies lib   [option gcc.depends_lib]
         gcc_build::add_dependencies run   [option gcc.depends_run]
@@ -364,6 +368,10 @@ proc gcc_build::callback {} {
         depends_run-delete ${libgcc_dep}
         depends_run-append ${libgcc_dep}
     } else {
+        ######################
+        # Libgcc subport
+        ######################
+
         # even if little of it is retained, building Libgcc requires the same dependencies as GCC
         gcc_build::add_dependencies build [list {*}[option gcc.depends_build] {*}[option gcc.depends_lib]]
         if { [exists depends_lib] } {
@@ -371,8 +379,8 @@ proc gcc_build::callback {} {
             depends_build-delete    {*}[option depends_lib]
         }
 
-        # depend on earliest possible subsequent Libgcc
         if { ![option libgcc.is_full] } {
+            # depend on earliest possible subsequent Libgcc
             set libgcc_dep  "path:share/doc/libgcc/README:libgcc"
             foreach v [lrange [option libgcc.versions] 0 end-1] {
                 if { [vercmp ${v} > [option gcc.major]] } {
@@ -658,3 +666,65 @@ pre-activate {
         }
     }
 }
+
+proc gcc_build::stub_callback {} {
+    if { [option subport] eq [option name] || [option libgcc.is_full] || [option libgcc.keep] ne "" } { return }
+
+    # this Libgcc subport does not install any library files
+    # it may install library files for different values of `${os.major}`, but not this one
+    # the subport builds all of Libgcc and then proceed to delete everything except a README file
+    # while correct, it is highly inefficient
+    # we also want to avoid multiple `if` statements throughout this PG to accommodate this situation
+    # this PG is complicated enough
+    # one solution is to have this subport defined in different Portfiles depending on`${os.major}`
+    # however, this would be potentially quite confusing
+    #
+    # as a compromise, hack away through previously set values to mimic a stub port
+
+    # clear dependencies
+    foreach type [list fetch extract patch build lib run test] {
+        if { [exists depends_${type}] } {
+            global depends_${type}
+            unset depends_${type}
+        }
+    }
+
+    # prevent search for unnecessary and potentially nonexistent extract program
+    uplevel 2 "proc portextract::extract_start {args} {}"
+
+    # set all phases (including pre- and post-) to do nothing
+    foreach phase {fetch extract patch configure build destroot test} {
+        global org.macports.${phase}
+        foreach part {pre procedure post} {
+            foreach p [ditem_key [set org.macports.${phase}] ${part}] {
+                if {[info procs user${p}] ne ""} {
+                    set proc_name user${p}
+                } else {
+                    set proc_name ${p}
+                }
+                uplevel 2 "proc ${proc_name} {{args \"\"}} {}"
+            }
+        }
+    }
+
+    platforms       any
+    supported_archs	noarch
+
+    # depend on earliest possible subsequent Libgcc
+    set libgcc_dep  "path:share/doc/libgcc/README:libgcc"
+    foreach v [lrange [option libgcc.versions] 0 end-1] {
+        if { [vercmp ${v} > [option gcc.major]] } {
+            set libgcc_dep port:[libgcc_from_version ${v}]
+            break
+        }
+    }
+    depends_run ${libgcc_dep}
+
+    distfiles
+
+    destroot {
+        xinstall -d ${destroot}${prefix}/share/doc/${subport}
+        system "echo ${subport} provides no runtime > ${destroot}${prefix}/share/doc/${subport}/README"
+    }
+}
+port::register_callback gcc_build::stub_callback

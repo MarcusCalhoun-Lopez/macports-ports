@@ -96,24 +96,6 @@ platform darwin {
 # "-stdlib" would be passed on to the bootstrap compiler if present
 configure.cxx_stdlib
 
-if {${subport} eq ${libgccname}} {
-
-    # No need to build as nothing that isn't provided by libgcc13
-    platforms   any
-
-    fetch.type    none
-    build         { }
-    use_configure no
-    patchfiles
-
-    destroot {
-        set doc_dir ${destroot}${prefix}/share/doc/${subport}
-        xinstall -m 755 -d ${doc_dir}
-        system "echo ${subport} provides no runtime > ${doc_dir}/README"
-    }
-
-}
-
     platform powerpc {
         configure.universal_archs ppc ppc64
     }
