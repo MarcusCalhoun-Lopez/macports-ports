@@ -14,6 +14,7 @@ checksums           rmd160  180d4aaa9d2c34084f3f01261f8cb00ddb921529 \
                     size    90097606
 
 if { ${configure.build_arch} ne "i386" } {
+    # TODO: does this work with universal?
     # TODO: most other GCC ports apply this to all architectures
     gcc.macports_exports-delete DISABLE_MACPORTS_AS_CLANG_SEARCH=1 \
                                 DISABLE_XCODE_AS_CLANG_SEARCH=1
@@ -33,10 +34,6 @@ post-extract {
     ln -s ${prefix}/libexec/isl18/include/isl ${worksrcpath}/gcc
 }
 
-platform darwin {
-    configure.pre_args-append --build=${build_arch}-apple-darwin${os.major}
-}
-
 # TODO: check if `known_fail` is needed for `[vercmp ${xcodeversion} >=  9]`
 # see https://github.com/macports/macports-ports/commit/449b6b5b24b65a8caa2521dbd7ca83a43780e0a9
 # see https://github.com/macports/macports-ports/commit/9986b5f971d504de2e6c479a7f96cd6276cfb38e
@@ -48,26 +45,6 @@ compiler.blacklist-append gcc-4.0
 # http://trac.macports.org/ticket/29104
 compiler.blacklist-append {llvm-gcc-4.2 < 2336.1}
 
-# "-stdlib" would be passed on to the bootstrap compiler if present
-configure.cxx_stdlib
-
 post-destroot {
     move ${destroot}${prefix}/lib/${name}/pkgconfig/libgcj-${gcc.suffix}.pc ${destroot}${prefix}/lib/pkgconfig/
 }
-
-platform powerpc {
-    configure.universal_archs ppc ppc64
-}
-platform i386 {
-    configure.universal_archs i386 x86_64
-}
-configure.cc-append [get_canonical_archflags]
-configure.cc_archflags
-configure.cxx-append ${configure.cxx_archflags}
-configure.cxx_archflags
-configure.objc_archflags
-configure.ld_archflags
-configure.universal_cflags
-configure.universal_cxxflags
-configure.universal_ldflags
-configure.universal_args

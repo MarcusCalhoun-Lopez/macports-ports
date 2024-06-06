@@ -38,6 +38,7 @@ checksums           ${distname}${extract.suffix} \
                     size    1619429
 
 if { ${configure.build_arch} ne "i386" } {
+    # TODO: does this work with universal?
     # TODO: most other GCC ports apply this to all architectures
     gcc.macports_exports-delete DISABLE_MACPORTS_AS_CLANG_SEARCH=1 \
                                 DISABLE_XCODE_AS_CLANG_SEARCH=1
@@ -80,7 +81,6 @@ platform darwin {
         # alignment to 2
         patchfiles-append   boehm-gc-darwin15-hack.patch
     }
-    configure.pre_args-append --build=${build_arch}-apple-darwin${os.major}
 }
 
 platform darwin 11 {
@@ -101,26 +101,6 @@ compiler.blacklist-append {llvm-gcc-4.2 < 2336.1}
 # https://trac.macports.org/ticket/47996
 compiler.blacklist-append {clang < 300}
 
-# "-stdlib" would be passed on to the bootstrap compiler if present
-configure.cxx_stdlib
-
 post-destroot {
     move ${destroot}${prefix}/lib/${name}/pkgconfig/libgcj-${gcc.suffix}.pc ${destroot}${prefix}/lib/pkgconfig/
 }
-
-platform powerpc {
-    configure.universal_archs ppc ppc64
-}
-platform i386 {
-    configure.universal_archs i386 x86_64
-}
-configure.cc-append [get_canonical_archflags]
-configure.cc_archflags
-configure.cxx-append ${configure.cxx_archflags}
-configure.cxx_archflags
-configure.objc_archflags
-configure.ld_archflags
-configure.universal_cflags
-configure.universal_cxxflags
-configure.universal_ldflags
-configure.universal_args

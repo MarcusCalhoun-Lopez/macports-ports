@@ -19,10 +19,6 @@ checksums           rmd160  a6d646ed9765f973d3f63ef560edf4a50cf686c3 \
                     sha256  e275e76442a6067341a27f04c5c6b83d8613144004c0413528863dc6b5c743da \
                     size    87858592
 
-platform darwin {
-    configure.pre_args-append --build=${build_arch}-apple-darwin${os.major}
-}
-
 if { ${os.platform} eq "darwin" } {
     # gcc has build issues on macOS 11.3 with the use of Xcode 12.5 clang via cctools for ld
     # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=100340
@@ -99,35 +95,6 @@ platform darwin {
     }
 }
 
-# "-stdlib" would be passed on to the bootstrap compiler if present
-configure.cxx_stdlib
-
 if {${subport} eq ${libgccname}} {
     depends_lib          port:zlib port:libiconv
 }
-
-    platform powerpc {
-        configure.universal_archs ppc ppc64
-    }
-    if { ${os.platform} eq "darwin" && ${os.major} >= 20 } {
-        platform i386 {
-            configure.universal_archs x86_64 arm64
-        }
-        platform arm {
-            configure.universal_archs x86_64 arm64
-        }
-    } else {
-        platform i386 {
-            configure.universal_archs i386 x86_64
-        }
-    }
-    configure.cc-append [get_canonical_archflags]
-    configure.cc_archflags
-    configure.cxx-append ${configure.cxx_archflags}
-    configure.cxx_archflags
-    configure.objc_archflags
-    configure.ld_archflags
-    configure.universal_cflags
-    configure.universal_cxxflags
-    configure.universal_ldflags
-    configure.universal_args

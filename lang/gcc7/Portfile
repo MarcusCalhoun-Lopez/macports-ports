@@ -16,7 +16,7 @@ checksums           rmd160  91d46ec088badec75f41a2ad2a0ba228a6715107 \
                     size    62783088
 
 if { ${configure.build_arch} eq "i386" && ${os.major} >= 10 } {
-
+    # TODO: does this work with universal?
     # fix no-pie clang bug bootstrapping gcc on i386
     # https://trac.macports.org/ticket/63161
     patchfiles-append  patch-gcc7-i686-clang-bootstrap-fix.diff
@@ -25,10 +25,6 @@ if { ${configure.build_arch} eq "i386" && ${os.major} >= 10 } {
 # Work around parallel building issue on APFS
 # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=81797
 patchfiles-append   notparallel-install-headers.patch
-
-platform darwin {
-    configure.pre_args-append --build=${build_arch}-apple-darwin${os.major}
-}
 
 platform darwin 8 i386 {
     patchfiles-append patch-gcc7-tiger-intel.diff
@@ -43,9 +39,6 @@ compiler.blacklist-append {llvm-gcc-4.2 < 2336.1}
 # https://trac.macports.org/ticket/47996
 compiler.blacklist-append {clang < 300}
 
-# "-stdlib" would be passed on to the bootstrap compiler if present
-configure.cxx_stdlib
-
 if {${subport} eq "libgcc7"} {
     if { ${libgcc.is_full} } {
         depends_lib      port:zlib
@@ -53,26 +46,3 @@ if {${subport} eq "libgcc7"} {
         libgcc.keep      libgfortran.4.dylib libasan.4.dylib libubsan.0.dylib libcilkrts.5.dylib
     }
 }
-
-platform powerpc {
-    configure.universal_archs ppc ppc64
-}
-platform i386 {
-    configure.universal_archs i386 x86_64
-}
-
-# gcc default optflags are required to build gcc7 with older compilers
-# see https://trac.macports.org/ticket/59706
-# we probably also want to clear out the rest of the configure.XYZ flags
-configure.optflags
-
-configure.cc-append [get_canonical_archflags]
-configure.cc_archflags
-configure.cxx-append ${configure.cxx_archflags}
-configure.cxx_archflags
-configure.objc_archflags
-configure.ld_archflags
-configure.universal_cflags
-configure.universal_cxxflags
-configure.universal_ldflags
-configure.universal_args

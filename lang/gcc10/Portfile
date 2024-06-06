@@ -26,10 +26,6 @@ if { ${os.platform} eq "darwin" } {
     patchfiles-append  patch-genconditions.diff
 }
 
-platform darwin {
-    configure.pre_args-append --build=${build_arch}-apple-darwin${os.major}
-}
-
 if { ${os.platform} eq "darwin" } {
     # Bootstrap comparison fails on 10.6, so disable
     #   https://trac.macports.org/ticket/65280
@@ -52,9 +48,6 @@ if { ${os.platform} eq "darwin" } {
 # https://trac.macports.org/ticket/58493
 compiler.blacklist-append {clang < 800}  gcc-4.0 *gcc-4.2 {macports-clang-3.[4-7]}
 
-# "-stdlib" would be passed on to the bootstrap compiler if present
-configure.cxx_stdlib
-
 # clang (as) from Xcode 12.5 has various problems with gcc build
 if { ${os.platform} eq "darwin" && \
          ([vercmp ${xcodeversion} >= 12.5] || [vercmp ${xcodecltversion} >= 12.5]) } {
@@ -67,29 +60,3 @@ if { ${os.platform} eq "darwin" && \
     # https://trac.macports.org/ticket/62775
     configure.args-append  --without-build-config
 }
-
-    platform powerpc {
-        configure.universal_archs ppc ppc64
-    }
-    if { ${os.platform} eq "darwin" && ${os.major} >= 20 } {
-        platform i386 {
-            configure.universal_archs x86_64 arm64
-        }
-        platform arm {
-            configure.universal_archs x86_64 arm64
-        }
-    } else {
-        platform i386 {
-            configure.universal_archs i386 x86_64
-        }
-    }
-    configure.cc-append [get_canonical_archflags]
-    configure.cc_archflags
-    configure.cxx-append ${configure.cxx_archflags}
-    configure.cxx_archflags
-    configure.objc_archflags
-    configure.ld_archflags
-    configure.universal_cflags
-    configure.universal_cxxflags
-    configure.universal_ldflags
-    configure.universal_args

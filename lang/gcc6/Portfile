@@ -16,7 +16,7 @@ checksums           rmd160  66782b17cff89f22e5e8869fa96bd9a8985f5067 \
                     size    74355588
 
 if { ${configure.build_arch} eq "i386" && ${os.major} >= 10 } {
-
+    # TODO: does this work with universal?
     # fix no-pie clang bug bootstrapping gcc on i386
     # https://trac.macports.org/ticket/63161
     patchfiles-append  patch-gcc7-i686-clang-bootstrap-fix.diff
@@ -40,8 +40,6 @@ if {[vercmp ${xcodeversion} 10.2] >= 0} {
 }
 
 platform darwin {
-    configure.pre_args-append --build=${build_arch}-apple-darwin${os.major}
-
     # see https://gcc.gnu.org/ml/gcc-patches/2012-05/msg00672.html
     patchfiles-append         patch-float128.diff
 }
@@ -83,20 +81,3 @@ if {${subport} eq "libgcc6"} {
     # TODO: check https://trac.macports.org/ticket/54768
     libgcc.keep libgfortran.3.dylib libasan.3.dylib
 }
-
-platform powerpc {
-    configure.universal_archs ppc ppc64
-}
-platform i386 {
-    configure.universal_archs i386 x86_64
-}
-configure.cc-append [get_canonical_archflags]
-configure.cc_archflags
-configure.cxx-append ${configure.cxx_archflags}
-configure.cxx_archflags
-configure.objc_archflags
-configure.ld_archflags
-configure.universal_cflags
-configure.universal_cxxflags
-configure.universal_ldflags
-configure.universal_args

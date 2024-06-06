@@ -66,6 +66,7 @@ patchfiles-append   yosemite-libtool.patch
 
 if { ${configure.build_arch} ne "i386" } {
     # TODO: most other GCC ports apply this to all architectures
+    # TODO: does this work with universal?
     gcc.macports_exports-delete DISABLE_MACPORTS_AS_CLANG_SEARCH=1 \
                                 DISABLE_XCODE_AS_CLANG_SEARCH=1
 }
@@ -74,10 +75,6 @@ worksrcdir          gcc-${version}
 
 post-extract {
     copy ${distpath}/${ecj} ${worksrcpath}/ecj.jar
-}
-
-platform darwin {
-    configure.pre_args-append --build=${build_arch}-apple-darwin${os.major}
 }
 
 # TODO: check if `known_fail` is needed for `[vercmp ${xcodeversion} >=  9]`
@@ -91,30 +88,22 @@ compiler.blacklist-append gcc-4.0
 # http://trac.macports.org/ticket/29104
 compiler.blacklist-append {llvm-gcc-4.2 < 2336.1}
 
-if {![variant_isset universal] && ${configure.build_arch} eq "x86_64"} {
-    # LTO doesn't work for most targets
-    # see https://trac.macports.org/ticket/32863
-    configure.args-append --enable-lto
-}
+# LTO doesn't work for most targets
+# see https://trac.macports.org/ticket/32863
+configure.args.x86_64-append    --enable-lto
 
 platform darwin 8 {
     # see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=45248
     configure.args-append --with-dwarf2
 }
 
-if { ([variant_isset universal] && "ppc" ni ${configure.universal_archs} || "ppc64" ni ${configure.universal_archs})
-     ||
-     (![variant_isset universal] && "ppc" ne ${configure.build_arch} && "ppc64" ne ${configure.build_arch})
- } {
-    # TODO: remove entirely?
-    # this is the only GCC port to use this configuration argument
-    # see https://github.com/macports/macports-ports/commit/95e18abb592e2abab10556326ae51e455608045b
-    # see https://trac.macports.org/ticket/39655
-    configure.args-append   --enable-plugin
+# TODO: remove entirely?
+# this is the only GCC port to use this configuration argument
+# see https://github.com/macports/macports-ports/commit/95e18abb592e2abab10556326ae51e455608045b
+# see https://trac.macports.org/ticket/39655
+foreach arch {arm64 x86_64 i386} {
+    configure.args.${arch}-append   --enable-plugin
 }
-
-# "-stdlib" would be passed on to the bootstrap compiler if present
-configure.cxx_stdlib
 
 if {${subport} eq "libgcc45"} {
     foreach arch {arm64 x86_64 i386 ppc ppc64} {
@@ -137,26 +126,10 @@ post-destroot {
     file rename ${destroot}${prefix}/share/python/classfile.py \
                 ${destroot}${prefix}/share/python/classfile-45.py
 
+    # TODO: does this work for universal?
     # darwin-sections.def gets missed on install for some reason
     if {${os.arch} ne "powerpc"} {
         file copy ${worksrcpath}/../gcc-${version}/gcc/config/darwin-sections.def {*}[glob ${destroot}${prefix}/lib/${name}/gcc/*/${version}/plugin/include/config]
     }
 }
 }
-
-platform powerpc {
-    configure.universal_archs ppc ppc64
-}
-
-platform i386 {
-    configure.universal_archs i386 x86_64
-}
-configure.cc-append [get_canonical_archflags]
-configure.cc_archflags
-configure.cxx_archflags
-configure.objc_archflags
-configure.ld_archflags
-configure.universal_cflags
-configure.universal_cxxflags
-configure.universal_ldflags
-configure.universal_args

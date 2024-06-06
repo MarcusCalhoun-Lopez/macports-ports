@@ -11,6 +11,7 @@ PortGroup   active_variants             1.1
 PortGroup   compiler_blacklist_versions 1.0
 PortGroup   conflicts_build             1.0
 PortGroup   gcc_info                    1.0
+PortGroup   muniversal                  1.1
 PortGroup   select                      1.0
 
 ####################################################################################################################################
@@ -56,12 +57,19 @@ default master_sites    {https://ftpmirror.gnu.org/gcc/gcc-${version}/${gcc.tag}
 default distname        {gcc-${version}}
 
 default configure.dir   {${workpath}/build}
-default configure.cmd   {${worksrcpath}/configure}
+default configure.cmd   {${workpath}/${worksrcdir}/configure} ; # `${worksrcpath}/configure}` does not work with muniversal PG
 
 default build.dir       {${configure.dir}}
 default build.target    {bootstrap-lean}
 
 default destroot.target {install install-info-host}
+
+# try to keep flags as clean as possible
+# most importantly, `-stdlib` would be passed on to the bootstrap compiler if present
+default configure.cflags        {}
+default configure.cxxflags      {}
+default configure.pipe          {}
+default configure.cxx_stdlib    {}
 
 # allow configure scripts to set CPP variants to something like `$(CC) -arch ... -E`
 # `/usr/bin/cpp` does not work
@@ -74,6 +82,9 @@ proc portconfigure::configure_get_compiler {type {compiler {}}} {
     }
 }
 
+# muniversal PG cannot merge .la files
+default destroot.delete_la_files    {yes}
+
 # TODO it is not entirely clear why this is needed
 #     see https://github.com/macports/macports-ports/commit/dd17e940bc80e9902dc1969ebf27e4de00d246b0
 default configure.ccache    {no}
@@ -85,6 +96,31 @@ default livecheck.regex {gcc-([option gcc.major].\[0-9.\]+)/}
 ####################################################################################################################################
 # tweak PortGroup defaults
 ####################################################################################################################################
+
+# cross-compiling on macOS does not seem to be well supported
+# if host!=build, build fails due to lack of build spec file
+#     see https://gcc.gnu.org/onlinedocs/gcc/Spec-Files.html
+# if host=build!=target, build fails due to lack of `host_detect_local_cpu`
+default muniversal.run_binaries     {yes}
+foreach arch {arm64 x86_64 i386 ppc ppc64} {
+    if { [option muniversal.can_run.${arch}] && [option muniversal.is_cross.${arch}] } {
+        default muniversal.is_cross.${arch} {no}
+    }
+}
+
+# always add `--build=...`
+default triplet.add_build   {all}
+
+# ensure directory names use same names ae `${configure.build_arch}`
+foreach arch {arm64 x86_64 i386 ppc ppc64} {
+    default triplet.cpu.${arch}      "${arch}"
+}
+unset   arch
+
+# do not add `-arch ...` to compiler flags
+default muniversal.arch_flag        {no}
+# append `-arch ...` to compiler namea
+default muniversal.arch_compiler    {yes}
 
 default select.group {[expr {${subport} eq ${name} ? "gcc" : ""}]}
 default select.file  {[expr {${subport} eq ${name} ? "${filespath}/mp-${name}" : ""}]}
@@ -118,7 +154,7 @@ default gcc.languages.ppc64     {c c++ objc obj-c++ fortran lto     java}
 # essentially an associative array
 #     index is the value for `--enable-languages`
 #     value can have 1-3 parts
-#    .    name of language (front end but not language if blank)
+#         name of language (front end but not language if blank)
 #         GCC version front end was introduced (all versions if does not exist)
 #         GCC version front end was removed (still exists if does not exist)
 options gcc.languages_info
@@ -156,7 +192,6 @@ default gcc.depends_lib     {port:cctools \
                             {port:ppl 4.6 4.8}
                             port:zlib \
                             {port:zstd 10}}
-
 
 options gcc.depends_run
 default gcc.depends_run     {port:gcc_select}
@@ -235,13 +270,9 @@ default gcc.args    {   --libdir=${prefix}/lib/${gcc.libgcc_name} \
                         {--with-zstd=${prefix}      10} \
                         {--enable-checking=release  10} \
                         {--enable-stage1-checking   4.3 10} \
-                        --disable-multilib \
                         {--enable-lto               4.6} \
                         {--enable-libstdcxx-time    4.6} \
                         {--with-build-config=bootstrap-debug    4.5} \
-                        --with-as=${gcc.as} \
-                        --with-ld=${gcc.ld} \
-                        --with-ar=${gcc.ar} \
                         --with-bugurl=https://trac.macports.org/newticket \
                         {--enable-host-shared   8} \
                         {--with-darwin-extra-rpath=${gcc.rpath} 10} \
@@ -262,16 +293,32 @@ options libgcc.keep
 default libgcc.keep     {}
 
 # ensure configure script and Makefile.in find the right tools
+# here, we define more values than are necessary (or used)
+#     however, there seems to be no harm
+# muniversal PG handles CPP_FOR_BUILD, CXXCPP_FOR_BUILD, CPPFLAGS_FOR_BUILD, CC_FOR_BUILD, CXX_FOR_BUILD
 options gcc.exports
-default gcc.exports {AR_FOR_TARGET=${gcc.ar} \
+default gcc.exports {AR=${gcc.ar} \
+                     AR_FOR_BUILD=${gcc.ar} \
+                     AR_FOR_TARGET=${gcc.ar} \
+                     AS=${gcc.as} \
+                     AS_FOR_BUILD=${gcc.as} \
                      AS_FOR_TARGET=${gcc.as} \
+                     LD=${gcc.ld} \
+                     LD_FOR_BUILD=${gcc.ld} \
                      LD_FOR_TARGET=${gcc.ld} \
+                     NM=${prefix}/bin/nm \
+                     NM_FOR_BUILD=${prefix}/bin/nm \
                      NM_FOR_TARGET=${prefix}/bin/nm \
+                     OBJDUMP=${prefix}/bin/objdump \
                      OBJDUMP_FOR_TARGET=${prefix}/bin/objdump \
+                     RANLIB=${prefix}/bin/ranlib \
+                     RANLIB_FOR_BUILD=${prefix}/bin/ranlib \
                      RANLIB_FOR_TARGET=${prefix}/bin/ranlib \
+                     STRIP=${prefix}/bin/strip \
                      STRIP_FOR_TARGET=${prefix}/bin/strip \
                      OTOOL=${prefix}/bin/otool \
-                     OTOOL64=${prefix}/bin/otool}
+                     OTOOL64=${prefix}/bin/otool
+                    }
 
 # if they exist, libraries from which to stip debug symbols to supress debugger warnings
 #     see https://trac.macports.org/ticket/34831
@@ -325,10 +372,14 @@ proc eval_variants {variations} {
     # TODO: do not add for Libgcc?
     if { [vercmp [option gcc.major] >= 10] } {
         variant stdlib_flag description {Enable stdlib command line flag to select c++ runtime} {}
-    }
-    if { [option configure.build_arch] ni [list ppc ppc64] } {
         # libcxx is unavailable on PPC
-        default_variants-append +stdlib_flag
+        foreach arch [list arm64 x86_64 i386] {
+            if { ${arch} in [option muniversal.architectures] } {
+                default_variants-delete +stdlib_flag
+                default_variants-append +stdlib_flag
+                break;
+            }
+        }
     }
     uplevel ::real_gcc_eval_variants ${variations}
 }
@@ -436,14 +487,29 @@ proc gcc_build::callback {} {
     # ensure configure script finds libc++ headers
     if { [variant_exists stdlib_flag] && [variant_isset stdlib_flag] } {
         # libcxx is unavailable on PPC
-            configure.args-delete --with-gxx-libcxx-include-dir=${prefix}/libexec/${name}/libc++/include/c++/v1
-            configure.args-append --with-gxx-libcxx-include-dir=${prefix}/libexec/${name}/libc++/include/c++/v1
-        depends_run-delete port:${name}-libcxx
-        depends_run-append port:${name}-libcxx
+        foreach arch [list arm64 x86_64 i386] {
+            configure.args.${arch}-delete   --with-gxx-libcxx-include-dir=${prefix}/libexec/${name}/libc++/include/c++/v1
+            configure.args.${arch}-append   --with-gxx-libcxx-include-dir=${prefix}/libexec/${name}/libc++/include/c++/v1
+        }
+        depends_run-delete  port:${name}-libcxx
+        depends_run-append  port:${name}-libcxx
     }
 
-    if { [variant_exists universal] && [variant_isset universal] } {
-        configure.args-delete   --disable-multilib
+    # ensure GFortran (part of GCC) works properly with -m32/-m64
+    #     fortran mod and "header" files cannot be merged
+    #     GFortran will only look in arch specific directories via `-fintrinsic-modules-path` if multilib is enabled
+    # needed for Libgcc since multilib affects installed header files
+    configure.args.arm64-delete             --disable-multilib
+    configure.args.arm64-append             --disable-multilib
+    foreach {arch1 arch2} [list x86_64 i386 ppc64 ppc] {
+        if { ${arch1} ni [option muniversal.architectures] } {
+            configure.args.${arch2}-delete  --disable-multilib
+            configure.args.${arch2}-append  --disable-multilib
+        }
+        if { ${arch2} ni [option muniversal.architectures] } {
+            configure.args.${arch1}-delete  --disable-multilib
+            configure.args.${arch1}-append  --disable-multilib
+        }
     }
 
     # see description of `gcc.exports`
@@ -529,9 +595,7 @@ post-destroot {
 
         # avoid conflict between various GCC ports
         foreach file [glob ${destroot}${prefix}/share/{info,man/man7}/*] {
-            set extension [file extension ${file}]
-            set newfile [regsub "${extension}$" ${file} "-mp-${gcc.suffix}${extension}"]
-            file rename ${file} ${newfile}
+            file rename ${file} "[file rootname ${file}]-mp-${gcc.suffix}[file extension ${file}]"
         }
 
         # while there can be multiple versions of these runtimes in a single
@@ -541,14 +605,18 @@ post-destroot {
         # see http://trac.macports.org/ticket/35770
         # see http://trac.macports.org/ticket/38814
         foreach dylib [glob -directory ${destroot}${prefix}/lib/${name} -tails *.*.dylib] {
+            # `${dylib}` is a versioned shared library
             file delete ${destroot}${prefix}/lib/${name}/${dylib}
             ln -s ${prefix}/lib/libgcc/${dylib} ${destroot}${prefix}/lib/${name}/${dylib}
         }
-        if { [variant_exists universal] && [variant_isset universal] } {
-            foreach archdir [glob ${destroot}${prefix}/lib/${name}/*/] {
+
+        # allow merge to handle different architectures
+        foreach dylib [glob -directory ${destroot}${prefix}/lib/${name} -tails *.{dylib,so,a,o}] {
+            # `${dylib}` can be merged into a fat binary
+            foreach archdir [glob -nocomplain ${destroot}${prefix}/lib/${name}/{arm64,x86_64,i386,ppc,ppc64}/] {
                 if { [file exists ${archdir}/${dylib}] } {
                     delete ${archdir}/${dylib}
-                    ln -s ${prefix}/lib/libgcc/${dylib} ${archdir}/${dylib}
+                    ln -s ../${dylib} ${archdir}/${dylib}
                 }
             }
         }
@@ -565,6 +633,10 @@ post-destroot {
         file delete -force ${destroot}${prefix}/bin
         file delete -force ${destroot}${prefix}/share
         file delete -force ${destroot}${prefix}/libexec
+        foreach archdir [glob -nocomplain ${destroot}${prefix}/lib/libgcc/{arm64,x86_64,i386,ppc,ppc64}/] {
+            # allow merge to handle different architectures
+            file delete -force ${archdir}
+        }
         if { ![option libgcc.is_full] } {
             # this subport is not a full Libgcc installation, so only keep the specified files
             file delete -force ${destroot}${prefix}/include
@@ -574,37 +646,6 @@ post-destroot {
                 }
             }
         }
-
-        # temporary working dir for dylibs
-        xinstall -d -m 0755 ${destroot}${prefix}/lib/libgcc.merged
-        # loop over libs to install
-        foreach dylib [glob -directory ${destroot}${prefix}/lib/libgcc -tails *.*.dylib] {
-            # move dylib to temp area
-            move ${destroot}${prefix}/lib/libgcc/${dylib} ${destroot}${prefix}/lib/libgcc.merged
-
-            # if needed create versionless sym link to dylib
-            set dylib_split [split ${dylib} "."]
-            set dylib_nover ${destroot}${prefix}/lib/libgcc.merged/[lindex ${dylib_split} 0].[lindex ${dylib_split} end]
-            if { ![file exists ${dylib_nover}]  } {
-                ln -s ${dylib} ${dylib_nover}
-            }
-
-            # universal support
-            if { [variant_exists universal] && [variant_isset universal] } {
-                foreach archdir [glob ${destroot}${prefix}/lib/libgcc/*/] {
-                    set archdir_nodestroot [string map "${destroot}/ /" ${archdir}]
-                    if { [file exists ${archdir}/${dylib}] } {
-                        system "install_name_tool -id ${prefix}/lib/libgcc/${dylib} ${archdir}/${dylib}"
-                        foreach link [glob -tails -directory ${archdir} *.dylib] {
-                            system "install_name_tool -change ${archdir_nodestroot}${link} ${prefix}/lib/libgcc/${link} ${archdir}/${dylib}"
-                        }
-                        system "lipo -create -output ${destroot}${prefix}/lib/libgcc.merged/${dylib}~ ${destroot}${prefix}/lib/libgcc.merged/${dylib} ${archdir}/${dylib} && mv ${destroot}${prefix}/lib/libgcc.merged/${dylib}~ ${destroot}${prefix}/lib/libgcc.merged/${dylib}"
-                    }
-                }
-            }
-        }
-        file delete -force ${destroot}${prefix}/lib/libgcc
-        move ${destroot}${prefix}/lib/libgcc.merged ${destroot}${prefix}/lib/libgcc
 
         # see description of `libgcc.strip`
         foreach dylib [option libgcc.strip] {
@@ -728,3 +769,9 @@ proc gcc_build::stub_callback {} {
     }
 }
 port::register_callback gcc_build::stub_callback
+# bypass muniversal PG
+rename universal_setup real_gcc_universal_setup
+proc universal_setup {args} {
+    if { [option subport] ne [option name] && ![option libgcc.is_full] && [option libgcc.keep] eq "" } { return }
+    real_gcc_universal_setup ${args}
+}

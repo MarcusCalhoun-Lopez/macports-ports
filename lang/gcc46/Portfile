@@ -33,6 +33,7 @@ checksums           ${distname}${extract.suffix} \
 
 if { ${configure.build_arch} ne "i386" } {
     # TODO: most other GCC ports apply this to all architectures
+    # TODO: does this work with universal?
     gcc.macports_exports-delete DISABLE_MACPORTS_AS_CLANG_SEARCH=1 \
                                 DISABLE_XCODE_AS_CLANG_SEARCH=1
 }
@@ -57,10 +58,6 @@ post-extract {
     copy ${distpath}/${ecj} ${worksrcpath}/ecj.jar
 }
 
-platform darwin {
-    configure.pre_args-append --build=${build_arch}-apple-darwin${os.major}
-}
-
 # 'java' and 'go' lead to compilation errors on 10.5/Xcode 3.x
 foreach arch {arm64 x86_64 i386 ppc ppc64} {
     gcc.languages.${arch}-delete java
@@ -82,28 +79,9 @@ platform darwin 8 {
     configure.args-append --with-dwarf2
 }
 
-# "-stdlib" would be passed on to the bootstrap compiler if present
-configure.cxx_stdlib
-
 post-destroot {
     # install/copy ffitarget.h only if we have it
     if {![catch {set ffitarget.h [glob ${destroot}${prefix}/lib/${name}/gcc/*/${version}/include/ffitarget.h]} result]} {
         file copy ${ffitarget.h} ${destroot}${prefix}/include/${name}/
     }
 }
-
-platform powerpc {
-    configure.universal_archs ppc ppc64
-}
-platform i386 {
-    configure.universal_archs i386 x86_64
-}
-configure.cc-append [get_canonical_archflags]
-configure.cc_archflags
-configure.cxx_archflags
-configure.objc_archflags
-configure.ld_archflags
-configure.universal_cflags
-configure.universal_cxxflags
-configure.universal_ldflags
-configure.universal_args

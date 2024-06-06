@@ -30,14 +30,10 @@ if { ${os.major} > 19 } {
 }
 
 if { ${configure.build_arch} eq "i386" && ${os.major} >= 10 } {
-
+    # TODO: does this work with universal?
     # fix no-pie clang bug bootstrapping gcc on i386
     # https://trac.macports.org/ticket/63161
     patchfiles-append  patch-gcc10-i686-clang-bootstrap-fix.diff
-}
-
-platform darwin {
-    configure.pre_args-append --build=${build_arch}-apple-darwin${os.major}
 }
 
 # on 10.6.8 building with the system gcc compilers leads to
@@ -67,23 +63,3 @@ compiler.blacklist-append {llvm-gcc-4.2 < 2336.1}
 
 # https://trac.macports.org/ticket/47996
 compiler.blacklist-append {clang < 300}
-
-# "-stdlib" would be passed on to the bootstrap compiler if present
-configure.cxx_stdlib
-
-platform powerpc {
-    configure.universal_archs ppc ppc64
-}
-platform i386 {
-    configure.universal_archs i386 x86_64
-}
-configure.cc-append [get_canonical_archflags]
-configure.cc_archflags
-configure.cxx-append ${configure.cxx_archflags}
-configure.cxx_archflags
-configure.objc_archflags
-configure.ld_archflags
-configure.universal_cflags
-configure.universal_cxxflags
-configure.universal_ldflags
-configure.universal_args
