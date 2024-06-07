@@ -19,6 +19,7 @@ checksums           rmd160  66782b17cff89f22e5e8869fa96bd9a8985f5067 \
 # TODO: check https://trac.macports.org/ticket/54768
 libgcc.keep         libgfortran.3.dylib \
                     libasan.3.dylib
+libgcc.depends_lib
 if { ${subport} ne ${name} } {
     # do not build front ends that will be deleted anyway
     foreach arch {arm64 x86_64 i386 ppc ppc64} {

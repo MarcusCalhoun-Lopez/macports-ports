@@ -16,6 +16,7 @@ checksums           rmd160  a43fd21a3887af24daa550c4b52fb634e33b633c \
                     size    79837032
 
 libgcc.keep         libasan.6.dylib
+libgcc.depends_lib  port:libiconv
 
 if { ${os.platform} eq "darwin" } {
     # Patch generated from https://github.com/iains/gcc-11-branch

@@ -19,6 +19,7 @@ checksums           rmd160  2ba36108599ceee93931722d98e0d5280037b05c \
 libgcc.keep         libasan.5.dylib \
                     libgcc_ext.10.4.dylib \
                     libgcc_ext.10.5.dylib
+libgcc.depends_lib
 
 patchfiles          patch-fix-libgccjit-soname \
                     patch-darwin21-support.diff

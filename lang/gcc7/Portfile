@@ -16,15 +16,14 @@ checksums           rmd160  91d46ec088badec75f41a2ad2a0ba228a6715107 \
                     sha256  b81946e7f01f90528a1f7352ab08cc602b9ccc05d4e44da4bd501c5a189ee661 \
                     size    62783088
 
-if { ${subport} ne ${name} && ${libgcc.is_full}} {
-    # Libgcc dependencies
-    depends_lib     port:zlib
-}
-if { !${libgcc.is_full} } {
-    libgcc.keep     libgfortran.4.dylib \
-                    libasan.4.dylib \
-                    libubsan.0.dylib \
-                    libcilkrts.5.dylib
+if { ${libgcc.is_full} } {
+    libgcc.depends_lib  port:zlib
+} else {
+    libgcc.keep         libgfortran.4.dylib \
+                        libasan.4.dylib \
+                        libubsan.0.dylib \
+                        libcilkrts.5.dylib
+    libgcc.depends_lib
 }
 
 if { ${configure.build_arch} eq "i386" && ${os.major} >= 10 } {

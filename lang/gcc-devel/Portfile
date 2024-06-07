@@ -24,12 +24,6 @@ master_sites        https://mirror.koddos.net/gcc/snapshots/${version}/ \
                     ftp://ftp.funet.fi/pub/mirrors/sources.redhat.com/pub/gcc/snapshots/${version}/ \
                     ftp://gcc.gnu.org/pub/gcc/snapshots/${version}/
 
-if { ${subport} ne ${name} } {
-    # Libgcc dependencies
-    depends_lib     port:zlib \
-                    port:libiconv
-}
-
 if { ${os.platform} eq "darwin" } {
     # Do not abort if 'system' headers in /opt/local/include/gcc are missing
     patchfiles-append      patch-disable-sys-header-missing-abort.diff

@@ -193,6 +193,15 @@ default gcc.depends_lib     {port:cctools \
                             port:zlib \
                             {port:zstd 10}}
 
+options libgcc.depends_lib
+default libgcc.depends_lib  {port:gmp
+                            path:lib/pkgconfig/isl.pc:isl \
+                            port:libiconv \
+                            port:libmpc \
+                            port:mpfr \
+                            port:zlib \
+                            {port:zstd 10}}
+
 options gcc.depends_run
 default gcc.depends_run     {port:gcc_select}
 
@@ -425,6 +434,7 @@ proc gcc_build::callback {} {
 
         # even if little of it is retained, building Libgcc requires the same dependencies as GCC
         gcc_build::add_dependencies build [list {*}[option gcc.depends_build] {*}[option gcc.depends_lib]]
+        gcc_build::add_dependencies lib   [option libgcc.depends_lib]
         if { [exists depends_lib] } {
             # avoid duplicates
             depends_build-delete    {*}[option depends_lib]

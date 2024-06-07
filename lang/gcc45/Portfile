@@ -53,7 +53,8 @@ checksums           gcc-core-${version}.tar.bz2 \
                     sha256  98fd128f1d374d9e42fd9d4836bdd249c6d511ebc6c0df17fbc1b9df96c3d781 \
                     size    1470676
 
-libgcc.keep libobjc-gnu.2.dylib
+libgcc.keep         libobjc-gnu.2.dylib
+libgcc.depends_lib
 
 # TODO: this is the only GCC port that adds to `libgcc.strip`
 libgcc.strip-append libobjc-gnu.2.dylib
