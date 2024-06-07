@@ -27,15 +27,10 @@ if { ${subport} ne ${name} } {
     }
 }
 
-if { ${configure.build_arch} eq "i386" && ${os.major} >= 10 } {
-    # TODO: does this work with universal?
+if { ${os.major} >= 10 } {
     # fix no-pie clang bug bootstrapping gcc on i386
-    # https://trac.macports.org/ticket/63161
-    patchfiles-append   patch-gcc7-i686-clang-bootstrap-fix.diff
-} else {
-    # TODO: most other GCC ports apply this to all architectures
-    gcc.macports_exports-delete DISABLE_MACPORTS_AS_CLANG_SEARCH=1 \
-                                DISABLE_XCODE_AS_CLANG_SEARCH=1
+    # see https://trac.macports.org/ticket/63161
+    patchfiles.i386-append  patch-gcc7-i686-clang-bootstrap-fix.diff
 }
 
 # Work around parallel building issue on APFS
@@ -64,3 +59,9 @@ platform darwin 8 i386 {
 # see http://trac.macports.org/ticket/29104
 # see https://trac.macports.org/ticket/47996
 compiler.blacklist-append   gcc-4.0 {llvm-gcc-4.2 < 2336.1} {clang < 300}
+
+if { ${configure.build_arch} ne "i386" || ${os.major} < 10 } {
+    # TODO: most other GCC ports apply this to all architectures
+    gcc.macports_exports-delete DISABLE_MACPORTS_AS_CLANG_SEARCH=1 \
+                                DISABLE_XCODE_AS_CLANG_SEARCH=1
+}

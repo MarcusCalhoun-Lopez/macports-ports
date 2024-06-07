@@ -26,11 +26,10 @@ if { ${libgcc.is_full} } {
     libgcc.depends_lib
 }
 
-if { ${configure.build_arch} eq "i386" && ${os.major} >= 10 } {
-    # TODO: does this work with universal?
+if { ${os.major} >= 10 } {
     # fix no-pie clang bug bootstrapping gcc on i386
-    # https://trac.macports.org/ticket/63161
-    patchfiles-append   patch-gcc7-i686-clang-bootstrap-fix.diff
+    # see https://trac.macports.org/ticket/63161
+    patchfiles.i386-append  patch-gcc7-i686-clang-bootstrap-fix.diff
 }
 
 # Work around parallel building issue on APFS
