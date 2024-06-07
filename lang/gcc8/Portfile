@@ -4,11 +4,12 @@ PortSystem                              1.0
 PortGroup           gcc_build           1.0
 PortGroup           xcode_workaround    1.0
 
-epoch               5
 name                gcc8
 version             8.5.0
-revision            2
-subport             libgcc8 { revision 1 }
+subport ${name}     { revision 2 }
+subport lib${name}  { revision 1 }
+epoch               5
+
 platforms           {darwin >= 10 < 15}
 
 checksums           rmd160  e7f3dedec67864006bf9f7e358817ce713b4476e \
@@ -21,23 +22,26 @@ if { ${os.major} > 19 } {
     # https://trac.macports.org/ticket/60908
     # Patch for macOS 11 (Darwin20) version numbering taken from
     # https://github.com/iains/gcc-darwin-arm64/commit/556ab512
-    patchfiles-append         big-sur-version-fix.diff
+    patchfiles-append   big-sur-version-fix.diff
     # Build doesn't understand a 11.0 deployment target so force to 10.16
-    macosx_deployment_target  10.16
+    macosx_deployment_target    10.16
     # Fix detection of sanitizer support
     # https://trac.macports.org/ticket/61494
-    patchfiles-append         fix-sanitisers-darwin20.diff
+    patchfiles-append   fix-sanitisers-darwin20.diff
 }
 
 if { ${configure.build_arch} eq "i386" && ${os.major} >= 10 } {
     # TODO: does this work with universal?
     # fix no-pie clang bug bootstrapping gcc on i386
     # https://trac.macports.org/ticket/63161
-    patchfiles-append  patch-gcc10-i686-clang-bootstrap-fix.diff
+    patchfiles-append   patch-gcc10-i686-clang-bootstrap-fix.diff
 }
 
-# on 10.6.8 building with the system gcc compilers leads to
-# bootstrap comparison failures
+# see https://trac.macports.org/ticket/29067
+# see https://trac.macports.org/ticket/29104
+# see https://trac.macports.org/ticket/47996
+compiler.blacklist-append   gcc-4.0 {llvm-gcc-4.2 < 2336.1} {clang < 300}
+# on 10.6.8 building with the system gcc compilers leads to bootstrap comparison failures
 platform darwin 10 {
     compiler.blacklist-append *gcc-3.* *gcc-4.*
 }
@@ -54,12 +58,3 @@ if { ${os.platform} eq "darwin" } {
         configure.args-append  --without-build-config
     }
 }
-
-# http://trac.macports.org/ticket/29067
-compiler.blacklist-append gcc-4.0
-
-# http://trac.macports.org/ticket/29104
-compiler.blacklist-append {llvm-gcc-4.2 < 2336.1}
-
-# https://trac.macports.org/ticket/47996
-compiler.blacklist-append {clang < 300}

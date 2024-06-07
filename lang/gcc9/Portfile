@@ -4,32 +4,40 @@ PortSystem                              1.0
 PortGroup           gcc_build           1.0
 PortGroup           xcode_workaround    1.0
 
-epoch               3
 name                gcc9
 version             9.5.0
-revision            1
-subport             libgcc9 { revision 2 }
+subport ${name}     { revision 1 }
+subport lib${name}  { revision 2 }
+epoch               3
+
 platforms           {darwin >= 10 < 15}
 
 checksums           rmd160  2ba36108599ceee93931722d98e0d5280037b05c \
                     sha256  27769f64ef1d4cd5e2be8682c0c93f9887983e6cfd1a927ce5a0a2915a95cf8f \
                     size    72462752
 
-patchfiles          patch-fix-libgccjit-soname
+libgcc.keep         libasan.5.dylib \
+                    libgcc_ext.10.4.dylib \
+                    libgcc_ext.10.5.dylib
 
-patchfiles-append   patch-darwin21-support.diff
+patchfiles          patch-fix-libgccjit-soname \
+                    patch-darwin21-support.diff
 
 if { ${os.platform} eq "darwin" && ${os.major} > 19 } {
     # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=92061
-    patchfiles-append patch-genconditions.diff
+    patchfiles-append   patch-genconditions.diff
 }
 
 if { ${configure.build_arch} eq "i386" && ${os.major} >= 10 } {
     # TODO: does this work with universal?
     # fix no-pie clang bug bootstrapping gcc on i386
     # https://trac.macports.org/ticket/63161
-    patchfiles-append  patch-gcc10-i686-clang-bootstrap-fix.diff
+    patchfiles-append   patch-gcc10-i686-clang-bootstrap-fix.diff
 }
+
+# see https://trac.macports.org/ticket/58493
+# see https://trac.macports.org/ticket/65415
+compiler.blacklist-append   {clang < 800} gcc-4.0 *gcc-4.2 {macports-clang-3.[4-7]} {macports-clang-1[2-9]}
 
 # clang (as) from Xcode 12.5 has various problems with gcc build
 if { ${os.platform} eq "darwin" && \
@@ -49,11 +57,3 @@ if { ${os.platform} eq "darwin" && \
 if { ${os.platform} eq "darwin" && ${os.major} < 15 } {
     configure.args-append  --without-build-config
 }
-
-# https://trac.macports.org/ticket/58493
-compiler.blacklist-append {clang < 800} gcc-4.0 *gcc-4.2 {macports-clang-3.[4-7]}
-
-# https://trac.macports.org/ticket/65415
-compiler.blacklist-append {macports-clang-1[2-9]}
-
-libgcc.keep libasan.5.dylib libgcc_ext.10.4.dylib libgcc_ext.10.5.dylib

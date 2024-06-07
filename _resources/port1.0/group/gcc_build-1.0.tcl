@@ -198,7 +198,7 @@ default gcc.depends_run     {port:gcc_select}
 
 # convenience options for include directory stricture (gcc for Libgcc and gccX for GCC version X)
 options gcc.gcc_name
-default gcc.gcc_name {[expr {${subport} eq ${name} ? ${name} : "gcc"}]}
+default gcc.gcc_name    {[expr {${subport} eq ${name} ? ${name} : "gcc"}]}
 
 # convenience options for library directory strictures (libgcc for Libgcc and gccX for GCC version X)
 options gcc.libgcc_name
@@ -211,17 +211,17 @@ default gcc.sdkroot {[regsub {MacOSX[1-9]+\.[0-9]+\.sdk} ${configure.sdkroot} {M
 
 # tools to be used by GCC
 options gcc.as
-default gcc.as {${prefix}/bin/as}
+default gcc.as  {${prefix}/bin/as}
 options gcc.ld
-default gcc.ld {${prefix}/bin/ld}
+default gcc.ld  {${prefix}/bin/ld}
 options gcc.ar
-default gcc.ar {${prefix}/bin/ar}
+default gcc.ar  {${prefix}/bin/ar}
 
 # recent GCC versions use rpath
 #     see https://trac.macports.org/ticket/65472
 #     see https://trac.macports.org/ticket/63115
 options gcc.rpath
-default gcc.rpath {${prefix}/lib/libgcc}
+default gcc.rpath   {${prefix}/lib/libgcc}
 
 # GCC configure options
 #     each option can have up to three parts

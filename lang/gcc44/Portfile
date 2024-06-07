@@ -4,9 +4,10 @@ PortSystem                              1.0
 PortGroup           gcc_build           1.0
 
 name                gcc44
-epoch               1
 version             4.4.7
-revision            15
+subport ${name}     { revision 15 }
+epoch               1
+
 platforms           {darwin < 17}
 
 set dcore           gcc-core-${version}.tar.bz2
@@ -42,33 +43,22 @@ patchfiles          ppc_fde_encoding.diff \
                     texinfo5.patch \
                     patch-gcc-texi.diff
 
-# Handle OS X deployment targets correctly (GCC PR target/63810
-# <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=63810>).
+# handle OS X deployment targets correctly
+#     see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=63810
 patchfiles-append   macosx-version-min.patch
 
-# Don't link with "-flat_namespace -undefined suppress" on Yosemite and
-# later (#45483).
+# don't link with "-flat_namespace -undefined suppress" on Yosemite and later
+#     see https://trac.macports.org/ticket/45483
 patchfiles-append   yosemite-libtool.patch
-
-# TODO: most other GCC ports apply this to all architectures
-# TODO: does this work with universal?
-if { ${configure.build_arch} ne "i386" } {
-    gcc.macports_exports-delete DISABLE_MACPORTS_AS_CLANG_SEARCH=1 \
-                                DISABLE_XCODE_AS_CLANG_SEARCH=1
-}
 
 worksrcdir          gcc-${version}
 
 # TODO: check if `known_fail` is needed for `[vercmp ${xcodeversion} >=  9]`
 # see https://github.com/macports/macports-ports/commit/449b6b5b24b65a8caa2521dbd7ca83a43780e0a9
 # see https://github.com/macports/macports-ports/commit/9986b5f971d504de2e6c479a7f96cd6276cfb38e
-compiler.blacklist-append {clang >= 900}
-
-# http://trac.macports.org/ticket/29067
-compiler.blacklist-append gcc-4.0
-
-# http://trac.macports.org/ticket/29104
-compiler.blacklist-append {llvm-gcc-4.2 < 2336.1}
+# see https://trac.macports.org/ticket/29067
+# see https://trac.macports.org/ticket/29104
+compiler.blacklist-append   {clang >= 900} gcc-4.0 {llvm-gcc-4.2 < 2336.1}
 
 # STAGE1_CFLAGS="-O2 -fkeep-inline-functions" : from configure.ac
 # BOOT_CFLAGS="-O2 -g" : from Makefile.tpl
@@ -77,15 +67,25 @@ compiler.blacklist-append {llvm-gcc-4.2 < 2336.1}
 #                       exposed in libc headers for fortified string functions.
 #                       Yes, we need to set both BOOT_CFLAGS and STAGE1_CFLAGS
 #                       because STAGE1_CFLAGS is used with xgcc for libgcc
-build.args-append BOOT_CFLAGS="-O2 -g -D_FORTIFY_SOURCE=0" STAGE1_CFLAGS="-O2 -fkeep-inline-functions -D_FORTIFY_SOURCE=0 -std=gnu89"
+build.args-append   BOOT_CFLAGS="-O2 -g -D_FORTIFY_SOURCE=0" \
+                    STAGE1_CFLAGS="-O2 -fkeep-inline-functions -D_FORTIFY_SOURCE=0 -std=gnu89"
 
 post-destroot {
+    # TODO: is this still needed?
     # install/copy ffitarget.h only if we have it
     if {![catch {set ffitarget.h [glob ${destroot}${prefix}/lib/${name}/gcc/*/${version}/include/ffitarget.h]} result]} {
         file copy ${ffitarget.h} ${destroot}${prefix}/include/${name}/
     }
+
     file rename ${destroot}${prefix}/share/python/aotcompile.py \
                 ${destroot}${prefix}/share/python/aotcompile-44.py
     file rename ${destroot}${prefix}/share/python/classfile.py \
                 ${destroot}${prefix}/share/python/classfile-44.py
+}
+
+if { ${configure.build_arch} ne "i386" } {
+    # TODO: most other GCC ports apply this to all architectures
+    # TODO: does this work with universal?
+    gcc.macports_exports-delete DISABLE_MACPORTS_AS_CLANG_SEARCH=1 \
+                                DISABLE_XCODE_AS_CLANG_SEARCH=1
 }

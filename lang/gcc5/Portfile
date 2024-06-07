@@ -5,14 +5,11 @@ PortGroup           gcc_build           1.0
 PortGroup           xcode_workaround    1.0
 
 name                gcc5
-epoch               2
 version             5.5.0
-revision            6
-platforms           {darwin >= 10 < 15}
+subport ${name}     { revision 6 }
+epoch               2
 
-description         The GNU compiler collection
-long_description    The GNU compiler collection, including front ends for \
-                    C, C++, Objective-C, Objective-C++, Fortran and Java.
+platforms           {darwin >= 10 < 15}
 
 dist_subdir         gcc
 
@@ -24,11 +21,11 @@ master_sites-append ftp://sourceware.org/pub/java/:ecj \
                     https://www.mirrorservice.org/sites/sources.redhat.com/pub/java/:ecj \
                     http://ftp-stud.fht-esslingen.de/pub/Mirrors/sourceware.org/java/:ecj
 
-distfiles           ${distname}${extract.suffix}:gcc ${ecj}:ecj
+distfiles           ${distname}.tar.xz:gcc ${ecj}:ecj
 
-extract.only        ${distname}${extract.suffix}
+extract.only        ${distname}.tar.xz
 
-checksums           ${distname}${extract.suffix} \
+checksums           ${distname}.tar.xz \
                     rmd160  63fdc006c2289f81df664d1fd9b4124f71732e7b \
                     sha256  530cea139d82fe542b358961130c69cfde8b3d14556370b65823d2f91f0ced87 \
                     size    71096120 \
@@ -36,13 +33,6 @@ checksums           ${distname}${extract.suffix} \
                     rmd160  eb1b19d9ac0e9e265bf993f38b9576e3c710e91e \
                     sha256  9506e75b862f782213df61af67338eb7a23c35ff425d328affc65585477d34cd \
                     size    1619429
-
-if { ${configure.build_arch} ne "i386" } {
-    # TODO: does this work with universal?
-    # TODO: most other GCC ports apply this to all architectures
-    gcc.macports_exports-delete DISABLE_MACPORTS_AS_CLANG_SEARCH=1 \
-                                DISABLE_XCODE_AS_CLANG_SEARCH=1
-}
 
 # Work around parallel building issue on APFS
 # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=81797
@@ -62,25 +52,41 @@ post-extract {
 
 patchfiles-append   patch-gcj-unwind.diff
 
-if {[vercmp ${xcodeversion} 10.2] >= 0} {
-    # https://trac.macports.org/ticket/58260
+if { [vercmp ${xcodeversion} >= 10.2] } {
+    # see https://trac.macports.org/ticket/58260
     # Patch for Xcode bug, taken from
-    # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=89864#c43
-    # https://github.com/Homebrew/homebrew-core/pull/39134/files
+    #     https://gcc.gnu.org/bugzilla/show_bug.cgi?id=89864#c43
+    #     https://github.com/Homebrew/homebrew-core/pull/39134/files
     patchfiles-append   xcode-bug-_Atomic-fix.patch
 }
 
-post-extract {
-    copy ${distpath}/${ecj} ${worksrcpath}/ecj.jar
+if { ${os.platform} eq "darwin" && ${os.major} > 14 } {
+    # Hack around boehm-gc and associated gcj failures from recompilation
+    # of libunwind.dylib with Apple Clang in macOS >= 10.11 by reducing
+    # alignment to 2
+    patchfiles-append   boehm-gc-darwin15-hack.patch
 }
 
-platform darwin {
-    if {${os.major} > 14} {
-        # Hack around boehm-gc and associated gcj failures from recompilation
-        # of libunwind.dylib with Apple Clang in macOS >= 10.11 by reducing
-        # alignment to 2
-        patchfiles-append   boehm-gc-darwin15-hack.patch
-    }
+post-extract {
+    copy    ${distpath}/${ecj} \
+            ${worksrcpath}/ecj.jar
+}
+
+post-destroot {
+    move    ${destroot}${prefix}/lib/${name}/pkgconfig/libgcj-${gcc.suffix}.pc \
+            ${destroot}${prefix}/lib/pkgconfig/
+}
+
+# see http://trac.macports.org/ticket/29067
+# see http://trac.macports.org/ticket/29104
+# see https://trac.macports.org/ticket/47996
+compiler.blacklist-append   gcc-4.0 {llvm-gcc-4.2 < 2336.1} {clang < 300}
+
+if { ${configure.build_arch} ne "i386" } {
+    # TODO: does this work with universal?
+    # TODO: most other GCC ports apply this to all architectures
+    gcc.macports_exports-delete DISABLE_MACPORTS_AS_CLANG_SEARCH=1 \
+                                DISABLE_XCODE_AS_CLANG_SEARCH=1
 }
 
 platform darwin 11 {
@@ -90,17 +96,4 @@ platform darwin 11 {
     # https://trac.macports.org/ticket/62072
     # TODO: find a way to force "gas" as assembler
     depends_build-append port:clang-9.0
-}
-
-# http://trac.macports.org/ticket/29067
-compiler.blacklist-append gcc-4.0
-
-# http://trac.macports.org/ticket/29104
-compiler.blacklist-append {llvm-gcc-4.2 < 2336.1}
-
-# https://trac.macports.org/ticket/47996
-compiler.blacklist-append {clang < 300}
-
-post-destroot {
-    move ${destroot}${prefix}/lib/${name}/pkgconfig/libgcj-${gcc.suffix}.pc ${destroot}${prefix}/lib/pkgconfig/
 }

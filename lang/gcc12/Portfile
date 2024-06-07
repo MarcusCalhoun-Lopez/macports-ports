@@ -3,23 +3,36 @@
 PortSystem                              1.0
 PortGroup           gcc_build           1.0
 
-epoch               1
 name                gcc12
+version             12.3.0
+subport ${name}     { revision 4 }
+subport lib${name}  { revision 4 }
+epoch               1
 
 platforms           {darwin >= 10}
-
-# Remember to reset all revision increments below to 0 on new versions
-version             12.3.0
-revision            4
-
-set libgccname      lib${name}
-subport             ${libgccname} { revision [ expr ${revision} + 0 ] }
 
 checksums           rmd160  bcc2a72fbbee69d031e1ca31c7236c65352397d4 \
                     sha256  949a5d4f99e786421a93b532b22ffab5578de7321369975b91aec97adfda8c3b \
                     size    85491976
 
-if { ${os.platform} eq "darwin" && ${subport} ne ${libgccname} } {
+if { ${os.platform} eq "darwin" } {
+    # Patch generated from https://github.com/iains/gcc-12-branch
+    # git diff --no-prefix releases/gcc-12.2.0 gcc-12.2-darwin-r0
+    patchfiles-append   patch-darwin-gcc-${version}.diff
+}
+
+# see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=111632
+patchfiles-append   patch-avoid-over-poisoning.diff
+
+# see https://trac.macports.org/ticket/29067
+# see https://trac.macports.org/ticket/29104
+# see https://trac.macports.org/ticket/47996
+# see https://trac.macports.org/ticket/58493
+# see https://build.macports.org/builders/ports-10.13_x86_64-builder/builds/105513/steps/install-port/logs/stdio
+#     c++/v1/functional:1408:2: error: no member named 'fancy_abort' in namespace 'std::__1'; did you mean simply 'fancy_abort'?
+compiler.blacklist-append   {clang < 800} gcc-4.0 *gcc-4.2 {llvm-gcc-4.2 < 2336.1} {macports-clang-3.[4-7]} {clang < 1001}
+
+if { ${os.platform} eq "darwin" } {
     # gcc has build issues on macOS 11.3 with the use of Xcode 12.5 clang via cctools for ld
     # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=100340
     # https://trac.macports.org/ticket/62775
@@ -42,15 +55,6 @@ if { ${os.platform} eq "darwin" && ${subport} ne ${libgccname} } {
     }
 }
 
-if { ${os.platform} eq "darwin" } {
-    # Patch generated from https://github.com/iains/gcc-12-branch
-    # git diff --no-prefix releases/gcc-12.2.0 gcc-12.2-darwin-r0
-    patchfiles-append  patch-darwin-gcc-${version}.diff
-}
-
-# see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=111632
-patchfiles-append   patch-avoid-over-poisoning.diff
-
 if {${os.platform} eq "darwin" && ${os.major} >= 22} {
     if { [vercmp ${xcodeversion} >= 15.0] || [vercmp ${xcodecltversion} >= 15.0] } {
         # On macOS13 and newer ensure the 'legacy' linker is used as GCC currently has problems
@@ -65,18 +69,8 @@ if {${os.platform} eq "darwin" && ${os.major} >= 22} {
     }
 }
 
-# https://trac.macports.org/ticket/29067
-# https://trac.macports.org/ticket/29104
-# https://trac.macports.org/ticket/47996
-# https://trac.macports.org/ticket/58493
-compiler.blacklist-append {clang < 800} gcc-4.0 *gcc-4.2 {llvm-gcc-4.2 < 2336.1} {macports-clang-3.[4-7]}
-
-# https://build.macports.org/builders/ports-10.13_x86_64-builder/builds/105513/steps/install-port/logs/stdio
-# c++/v1/functional:1408:2: error: no member named 'fancy_abort' in namespace 'std::__1'; did you mean simply 'fancy_abort'?
-compiler.blacklist-append {clang < 1001}
-
 platform darwin {
-    # gcc12 can't be built by Xcode Clang 14.0.x
+    # gcc can't be built by Xcode Clang 14.0.x
     # https://trac.macports.org/ticket/67416
     # https://github.com/iains/gcc-12-branch/issues/6
     if { ([vercmp ${xcodeversion} >= 14.0] && [vercmp ${xcodeversion} < 14.1]) || \

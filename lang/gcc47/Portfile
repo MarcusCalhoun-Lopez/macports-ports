@@ -4,9 +4,10 @@ PortSystem                              1.0
 PortGroup           gcc_build           1.0
 
 name                gcc47
-epoch               1
 version             4.7.4
-revision            12
+subport ${name}     { revision 12 }
+epoch               1
+
 platforms           {darwin < 17}
 
 set ecj             ecj-4.5.jar
@@ -17,11 +18,11 @@ master_sites-append ftp://sourceware.org/pub/java/:ecj \
                     https://www.mirrorservice.org/sites/sources.redhat.com/pub/java/:ecj \
                     http://ftp-stud.fht-esslingen.de/pub/Mirrors/sourceware.org/java/:ecj
 
-distfiles           ${distname}${extract.suffix}:gcc ${ecj}:ecj
+distfiles           ${distname}.tar.bz2:gcc ${ecj}:ecj
 
-extract.only        ${distname}${extract.suffix}
+extract.only        ${distname}.tar.bz2
 
-checksums           ${distname}${extract.suffix} \
+checksums           ${distname}.tar.bz2 \
                     rmd160  d0a8e421b9c62a923f765b97828b12d5af388199 \
                     sha256  92e61c6dc3a0a449e62d72a38185fda550168a86702dea07125ebd3ec3996282 \
                     size    82935453 \
@@ -30,46 +31,44 @@ checksums           ${distname}${extract.suffix} \
                     sha256  98fd128f1d374d9e42fd9d4836bdd249c6d511ebc6c0df17fbc1b9df96c3d781 \
                     size    1470676
 
-if { ${configure.build_arch} ne "i386" } {
-    # TODO: most other GCC ports apply this to all architectures
-    # TODO: does this work with universal?
-    gcc.macports_exports-delete DISABLE_MACPORTS_AS_CLANG_SEARCH=1 \
-                                DISABLE_XCODE_AS_CLANG_SEARCH=1
-}
-
 patchfiles          ppc_fde_encoding.diff \
                     patch-gcc-texi.diff
 
-# Don't check Darwin kernel version (GCC PR target/61407
-# <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=61407>).
+# don't check Darwin kernel version
+#     see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=61407
 patchfiles-append   remove-kernel-version-check.patch
 
-# Handle OS X deployment targets correctly (GCC PR target/63810
-# <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=63810>).
+# handle OS X deployment targets correctly
+#     see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=63810
 patchfiles-append   macosx-version-min.patch
 
-# Don't link with "-flat_namespace -undefined suppress" on Yosemite and
-# later (#45483).
+# don't link with "-flat_namespace -undefined suppress" on Yosemite and later
+#     see https://trac.macports.org/ticket/45483
 patchfiles-append   yosemite-libtool.patch
 
 post-extract {
-    copy ${distpath}/${ecj} ${worksrcpath}/ecj.jar
+    copy    ${distpath}/${ecj} \
+            ${worksrcpath}/ecj.jar
 }
 
 # TODO: check if `known_fail` is needed for `[vercmp ${xcodeversion} >=  9]`
 # see https://github.com/macports/macports-ports/commit/449b6b5b24b65a8caa2521dbd7ca83a43780e0a9
 # see https://github.com/macports/macports-ports/commit/9986b5f971d504de2e6c479a7f96cd6276cfb38e
-compiler.blacklist-append {clang >= 900}
-
-# http://trac.macports.org/ticket/29067
-compiler.blacklist-append gcc-4.0
-
-# http://trac.macports.org/ticket/29104
-compiler.blacklist-append {llvm-gcc-4.2 < 2336.1}
+# see https://trac.macports.org/ticket/29067
+# see https://trac.macports.org/ticket/29104
+compiler.blacklist-append   {clang >= 900} gcc-4.0 {llvm-gcc-4.2 < 2336.1}
 
 post-destroot {
+    # TODO: is this still needed?
     # install/copy ffitarget.h only if we have it
     if {![catch {set ffitarget.h [glob ${destroot}${prefix}/lib/${name}/gcc/*/${version}/include/ffitarget.h]} result]} {
         file copy ${ffitarget.h} ${destroot}${prefix}/include/${name}/
     }
+}
+
+if { ${configure.build_arch} ne "i386" } {
+    # TODO: most other GCC ports apply this to all architectures
+    # TODO: does this work with universal?
+    gcc.macports_exports-delete DISABLE_MACPORTS_AS_CLANG_SEARCH=1 \
+                                DISABLE_XCODE_AS_CLANG_SEARCH=1
 }

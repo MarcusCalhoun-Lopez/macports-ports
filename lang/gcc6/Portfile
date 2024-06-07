@@ -5,21 +5,32 @@ PortGroup           gcc_build           1.0
 PortGroup           xcode_workaround    1.0
 
 name                gcc6
-epoch               3
 version             6.5.0
-revision            7
-subport             libgcc6 { revision 4 }
+subport ${name}     { revision 7 }
+subport lib${name}  { revision 4 }
+epoch               3
+
 platforms           {darwin < 15}
 
 checksums           rmd160  66782b17cff89f22e5e8869fa96bd9a8985f5067 \
                     sha256  7ef1796ce497e89479183702635b14bb7a46b53249209a5e0f999bebf4740945 \
                     size    74355588
 
+# TODO: check https://trac.macports.org/ticket/54768
+libgcc.keep         libgfortran.3.dylib \
+                    libasan.3.dylib
+if { ${subport} ne ${name} } {
+    # do not build front ends that will be deleted anyway
+    foreach arch {arm64 x86_64 i386 ppc ppc64} {
+        gcc.languages.${arch}   fortran
+    }
+}
+
 if { ${configure.build_arch} eq "i386" && ${os.major} >= 10 } {
     # TODO: does this work with universal?
     # fix no-pie clang bug bootstrapping gcc on i386
     # https://trac.macports.org/ticket/63161
-    patchfiles-append  patch-gcc7-i686-clang-bootstrap-fix.diff
+    patchfiles-append   patch-gcc7-i686-clang-bootstrap-fix.diff
 } else {
     # TODO: most other GCC ports apply this to all architectures
     gcc.macports_exports-delete DISABLE_MACPORTS_AS_CLANG_SEARCH=1 \
@@ -30,54 +41,25 @@ if { ${configure.build_arch} eq "i386" && ${os.major} >= 10 } {
 # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=81797
 patchfiles-append   notparallel-install-headers.patch
 
-if {[vercmp ${xcodeversion} 10.2] >= 0} {
-    # https://trac.macports.org/ticket/58260
+if { [vercmp ${xcodeversion} >= 10.2] } {
+    # see https://trac.macports.org/ticket/58260
     # Patch for Xcode bug, taken from
-    # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=89864#c43
-    # https://github.com/Homebrew/homebrew-core/pull/39134/files
-    # This should be removed in the next release of GCC
+    #     https://gcc.gnu.org/bugzilla/show_bug.cgi?id=89864#c43
+    #     https://github.com/Homebrew/homebrew-core/pull/39134/files
     patchfiles-append   xcode-bug-_Atomic-fix.patch
 }
 
 platform darwin {
     # see https://gcc.gnu.org/ml/gcc-patches/2012-05/msg00672.html
-    patchfiles-append         patch-float128.diff
+    patchfiles-append   patch-float128.diff
 }
 
 # fix build on Tiger Intel - same patch as gcc7 / libgcc works
 platform darwin 8 i386 {
-    patchfiles-append patch-gcc7-tiger-intel.diff
+    patchfiles-append   patch-gcc7-tiger-intel.diff
 }
 
-# http://trac.macports.org/ticket/29067
-compiler.blacklist-append gcc-4.0
-
-# http://trac.macports.org/ticket/29104
-compiler.blacklist-append {llvm-gcc-4.2 < 2336.1}
-
-# https://trac.macports.org/ticket/47996
-compiler.blacklist-append {clang < 300}
-
-# "-stdlib" would be passed on to the bootstrap compiler if present
-configure.cxx_stdlib
-
-if {${subport} eq "libgcc6"} {
-    # http://trac.macports.org/ticket/35770
-    # http://trac.macports.org/ticket/38814
-    # While there can be multiple versions of these runtimes in a single
-    # process, it is not possible to pass objects between different versions,
-    # so we simplify this by having the libgcc port provide the newest version
-    # of these runtimes for all versions of gcc to use.
-    #
-    # If there is a binary incompatible change to the runtime in a future
-    # version of gcc, then the latest version of gcc to provide a given ABI
-    # version should continue to provide a subport for that and older gcc
-    # versions.
-
-    foreach arch {arm64 x86_64 i386 ppc ppc64} {
-        gcc.languages.${arch} fortran
-    }
-
-    # TODO: check https://trac.macports.org/ticket/54768
-    libgcc.keep libgfortran.3.dylib libasan.3.dylib
-}
+# see http://trac.macports.org/ticket/29067
+# see http://trac.macports.org/ticket/29104
+# see https://trac.macports.org/ticket/47996
+compiler.blacklist-append   gcc-4.0 {llvm-gcc-4.2 < 2336.1} {clang < 300}

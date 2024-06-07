@@ -3,12 +3,11 @@
 PortSystem                              1.0
 PortGroup           gcc_build           1.0
 
-epoch               2
-
 name                gcc11
-
 version             11.4.0
-revision            1
+subport ${name}     { revision 1 }
+subport lib${name}  { revision 1 }
+epoch               2
 
 platforms           {darwin >= 10 < 22}
 
@@ -16,14 +15,21 @@ checksums           rmd160  a43fd21a3887af24daa550c4b52fb634e33b633c \
                     sha256  3f2db222b007e8a4a23cd5ba56726ef08e8b1f1eb2055ee72c1402cea73a8dd9 \
                     size    79837032
 
-set libgccname      lib${name}
-subport             ${libgccname} { revision [ expr ${revision} + 0 ] }
+libgcc.keep         libasan.6.dylib
 
 if { ${os.platform} eq "darwin" } {
     # Patch generated from https://github.com/iains/gcc-11-branch
     # git diff --no-prefix releases/gcc-11.3.0 gcc-11.3-darwin-r2
     patchfiles-append  patch-darwin-gcc-${version}.diff
 }
+
+# see https://trac.macports.org/ticket/29067
+# see https://trac.macports.org/ticket/29104
+# see https://trac.macports.org/ticket/47996
+# see https://trac.macports.org/ticket/58493
+# see https://build.macports.org/builders/ports-10.13_x86_64-builder/builds/105513/steps/install-port/logs/stdio
+#     c++/v1/functional:1408:2: error: no member named 'fancy_abort' in namespace 'std::__1'; did you mean simply 'fancy_abort'?
+compiler.blacklist-append   {clang < 800} gcc-4.0 *gcc-4.2 {llvm-gcc-4.2 < 2336.1} {macports-clang-3.[4-7]} {clang < 1000}
 
 if { ${os.platform} eq "darwin" && ${os.major} >= 17 } {
     # On macOS 10.13 and later, compilation is extremely slow if SIP is
@@ -48,11 +54,6 @@ if { ${os.platform} eq "darwin" && ${os.major} >= 17 } {
     # See also: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=84257
     patchfiles-append patch-disable-dyld_library_path.diff
 }
-
-set gcc_as ${prefix}/bin/as
-set gcc_ld ${prefix}/bin/ld
-set gcc_ar ${prefix}/bin/ar
-set gcc_nm ${prefix}/bin/nm
 
 if { ${os.platform} eq "darwin" } {
     # gcc has build issues on macOS 11.3 with the use of Xcode 12.5 clang via cctools for ld
@@ -90,15 +91,3 @@ if {${os.platform} eq "darwin" && ${os.major} >= 22} {
         require_active_variants ld64 ld64_xcode
     }
 }
-
-# https://trac.macports.org/ticket/29067
-# https://trac.macports.org/ticket/29104
-# https://trac.macports.org/ticket/47996
-# https://trac.macports.org/ticket/58493
-compiler.blacklist-append {clang < 800} gcc-4.0 *gcc-4.2 {llvm-gcc-4.2 < 2336.1} {macports-clang-3.[4-7]}
-
-# https://build.macports.org/builders/ports-10.13_x86_64-builder/builds/105513/steps/install-port/logs/stdio
-# c++/v1/functional:1408:2: error: no member named 'fancy_abort' in namespace 'std::__1'; did you mean simply 'fancy_abort'?
-compiler.blacklist-append {clang < 1000}
-
-libgcc.keep libasan.6.dylib

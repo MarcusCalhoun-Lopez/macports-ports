@@ -4,10 +4,11 @@ PortSystem                              1.0
 PortGroup           gcc_build           1.0
 
 name                gcc45
-epoch               1
 version             4.5.4
-revision            17
-subport             libgcc45 { revision 16 }
+subport ${name}     { revision 17 }
+subport lib${name}  { revision 16 }
+epoch               1
+
 platforms           {darwin < 17}
 
 set dcore           gcc-core-${version}.tar.bz2
@@ -47,80 +48,74 @@ checksums           gcc-core-${version}.tar.bz2 \
                     rmd160  6c5bf2b75cb61105bfa3fd4c0d2462871c687495 \
                     sha256  92e7f8894a2f372a77d30732831c366289cea74f2a56c53cfec9de2ace413c92 \
                     size    238729 \
-                    ecj-4.5.jar \
+                    ${ecj} \
                     rmd160  d3f4da657f086b6423f74e93f001132f4855368a \
                     sha256  98fd128f1d374d9e42fd9d4836bdd249c6d511ebc6c0df17fbc1b9df96c3d781 \
                     size    1470676
+
+libgcc.keep libobjc-gnu.2.dylib
+
+# TODO: this is the only GCC port that adds to `libgcc.strip`
+libgcc.strip-append libobjc-gnu.2.dylib
+
+if { ${subport} ne ${name} } {
+    # do not build front ends that will be deleted anyway
+    foreach arch {arm64 x86_64 i386 ppc ppc64} {
+        gcc.languages.${arch}   c c++ objc obj-c++
+    }
+}
 
 patchfiles          ppc_fde_encoding.diff \
                     texinfo5.patch \
                     patch-gcc-texi.diff
 
-# Handle OS X deployment targets correctly (GCC PR target/63810
-# <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=63810>).
+# handle OS X deployment targets correctly
+#     see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=63810
 patchfiles-append   macosx-version-min.patch
 
-# Don't link with "-flat_namespace -undefined suppress" on Yosemite and
-# later (#45483).
+# don't link with "-flat_namespace -undefined suppress" on Yosemite and later
+#     see https://trac.macports.org/ticket/45483
 patchfiles-append   yosemite-libtool.patch
-
-if { ${configure.build_arch} ne "i386" } {
-    # TODO: most other GCC ports apply this to all architectures
-    # TODO: does this work with universal?
-    gcc.macports_exports-delete DISABLE_MACPORTS_AS_CLANG_SEARCH=1 \
-                                DISABLE_XCODE_AS_CLANG_SEARCH=1
-}
 
 worksrcdir          gcc-${version}
 
 post-extract {
-    copy ${distpath}/${ecj} ${worksrcpath}/ecj.jar
+    copy    ${distpath}/${ecj} \
+            ${worksrcpath}/ecj.jar
 }
 
 # TODO: check if `known_fail` is needed for `[vercmp ${xcodeversion} >=  9]`
 # see https://github.com/macports/macports-ports/commit/449b6b5b24b65a8caa2521dbd7ca83a43780e0a9
 # see https://github.com/macports/macports-ports/commit/9986b5f971d504de2e6c479a7f96cd6276cfb38e
-compiler.blacklist-append {clang >= 900}
-
-# http://trac.macports.org/ticket/29067
-compiler.blacklist-append gcc-4.0
-
-# http://trac.macports.org/ticket/29104
-compiler.blacklist-append {llvm-gcc-4.2 < 2336.1}
+# see https://trac.macports.org/ticket/29067
+# see https://trac.macports.org/ticket/29104
+compiler.blacklist-append {clang >= 900} gcc-4.0 {llvm-gcc-4.2 < 2336.1}
 
 # LTO doesn't work for most targets
-# see https://trac.macports.org/ticket/32863
+#     see https://trac.macports.org/ticket/32863
 configure.args.x86_64-append    --enable-lto
 
 platform darwin 8 {
     # see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=45248
-    configure.args-append --with-dwarf2
+    configure.args-append   --with-dwarf2
 }
 
 # TODO: remove entirely?
 # this is the only GCC port to use this configuration argument
-# see https://github.com/macports/macports-ports/commit/95e18abb592e2abab10556326ae51e455608045b
-# see https://trac.macports.org/ticket/39655
+#     see https://github.com/macports/macports-ports/commit/95e18abb592e2abab10556326ae51e455608045b
+#     see https://trac.macports.org/ticket/39655
 foreach arch {arm64 x86_64 i386} {
     configure.args.${arch}-append   --enable-plugin
 }
 
-if {${subport} eq "libgcc45"} {
-    foreach arch {arm64 x86_64 i386 ppc ppc64} {
-        gcc.languages.${arch} c c++ objc obj-c++
-    }
-
-    libgcc.keep libobjc-gnu.2.dylib
-
-    # TODO: this is the only GCC port that adds to `libgcc.strip`
-    libgcc.strip-append libobjc-gnu.2.dylib
-} else {
-
+if { ${subport} eq ${name} } {
 post-destroot {
+    # TODO: is this still needed?
     # install/copy ffitarget.h only if we have it
     if {![catch {set ffitarget.h [glob ${destroot}${prefix}/lib/${name}/gcc/*/${version}/include/ffitarget.h]} result]} {
         file copy ${ffitarget.h} ${destroot}${prefix}/include/${name}/
     }
+
     file rename ${destroot}${prefix}/share/python/aotcompile.py \
                 ${destroot}${prefix}/share/python/aotcompile-45.py
     file rename ${destroot}${prefix}/share/python/classfile.py \
@@ -132,4 +127,11 @@ post-destroot {
         file copy ${worksrcpath}/../gcc-${version}/gcc/config/darwin-sections.def {*}[glob ${destroot}${prefix}/lib/${name}/gcc/*/${version}/plugin/include/config]
     }
 }
+}
+
+if { ${configure.build_arch} ne "i386" } {
+    # TODO: most other GCC ports apply this to all architectures
+    # TODO: does this work with universal?
+    gcc.macports_exports-delete DISABLE_MACPORTS_AS_CLANG_SEARCH=1 \
+                                DISABLE_XCODE_AS_CLANG_SEARCH=1
 }

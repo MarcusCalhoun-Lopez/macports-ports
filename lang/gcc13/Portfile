@@ -3,21 +3,45 @@
 PortSystem                              1.0
 PortGroup           gcc_build           1.0
 
-epoch               0
 name                gcc13
+version             13.2.0
+subport ${name}     { revision 0 }
+subport lib${name}  { revision 0 }
 
 platforms           {darwin >= 10}
-
-# Remember to reset all revision increments below to 0 on new versions
-version             13.2.0
-revision            4
-
-set libgccname      lib${name}
-subport             ${libgccname} { revision [ expr ${revision} + 0 ] }
 
 checksums           rmd160  a6d646ed9765f973d3f63ef560edf4a50cf686c3 \
                     sha256  e275e76442a6067341a27f04c5c6b83d8613144004c0413528863dc6b5c743da \
                     size    87858592
+
+if { ${subport} ne ${name} } {
+    # Libgcc dependencies
+    depends_lib     port:zlib \
+                    port:libiconv
+}
+
+if { ${os.platform} eq "darwin" } {
+    # Patch generated from https://github.com/iains/gcc-13-branch
+    # git diff --no-prefix releases/gcc-13.1.0 gcc-13.1-darwin-r0
+    patchfiles-append      patch-darwin-gcc-${version}.diff
+    # Do not abort if 'system' headers in /opt/local/include/gcc are missing
+    patchfiles-append      patch-disable-sys-header-missing-abort.diff
+    # GCC fixinc work-around for sys/ucred.h on OSX10.14.4 no longer seems to work ???
+    if { ${os.major} == 18 } {
+        patchfiles-append  patch-OSX10.14-ucred-atomic-define.diff
+    }
+}
+
+# see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=111632
+patchfiles-append   patch-avoid-over-poisoning.diff
+
+# see https://trac.macports.org/ticket/29067
+# see https://trac.macports.org/ticket/29104
+# see https://trac.macports.org/ticket/47996
+# see https://trac.macports.org/ticket/58493
+# see https://build.macports.org/builders/ports-10.13_x86_64-builder/builds/105513/steps/install-port/logs/stdio
+#     c++/v1/functional:1408:2: error: no member named 'fancy_abort' in namespace 'std::__1'; did you mean simply 'fancy_abort'?
+compiler.blacklist-append   {clang < 800} gcc-4.0 *gcc-4.2 {llvm-gcc-4.2 < 2336.1} {macports-clang-3.[4-7]} {clang < 1001}
 
 if { ${os.platform} eq "darwin" } {
     # gcc has build issues on macOS 11.3 with the use of Xcode 12.5 clang via cctools for ld
@@ -42,21 +66,6 @@ if { ${os.platform} eq "darwin" } {
     }
 }
 
-if { ${os.platform} eq "darwin" } {
-    # Patch generated from https://github.com/iains/gcc-13-branch
-    # git diff --no-prefix releases/gcc-13.1.0 gcc-13.1-darwin-r0
-    patchfiles-append      patch-darwin-gcc-${version}.diff
-    # Do not abort if 'system' headers in /opt/local/include/gcc are missing
-    patchfiles-append      patch-disable-sys-header-missing-abort.diff
-    # GCC fixinc work-around for sys/ucred.h on OSX10.14.4 no longer seems to work ???
-    if { ${os.major} == 18 } {
-        patchfiles-append  patch-OSX10.14-ucred-atomic-define.diff
-    }
-}
-
-# see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=111632
-patchfiles-append   patch-avoid-over-poisoning.diff
-
 if {${os.platform} eq "darwin" && ${os.major} >= 22} {
     if { [vercmp ${xcodeversion} >= 15.0] || [vercmp ${xcodecltversion} >= 15.0] } {
         # On macOS13 and newer ensure the 'legacy' linker is used as GCC currently has problems
@@ -71,16 +80,6 @@ if {${os.platform} eq "darwin" && ${os.major} >= 22} {
     }
 }
 
-# https://trac.macports.org/ticket/29067
-# https://trac.macports.org/ticket/29104
-# https://trac.macports.org/ticket/47996
-# https://trac.macports.org/ticket/58493
-compiler.blacklist-append {clang < 800} gcc-4.0 *gcc-4.2 {llvm-gcc-4.2 < 2336.1} {macports-clang-3.[4-7]}
-
-# https://build.macports.org/builders/ports-10.13_x86_64-builder/builds/105513/steps/install-port/logs/stdio
-# c++/v1/functional:1408:2: error: no member named 'fancy_abort' in namespace 'std::__1'; did you mean simply 'fancy_abort'?
-compiler.blacklist-append {clang < 1001}
-
 platform darwin {
     # gcc can't be built by Xcode Clang 14.0.x
     # https://trac.macports.org/ticket/67416
@@ -93,8 +92,4 @@ platform darwin {
             return -code error "incompatible Xcode/CLT version"
         }
     }
-}
-
-if {${subport} eq ${libgccname}} {
-    depends_lib          port:zlib port:libiconv
 }
