@@ -398,8 +398,7 @@ proc gcc_build::add_args {args gcc.args} {
 #     see https://github.com/macports/macports-base/blob/master/src/macports1.0/macports.tcl
 rename ::eval_variants ::real_gcc_eval_variants
 proc eval_variants {variations} {
-    # TODO: do not add for Libgcc?
-    if { [vercmp [option gcc.major] >= 10] } {
+    if { [option subport] eq [option name] && [vercmp [option gcc.major] >= 10] } {
         variant stdlib_flag description {Enable stdlib command line flag to select c++ runtime} {}
         # libcxx is unavailable on PPC
         foreach arch [list arm64 x86_64 i386] {
@@ -697,7 +696,7 @@ post-destroot {
             # not all files exist in all Libgcc versions
             # see https://trac.macports.org/ticket/65055
             if { [file exists ${destroot}${prefix}/lib/libgcc/${dylib}] } {
-                system "${prefix}/bin/strip -x ${destroot}${prefix}/lib/libgcc/${dylib}"
+                system  "${prefix}/bin/strip -x ${destroot}${prefix}/lib/libgcc/${dylib}"
             }
         }
 
