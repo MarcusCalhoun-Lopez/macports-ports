@@ -699,11 +699,6 @@ post-destroot {
                 system  "${prefix}/bin/strip -x ${destroot}${prefix}/lib/libgcc/${dylib}"
             }
         }
-
-        # TODO: is this fix still needed?
-        # for binary compatibility with binaries that linked against the old libstdcxx port
-        # see https://github.com/macports/macports-ports/commit/ac5a416fd8dc537e38f9c55b39e5e9e873c3454d
-        ln -s libgcc/libstdc++.6.dylib ${destroot}${prefix}/lib/libstdc++.6.dylib
     }
 }
 
