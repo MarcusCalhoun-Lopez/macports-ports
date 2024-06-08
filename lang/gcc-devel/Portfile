@@ -33,6 +33,12 @@ if { ${os.platform} eq "darwin" } {
     }
 }
 
+post-destroot {
+    # allow this subport to satisfy `path:share/doc/libgcc/README:libgcc` dependency
+    xinstall -d ${destroot}${prefix}/share/doc/${name}
+    system  "echo 'libgcc runtime is provided by ${subport}' > ${destroot}${prefix}/share/doc/libgcc/README"
+}
+
 # see https://trac.macports.org/ticket/29067
 # see https://trac.macports.org/ticket/29104
 # see https://trac.macports.org/ticket/47996

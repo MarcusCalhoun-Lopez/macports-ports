@@ -42,8 +42,9 @@ depends_lib port:libgcc${gcc_version}
 build { }
 
 destroot {
-   xinstall -d ${destroot}${prefix}/share/doc/${name}
-   system "echo 'libgcc runtime is provided by libgcc${gcc_version}' > ${destroot}${prefix}/share/doc/${name}/README"
+    # allow this subport to satisfy `path:share/doc/libgcc/README:libgcc` dependency
+    xinstall -d ${destroot}${prefix}/share/doc/${name}
+    system  "echo 'Libgcc runtime is provided by libgcc${gcc_version}' > ${destroot}${prefix}/share/doc/libgcc/README"
 }
 
 #post-deactivate {

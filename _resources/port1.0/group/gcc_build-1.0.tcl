@@ -704,26 +704,6 @@ post-destroot {
         # for binary compatibility with binaries that linked against the old libstdcxx port
         # see https://github.com/macports/macports-ports/commit/ac5a416fd8dc537e38f9c55b39e5e9e873c3454d
         ln -s libgcc/libstdc++.6.dylib ${destroot}${prefix}/lib/libstdc++.6.dylib
-
-        # TODO: fix inconsistent creation of README
-        switch -- [option gcc.suffix] {
-            10 -
-            11 {
-                set doc_dir ${destroot}${prefix}/share/doc/${subport}
-                xinstall -m 755 -d ${doc_dir}
-                system "echo ${subport} provides additional runtime > ${doc_dir}/README"
-            }
-            8  -
-            12 {
-                set doc_dir ${destroot}${prefix}/share/doc/${subport}
-                xinstall -m 755 -d ${doc_dir}
-                system "echo ${subport} provides no runtime > ${doc_dir}/README"
-            }
-            -devel {
-                xinstall -d ${destroot}${prefix}/share/doc/libgcc
-                system "echo 'libgcc runtime is provided by ${subport}' > ${destroot}${prefix}/share/doc/libgcc/README"
-            }
-        }
     }
 }
 
