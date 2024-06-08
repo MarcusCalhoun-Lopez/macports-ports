@@ -342,6 +342,26 @@ options gcc.macports_exports
 default gcc.macports_exports    {DISABLE_MACPORTS_AS_CLANG_SEARCH=1 \
                                 DISABLE_XCODE_AS_CLANG_SEARCH=1}
 
+# convenience option for whichever developer version is being used (Xcode or Command Line Tools)
+options gcc.developerversion
+default gcc.developerversion {[expr {${use_xcode} ? ${xcodeversion} : ${xcodecltversion}}]}
+
+# avoid certain Xcode versions since, for example, the linker is problematic
+#
+#  For Xcode/CLT 14.0.x,
+#     see https://trac.macports.org/ticket/67416
+#     see https://stackoverflow.com/questions/73714336/xcode-update-to-version-2395-ld-compile-problem-occurs-computedatomcount-m
+#     see https://github.com/iains/gcc-12-branch/issues/6
+#
+# For Xcode/CLT 15.0.x,
+#     see https://developer.apple.com/documentation/xcode-release-notes/xcode-15-release-notes#Linking
+#     see https://discussions.apple.com/thread/255137447
+#     see https://developer.apple.com/forums/thread/737707
+#     see https://github.com/Homebrew/homebrew-core/issues/145991
+#
+options gcc.developer.blacklist
+default gcc.developer.blacklist {14 14.1 15 15.1}
+
 ####################################################################################################################################
 # internal procedures
 ####################################################################################################################################
@@ -536,6 +556,21 @@ proc gcc_build::callback {} {
         configure.env-append    ${e}
         build.env-delete        ${e}
         build.env-append        ${e}
+    }
+
+    # fail early for problematic development tools
+    if { [option os.platform] eq "darwin" } {
+        foreach {vmin vmax} [option gcc.developer.blacklist] {
+            if { [vercmp ${vmin} <= [option gcc.developerversion]] && [vercmp [option gcc.developerversion] < ${vmax}] } {
+                known_fail  yes
+                pre-fetch {
+                    ui_error "${name} cannot be built with installed version of Xcode/CLT"
+                    ui_error "Either upgrade or downgrade both Xcode and the Command Line Tools"
+                    return -code error "incompatible Xcode/CLT version"
+                }
+                break
+            }
+        }
     }
 
     # set `--enable-languages`
