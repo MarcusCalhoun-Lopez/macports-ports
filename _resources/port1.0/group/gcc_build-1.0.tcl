@@ -648,7 +648,7 @@ post-destroot {
         #     of these runtimes for all versions of gcc to use.
         # see http://trac.macports.org/ticket/35770
         # see http://trac.macports.org/ticket/38814
-        foreach dylib [glob -directory ${destroot}${prefix}/lib/${name} -tails *.*.dylib] {
+        foreach dylib [glob -directory ${destroot}${prefix}/lib/${name} -tails *.*.{dylib,so}] {
             # `${dylib}` is a versioned shared library
             file delete ${destroot}${prefix}/lib/${name}/${dylib}
             ln -s ${prefix}/lib/libgcc/${dylib} ${destroot}${prefix}/lib/${name}/${dylib}
