@@ -24,11 +24,6 @@ libgcc.depends_lib
 patchfiles          patch-fix-libgccjit-soname \
                     patch-darwin21-support.diff
 
-if { ${os.platform} eq "darwin" && ${os.major} > 19 } {
-    # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=92061
-    patchfiles-append   patch-genconditions.diff
-}
-
 if { ${os.major} >= 10 } {
     # fix no-pie clang bug bootstrapping gcc on i386
     # see https://trac.macports.org/ticket/63161

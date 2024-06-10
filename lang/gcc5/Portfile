@@ -41,9 +41,6 @@ patchfiles-append   notparallel-install-headers.patch
 # Provide linkage for MacPorts libiconv in gcj
 patchfiles-append   gcj-libiconv-linkage.patch
 
-# work around bug in 10.13 headers
-patchfiles-append   headers-10.13-fix.patch
-
 # See https://trac.macports.org/ticket/53662 for a similar issue
 patchfiles-append   patch-libisl.diff
 post-extract {
@@ -51,21 +48,6 @@ post-extract {
 }
 
 patchfiles-append   patch-gcj-unwind.diff
-
-if { [vercmp ${xcodeversion} >= 10.2] } {
-    # see https://trac.macports.org/ticket/58260
-    # Patch for Xcode bug, taken from
-    #     https://gcc.gnu.org/bugzilla/show_bug.cgi?id=89864#c43
-    #     https://github.com/Homebrew/homebrew-core/pull/39134/files
-    patchfiles-append   xcode-bug-_Atomic-fix.patch
-}
-
-if { ${os.platform} eq "darwin" && ${os.major} > 14 } {
-    # Hack around boehm-gc and associated gcj failures from recompilation
-    # of libunwind.dylib with Apple Clang in macOS >= 10.11 by reducing
-    # alignment to 2
-    patchfiles-append   boehm-gc-darwin15-hack.patch
-}
 
 post-extract {
     copy    ${distpath}/${ecj} \

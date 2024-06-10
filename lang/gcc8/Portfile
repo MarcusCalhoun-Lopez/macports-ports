@@ -18,18 +18,6 @@ checksums           rmd160  e7f3dedec67864006bf9f7e358817ce713b4476e \
 
 patchfiles          patch-fix-libgccjit-soname
 
-if { ${os.major} > 19 } {
-    # https://trac.macports.org/ticket/60908
-    # Patch for macOS 11 (Darwin20) version numbering taken from
-    # https://github.com/iains/gcc-darwin-arm64/commit/556ab512
-    patchfiles-append   big-sur-version-fix.diff
-    # Build doesn't understand a 11.0 deployment target so force to 10.16
-    macosx_deployment_target    10.16
-    # Fix detection of sanitizer support
-    # https://trac.macports.org/ticket/61494
-    patchfiles-append   fix-sanitisers-darwin20.diff
-}
-
 if { ${os.major} >= 10 } {
     # fix no-pie clang bug bootstrapping gcc on i386
     # see https://trac.macports.org/ticket/63161
