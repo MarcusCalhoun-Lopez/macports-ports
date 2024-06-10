@@ -32,26 +32,11 @@ if { ${os.platform} eq "darwin" } {
 #     c++/v1/functional:1408:2: error: no member named 'fancy_abort' in namespace 'std::__1'; did you mean simply 'fancy_abort'?
 compiler.blacklist-append   {clang < 800} gcc-4.0 *gcc-4.2 {llvm-gcc-4.2 < 2336.1} {macports-clang-3.[4-7]} {clang < 1000}
 
-if { ${os.platform} eq "darwin" && ${os.major} >= 17 } {
-    # On macOS 10.13 and later, compilation is extremely slow if SIP is
-    # disabled; e.g. from ~30m with SIP enabled, to ~6 hours if disabled.
-    #
-    # This is caused by gcc's build system setting DYLD_LIBRARY_PATH to ensure
-    # that the toolchain picks up newly built library versions, which seems to
-    # trigger a pathologically slow path in dyld's library resolution.
-    #
-    # Since dyld ignores DYLD_LIBRARY_PATH when SIP is enabled, the issue is
-    # avoided entirely, but at the cost of potentially falling back to incorrect
-    # system library paths. The correct, SIP-compatible solution would be gcc
-    # adopting @rpath.
-    #
-    # However, given that SIP is enabled by default in macOS, including on our
-    # build bots, we already have to assume that ignoring DYLD_LIBRARY_PATH will
-    # still produce a valid toolchain.
-    #
-    # Given that, we go ahead and disable DYLD_LIBRARY_PATH explicitly, avoiding
-    # otherwise unworkably long build-times for hosts with SIP disabled.
-    #
-    # See also: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=84257
-    patchfiles-append patch-disable-dyld_library_path.diff
+if { ${os.platform} eq "darwin" && ${os.major} >= 17 && ![catch {exec csrutil status} status] && [string trim [lindex [split ${status} :] end]] ne "enabled." } {
+    # see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=84257
+    known_fail  yes
+    pre-fetch {
+        # use `ui_warn` and do not use `return -code error ...` to allow users to install if they really want to
+        ui_warn "${subport} is known to take many hours to build if SIP is turned off. To enable SIP, please run `csrutil enable`."
+    }
 }
