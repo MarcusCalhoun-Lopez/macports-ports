@@ -44,16 +44,3 @@ compiler.blacklist-append   gcc-4.0 {llvm-gcc-4.2 < 2336.1} {clang < 300}
 platform darwin 10 {
     compiler.blacklist-append *gcc-3.* *gcc-4.*
 }
-
-if { ${os.platform} eq "darwin" } {
-    if { [vercmp ${xcodeversion} >= 12.5] || [vercmp ${xcodecltversion} >= 12.5]} {
-        pre-configure {
-            ui_warn "Applying '--without-build-config' workaround to Xcode ${xcodeversion} / CLT ${xcodecltversion}"
-            ui_warn "If versions > 12.5 please check if it is still required"
-        }
-        # gcc has build issues on macOS 11.3 with the use of Xcode clang via cctools for ld
-        # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=100340
-        # https://trac.macports.org/ticket/62775
-        configure.args-append  --without-build-config
-    }
-}

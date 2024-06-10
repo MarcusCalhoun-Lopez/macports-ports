@@ -38,22 +38,3 @@ if { ${os.major} >= 10 } {
 # see https://trac.macports.org/ticket/58493
 # see https://trac.macports.org/ticket/65415
 compiler.blacklist-append   {clang < 800} gcc-4.0 *gcc-4.2 {macports-clang-3.[4-7]} {macports-clang-1[2-9]}
-
-# clang (as) from Xcode 12.5 has various problems with gcc build
-if { ${os.platform} eq "darwin" && \
-         ([vercmp ${xcodeversion} >= 12.5] || [vercmp ${xcodecltversion} >= 12.5]) } {
-    pre-configure {
-        ui_warn "Applying '--without-build-config' workaround to Xcode ${xcodeversion} / CLT ${xcodecltversion}"
-        ui_warn "If versions > 12.5 please check if it is still required"
-    }
-    # gcc has build issues on macOS 11.3 with the use of Xcode clang as 'as'
-    # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=100340
-    # https://trac.macports.org/ticket/62775
-    configure.args-append  --without-build-config
-}
-
-# https://trac.macports.org/ticket/65415
-# Need to disable bootstrap comparisons here as well
-if { ${os.platform} eq "darwin" && ${os.major} < 15 } {
-    configure.args-append  --without-build-config
-}

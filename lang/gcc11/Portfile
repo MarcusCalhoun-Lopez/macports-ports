@@ -55,26 +55,3 @@ if { ${os.platform} eq "darwin" && ${os.major} >= 17 } {
     # See also: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=84257
     patchfiles-append patch-disable-dyld_library_path.diff
 }
-
-if { ${os.platform} eq "darwin" } {
-    # gcc has build issues on macOS 11.3 with the use of Xcode 12.5 clang via cctools for ld
-    #   https://gcc.gnu.org/bugzilla/show_bug.cgi?id=100340
-    #   https://trac.macports.org/ticket/62775
-    # Bootstrap comparison fails on 10.6, so disable for that case too
-    #   https://trac.macports.org/ticket/65149
-    # ... also now fails mysteriously on 10.7
-    # https://github.com/macports/macports-ports/commit/21bcf9d4ae1feade8f4c53c7608febf8d249cea8#commitcomment-78674560
-    if { ([vercmp ${xcodeversion} >= 12.5] && [vercmp ${xcodeversion} < 13]) || \
-         ([vercmp ${xcodecltversion} >= 12.5] && [vercmp ${xcodecltversion} < 13]) || \
-         (${os.major} <= 11) } \
-    {
-        # Skip bootstrap comparison entirely
-        post-patch {
-            reinplace {s|^do-compare =|do-compare = /usr/bin/true|g} \
-                ${worksrcpath}/Makefile.in \
-                ${worksrcpath}/config/bootstrap-debug.mk \
-                ${worksrcpath}/config/bootstrap-debug-lean.mk \
-                ${worksrcpath}/config/bootstrap-debug-lib.mk
-        }
-    }
-}
