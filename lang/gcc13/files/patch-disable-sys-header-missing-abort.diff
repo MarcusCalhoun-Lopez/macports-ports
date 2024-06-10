@@ -1,11 +1,17 @@
---- gcc/Makefile.in.orig	2023-09-27 12:34:24
-+++ gcc/Makefile.in	2023-09-27 12:35:59
-@@ -3280,7 +3280,7 @@
- 	      echo "  ${BUILD_SYSTEM_HEADER_DIR}" >&2 ; \
- 	      tooldir_sysinc=`echo "${gcc_tooldir}/sys-include" | sed -e :a -e "s,[^/]*/\.\.\/,," -e ta`; \
- 	      if test "x${BUILD_SYSTEM_HEADER_DIR}" = "x$${tooldir_sysinc}"; \
--	      then sleep 1; else exit 1; fi; \
-+	      then sleep 1; else exit 0; fi; \
- 	    fi; \
- 	    $(mkinstalldirs) $${fix_dir}; \
- 	    chmod a+rx $${fix_dir} || true; \
+diff --git gcc/Makefile.in gcc/Makefile.in
+index 6001c9e3b55..6aed2cda3ca 100644
+--- gcc/Makefile.in
++++ gcc/Makefile.in
+@@ -532,11 +532,7 @@ LINKER_PLUGIN_API_H = $(srcdir)/../include/plugin-api.h
+ # Default native SYSTEM_HEADER_DIR, to be overridden by targets.
+ NATIVE_SYSTEM_HEADER_DIR = @NATIVE_SYSTEM_HEADER_DIR@
+ # Default cross SYSTEM_HEADER_DIR, to be overridden by targets.
+-ifeq (@includedir@,$(prefix)/include)
+-  CROSS_SYSTEM_HEADER_DIR = @CROSS_SYSTEM_HEADER_DIR@
+-else
+-  CROSS_SYSTEM_HEADER_DIR = @includedir@
+-endif
++CROSS_SYSTEM_HEADER_DIR = @CROSS_SYSTEM_HEADER_DIR@
+ 
+ # autoconf sets SYSTEM_HEADER_DIR to one of the above.
+ # Purge it of unnecessary internal relative paths

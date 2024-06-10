@@ -25,13 +25,14 @@ master_sites        https://mirror.koddos.net/gcc/snapshots/${version}/ \
                     ftp://gcc.gnu.org/pub/gcc/snapshots/${version}/
 
 if { ${os.platform} eq "darwin" } {
-    # Do not abort if 'system' headers in /opt/local/include/gcc are missing
-    patchfiles-append      patch-disable-sys-header-missing-abort.diff
     # GCC fixinc work-around for sys/ucred.h on OSX10.14.4 no longer seems to work ???
     if { ${os.major} == 18 } {
         patchfiles-append  patch-OSX10.14-ucred-atomic-define.diff
     }
 }
+
+# see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=115416
+patchfiles-append       patch-disable-sys-header-missing-abort.diff
 
 post-destroot {
     # allow this subport to satisfy `path:share/doc/libgcc/README:libgcc` dependency
