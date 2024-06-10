@@ -1,5 +1,5 @@
 diff --git Makefile.def Makefile.def
-index 7c33a3b..b9c1e0d 100644
+index 7c33a3b1e8c..b9c1e0de8a9 100644
 --- Makefile.def
 +++ Makefile.def
 @@ -46,7 +46,8 @@ host_modules= { module= fixincludes; bootstrap=true;
@@ -21,7 +21,7 @@ index 7c33a3b..b9c1e0d 100644
  // Toplevel bootstrap
  bootstrap_stage = { id=1 ; };
 diff --git Makefile.in Makefile.in
-index 20cbbe2..ecf48c8 100644
+index 20cbbe2906d..ecf48c85832 100644
 --- Makefile.in
 +++ Makefile.in
 @@ -112,6 +112,9 @@ GCC_SHLIB_SUBDIR = @GCC_SHLIB_SUBDIR@
@@ -149,7 +149,7 @@ index 20cbbe2..ecf48c8 100644
  # The gcc part of install-no-fixedincludes, which relies on an intimate
  # knowledge of how a number of gcc internal targets (inter)operate.  Delegate.
 diff --git Makefile.tpl Makefile.tpl
-index 9adf4f9..329d927 100644
+index 9adf4f94728..329d927598a 100644
 --- Makefile.tpl
 +++ Makefile.tpl
 @@ -115,6 +115,9 @@ GCC_SHLIB_SUBDIR = @GCC_SHLIB_SUBDIR@
@@ -164,7 +164,7 @@ index 9adf4f9..329d927 100644
  # This is set by the configure script to the arguments to use when configuring
 diff --git README.md README.md
 new file mode 100644
-index 0000000..03bb0ba
+index 00000000000..03bb0ba805e
 --- /dev/null
 +++ README.md
 @@ -0,0 +1,28 @@
@@ -197,7 +197,7 @@ index 0000000..03bb0ba
 +
 +Iain Sandoe, May 2023
 diff --git c++tools/resolver.cc c++tools/resolver.cc
-index ef08de5..298a700 100644
+index ef08de53072..298a7008465 100644
 --- c++tools/resolver.cc
 +++ c++tools/resolver.cc
 @@ -307,3 +307,14 @@ module_resolver::IncludeTranslateRequest (Cody::Server *s, Cody::Flags,
@@ -216,7 +216,7 @@ index ef08de5..298a700 100644
 +  return 0;
 +}
 diff --git c++tools/resolver.h c++tools/resolver.h
-index a9547bf..ac4caf0 100644
+index a9547bf6994..ac4caf0e195 100644
 --- c++tools/resolver.h
 +++ c++tools/resolver.h
 @@ -96,6 +96,10 @@ public:
@@ -231,7 +231,7 @@ index a9547bf..ac4caf0 100644
    using parent::GetCMISuffix;
    virtual char const *GetCMISuffix () override;
 diff --git c++tools/server.cc c++tools/server.cc
-index ebc1efb..3a52fec 100644
+index ebc1efbda94..3a52fecdcf5 100644
 --- c++tools/server.cc
 +++ c++tools/server.cc
 @@ -360,7 +360,11 @@ accept_from (char *arg ATTRIBUTE_UNUSED)
@@ -248,7 +248,7 @@ index ebc1efb..3a52fec 100644
        noisy ("cannot resolve '%s': %s", arg, gai_strerror (e));
        ok = false;
 diff --git config/gcc-plugin.m4 config/gcc-plugin.m4
-index 8f27871..7ee342f 100644
+index 8f278719118..7ee342fe5fe 100644
 --- config/gcc-plugin.m4
 +++ config/gcc-plugin.m4
 @@ -91,14 +91,18 @@ AC_DEFUN([GCC_ENABLE_PLUGINS],
@@ -279,7 +279,7 @@ index 8f27871..7ee342f 100644
       # If plugin support had been requested but not available, fail.
       if test x"$enable_plugin" = x"no" ; then
 diff --git config/mh-darwin config/mh-darwin
-index b72835a..bb41127 100644
+index b72835ae953..bb4112773c9 100644
 --- config/mh-darwin
 +++ config/mh-darwin
 @@ -11,7 +11,8 @@
@@ -293,7 +293,7 @@ index b72835a..bb41127 100644
  ifeq (${host_shared},no)
  BOOTSTRAP_TOOL_CAN_USE_MDYNAMIC_NO_PIC := $(shell \
 diff --git configure configure
-index 74775c3..a1a861b 100755
+index 74775c31c58..a1a861b9300 100755
 --- configure
 +++ configure
 @@ -682,6 +682,7 @@ get_gcc_base_ver
@@ -395,7 +395,7 @@ index 74775c3..a1a861b 100755
  # on the build machine.  These are used if the Makefile can't locate these
  # programs in objdir.
 diff --git configure.ac configure.ac
-index 3613860..1e613e3 100644
+index 3613860460e..1e613e37757 100644
 --- configure.ac
 +++ configure.ac
 @@ -1781,6 +1781,20 @@ AC_ARG_WITH(boot-ldflags,
@@ -462,7 +462,7 @@ index 3613860..1e613e3 100644
  # By default, C and C++ are the only stage 1 languages.
  stage1_languages=,c,
 diff --git fixincludes/configure fixincludes/configure
-index 6e2d67b..b3bca66 100755
+index 6e2d67b655b..b3bca666a4d 100755
 --- fixincludes/configure
 +++ fixincludes/configure
 @@ -2644,7 +2644,7 @@ ac_configure="$SHELL $ac_aux_dir/configure"  # Please don't use this var.
@@ -475,7 +475,7 @@ index 6e2d67b..b3bca66 100755
  
  # _LT_SYS_MODULE_PATH_AIX
 diff --git gcc/Makefile.in gcc/Makefile.in
-index 7bfd6ce..012465f 100644
+index 7bfd6ce653f..012465f9202 100644
 --- gcc/Makefile.in
 +++ gcc/Makefile.in
 @@ -270,11 +270,15 @@ COMPILER += $(CET_HOST_FLAGS)
@@ -541,7 +541,7 @@ index 7bfd6ce..012465f 100644
  	@cat ./site.tmp > site.exp
  	@cat site.bak | sed \
 diff --git gcc/aclocal.m4 gcc/aclocal.m4
-index 6be36df..126e09b 100644
+index 6be36df5190..126e09bbcd1 100644
 --- gcc/aclocal.m4
 +++ gcc/aclocal.m4
 @@ -12,6 +12,56 @@
@@ -602,7 +602,7 @@ index 6be36df..126e09b 100644
  m4_include([../ltoptions.m4])
  m4_include([../ltsugar.m4])
 diff --git gcc/ada/gcc-interface/Make-lang.in gcc/ada/gcc-interface/Make-lang.in
-index d88c354..b98b7fe 100644
+index d88c354c9a4..b98b7fef0ef 100644
 --- gcc/ada/gcc-interface/Make-lang.in
 +++ gcc/ada/gcc-interface/Make-lang.in
 @@ -655,6 +655,14 @@ endif
@@ -643,7 +643,7 @@ index d88c354..b98b7fe 100644
  # use target-gcc target-gnatmake target-gnatbind target-gnatlink
  gnattools: $(GCC_PARTS) $(CONFIG_H) prefix.o force
 diff --git gcc/ada/gcc-interface/Makefile.in gcc/ada/gcc-interface/Makefile.in
-index 6cc9503..3ac49ef 100644
+index 6cc95038c40..3ac49ef8d24 100644
 --- gcc/ada/gcc-interface/Makefile.in
 +++ gcc/ada/gcc-interface/Makefile.in
 @@ -793,20 +793,23 @@ gnatlib-shared-darwin:
@@ -674,7 +674,7 @@ index 6cc9503..3ac49ef 100644
  gnatlib-shared:
  	$(MAKE) $(FLAGS_TO_PASS) \
 diff --git gcc/ada/gcc-interface/decl.c gcc/ada/gcc-interface/decl.c
-index c27a4eb..bc3757c 100644
+index c27a4eb723e..bc3757c472b 100644
 --- gcc/ada/gcc-interface/decl.c
 +++ gcc/ada/gcc-interface/decl.c
 @@ -170,7 +170,7 @@ gt_pch_nx (Entity_Id &)
@@ -687,7 +687,7 @@ index c27a4eb..bc3757c 100644
  
  struct dummy_type_hasher : ggc_cache_ptr_hash<tree_entity_vec_map>
 diff --git gcc/ada/sigtramp-ios.c gcc/ada/sigtramp-ios.c
-index 7715ddb..f95e6ef 100644
+index 7715ddb18d5..f95e6efab61 100644
 --- gcc/ada/sigtramp-ios.c
 +++ gcc/ada/sigtramp-ios.c
 @@ -71,6 +71,10 @@
@@ -713,7 +713,7 @@ index 7715ddb..f95e6ef 100644
  
  #define STR(TEXT) #TEXT
 diff --git gcc/builtins.def gcc/builtins.def
-index b67649a..0df16ab 100644
+index b67649a13a9..0df16ab718f 100644
 --- gcc/builtins.def
 +++ gcc/builtins.def
 @@ -954,6 +954,8 @@ DEF_BUILTIN_STUB (BUILT_IN_ADJUST_TRAMPOLINE, "__builtin_adjust_trampoline")
@@ -726,7 +726,7 @@ index b67649a..0df16ab 100644
  /* Implementing __builtin_setjmp.  */
  DEF_BUILTIN_STUB (BUILT_IN_SETJMP_SETUP, "__builtin_setjmp_setup")
 diff --git gcc/c-family/c-attribs.c gcc/c-family/c-attribs.c
-index cdf89d6..c3d3f46 100644
+index cdf89d66fe1..c3d3f4629ac 100644
 --- gcc/c-family/c-attribs.c
 +++ gcc/c-family/c-attribs.c
 @@ -121,6 +121,8 @@ static tree handle_pure_attribute (tree *, tree, tree, int, bool *);
@@ -820,7 +820,7 @@ index cdf89d6..c3d3f46 100644
     vector_size to by stripping arrays, function types, etc.  */
  static tree
 diff --git gcc/c-family/c-opts.c gcc/c-family/c-opts.c
-index 6f001e0..193c584 100644
+index 6f001e0bb6c..193c584a37c 100644
 --- gcc/c-family/c-opts.c
 +++ gcc/c-family/c-opts.c
 @@ -852,9 +852,9 @@ c_common_post_options (const char **pfilename)
@@ -845,7 +845,7 @@ index 6f001e0..193c584 100644
  	  /* Lazy TLS initialization for a variable in another TU requires
  	     alias and weak reference support.  */
 diff --git gcc/c-family/c-pch.c gcc/c-family/c-pch.c
-index fd94c37..c851f1f 100644
+index fd94c3799ac..c851f1f564d 100644
 --- gcc/c-family/c-pch.c
 +++ gcc/c-family/c-pch.c
 @@ -54,7 +54,6 @@ struct c_pch_validity
@@ -895,7 +895,7 @@ index fd94c37..c851f1f 100644
  }
  
 diff --git gcc/c/c-decl.c gcc/c/c-decl.c
-index ddef9c6..1bc6bfb 100644
+index ddef9c68fb7..1bc6bfb4845 100644
 --- gcc/c/c-decl.c
 +++ gcc/c/c-decl.c
 @@ -73,13 +73,16 @@ enum decl_context
@@ -1002,7 +1002,7 @@ index ddef9c6..1bc6bfb 100644
    /* Handle type specifier keywords.  */
    if (TREE_CODE (type) == IDENTIFIER_NODE
 diff --git gcc/c/c-tree.h gcc/c/c-tree.h
-index a671a3e..4c1022d 100644
+index a671a3eb740..4c1022d58a1 100644
 --- gcc/c/c-tree.h
 +++ gcc/c/c-tree.h
 @@ -370,6 +370,8 @@ struct c_declspecs {
@@ -1015,7 +1015,7 @@ index a671a3e..4c1022d 100644
       specifiers.  */
    BOOL_BITFIELD default_int_p : 1;
 diff --git gcc/c/c-typeck.c gcc/c/c-typeck.c
-index 84b4408..c5786cf 100644
+index 84b44081f0e..c5786cf5fce 100644
 --- gcc/c/c-typeck.c
 +++ gcc/c/c-typeck.c
 @@ -2561,7 +2561,9 @@ build_component_ref (location_t loc, tree datum, tree component,
@@ -1041,7 +1041,7 @@ index 84b4408..c5786cf 100644
  
    /* Recursive call does not count as usage.  */
 diff --git gcc/calls.c gcc/calls.c
-index 7d908c6..263cfe6 100644
+index 7d908c6a62b..263cfe62619 100644
 --- gcc/calls.c
 +++ gcc/calls.c
 @@ -2390,7 +2390,8 @@ initialize_argument_information (int num_actuals ATTRIBUTE_UNUSED,
@@ -1079,7 +1079,7 @@ index 7d908c6..263cfe6 100644
  	  args_size.constant += argvec[count].locate.size.constant;
  	  gcc_assert (!argvec[count].locate.size.var);
 diff --git gcc/calls.h gcc/calls.h
-index 4a018f6..fd920c6 100644
+index 4a018f6ae85..fd920c678dc 100644
 --- gcc/calls.h
 +++ gcc/calls.h
 @@ -35,24 +35,43 @@ class function_arg_info
@@ -1141,7 +1141,7 @@ index 4a018f6..fd920c6 100644
       the function_arg_info describes a pointer to the original argument.  */
    unsigned int pass_by_reference : 1;
 diff --git gcc/common.opt gcc/common.opt
-index 4a3f09d..09a4a11 100644
+index 4a3f09d9e1f..09a4a110b87 100644
 --- gcc/common.opt
 +++ gcc/common.opt
 @@ -2090,6 +2090,10 @@ foffload-abi=
@@ -1176,7 +1176,7 @@ index 4a3f09d..09a4a11 100644
  generate them instead of using descriptors.
  
 diff --git gcc/config.gcc gcc/config.gcc
-index bf809ef..2acb7c2 100644
+index bf809ef9545..2acb7c28fb3 100644
 --- gcc/config.gcc
 +++ gcc/config.gcc
 @@ -749,7 +749,7 @@ case ${target} in
@@ -1225,7 +1225,7 @@ index bf809ef..2acb7c2 100644
  	tm_file="${tm_file} dbxelf.h elfos.h ${fbsd_tm_file}"
  	tm_file="${tm_file} aarch64/aarch64-elf.h aarch64/aarch64-errata.h aarch64/aarch64-freebsd.h"
 diff --git gcc/config.host gcc/config.host
-index 0a02c33..81ff7ed 100644
+index 0a02c33cc80..81ff7ed1043 100644
 --- gcc/config.host
 +++ gcc/config.host
 @@ -99,7 +99,8 @@ case ${host} in
@@ -1250,7 +1250,7 @@ index 0a02c33..81ff7ed 100644
      out_host_hook_obj="${out_host_hook_obj} host-i386-darwin.o"
      host_xmake_file="${host_xmake_file} i386/x-darwin"
 diff --git gcc/config.in gcc/config.in
-index 048bf52..547f0f4 100644
+index 048bf52e8c2..547f0f4d402 100644
 --- gcc/config.in
 +++ gcc/config.in
 @@ -49,6 +49,19 @@
@@ -1301,7 +1301,7 @@ index 048bf52..547f0f4 100644
  #ifndef USED_FOR_TARGET
  #undef LD64_VERSION
 diff --git gcc/config/aarch64/aarch64-builtins.c gcc/config/aarch64/aarch64-builtins.c
-index f9a8c0a..4a63a66 100644
+index f9a8c0aa6a0..4a63a6697c1 100644
 --- gcc/config/aarch64/aarch64-builtins.c
 +++ gcc/config/aarch64/aarch64-builtins.c
 @@ -529,6 +529,10 @@ enum aarch64_builtins
@@ -1409,7 +1409,7 @@ index f9a8c0a..4a63a66 100644
  	break;
      }
 diff --git gcc/config/aarch64/aarch64-c.c gcc/config/aarch64/aarch64-c.c
-index 0586946..e73fe98 100644
+index 05869463e4b..e73fe98902c 100644
 --- gcc/config/aarch64/aarch64-c.c
 +++ gcc/config/aarch64/aarch64-c.c
 @@ -364,4 +364,8 @@ aarch64_register_pragmas (void)
@@ -1422,7 +1422,7 @@ index 0586946..e73fe98 100644
 +#endif
  }
 diff --git gcc/config/aarch64/aarch64-protos.h gcc/config/aarch64/aarch64-protos.h
-index fdc79b1..a6f56df 100644
+index fdc79b1dced..a6f56df12ef 100644
 --- gcc/config/aarch64/aarch64-protos.h
 +++ gcc/config/aarch64/aarch64-protos.h
 @@ -108,6 +108,14 @@ enum aarch64_symbol_type
@@ -1465,7 +1465,7 @@ index fdc79b1..a6f56df 100644
  gimple *aarch64_general_gimple_fold_builtin (unsigned int, gcall *);
  rtx aarch64_general_expand_builtin (unsigned int, tree, rtx, int);
 diff --git gcc/config/aarch64/aarch64-sve-builtins.cc gcc/config/aarch64/aarch64-sve-builtins.cc
-index fcc458a..f773802 100644
+index fcc458af3d6..f773802ba7b 100644
 --- gcc/config/aarch64/aarch64-sve-builtins.cc
 +++ gcc/config/aarch64/aarch64-sve-builtins.cc
 @@ -3916,7 +3916,7 @@ gt_pch_nx (function_instance *)
@@ -1478,7 +1478,7 @@ index fcc458a..f773802 100644
  }
  
 diff --git gcc/config/aarch64/aarch64.c gcc/config/aarch64/aarch64.c
-index 391a93f..1d3d49b 100644
+index 391a93f3018..1d3d49b6705 100644
 --- gcc/config/aarch64/aarch64.c
 +++ gcc/config/aarch64/aarch64.c
 @@ -291,8 +291,10 @@ static bool aarch64_vfp_is_call_or_return_candidate (machine_mode,
@@ -1868,7 +1868,7 @@ index 391a93f..1d3d49b 100644
  
  static unsigned int
  aarch64_function_arg_boundary (machine_mode mode, const_tree type)
-@@ -6986,15 +7163,118 @@ aarch64_function_arg_boundary (machine_mode mode, const_tree type)
+@@ -6986,8 +7163,73 @@ aarch64_function_arg_boundary (machine_mode mode, const_tree type)
    unsigned int abi_break;
    unsigned int alignment = aarch64_function_arg_alignment (mode, type,
  							   &abi_break);
@@ -1888,8 +1888,8 @@ index 391a93f..1d3d49b 100644
 +#else
    alignment = MIN (MAX (alignment, PARM_BOUNDARY), STACK_BOUNDARY);
    if (abi_break && warn_psabi)
-     {
-       abi_break = MIN (MAX (abi_break, PARM_BOUNDARY), STACK_BOUNDARY);
++    {
++      abi_break = MIN (MAX (abi_break, PARM_BOUNDARY), STACK_BOUNDARY);
 +      if (alignment != abi_break && !TARGET_MACHO)
 +	inform (input_location, "parameter passing for argument of type "
 +		"%qT changed in GCC 9.1", type);
@@ -1939,10 +1939,10 @@ index 391a93f..1d3d49b 100644
 +#else
 +  alignment = MIN (MAX (alignment, PARM_BOUNDARY), STACK_BOUNDARY);
 +  if (abi_break & warn_psabi)
-+    {
-+      abi_break = MIN (MAX (abi_break, PARM_BOUNDARY), STACK_BOUNDARY);
+     {
+       abi_break = MIN (MAX (abi_break, PARM_BOUNDARY), STACK_BOUNDARY);
        if (alignment != abi_break)
- 	inform (input_location, "parameter passing for argument of type "
+@@ -6995,6 +7237,44 @@ aarch64_function_arg_boundary (machine_mode mode, const_tree type)
  		"%qT changed in GCC 9.1", type);
      }
    return alignment;
@@ -2725,7 +2725,7 @@ index 391a93f..1d3d49b 100644
  #undef TARGET_HARD_REGNO_NREGS
  #define TARGET_HARD_REGNO_NREGS aarch64_hard_regno_nregs
 diff --git gcc/config/aarch64/aarch64.h gcc/config/aarch64/aarch64.h
-index bb383acfa..ae911a8 100644
+index bb383acfae8..ae911a82829 100644
 --- gcc/config/aarch64/aarch64.h
 +++ gcc/config/aarch64/aarch64.h
 @@ -58,6 +58,10 @@
@@ -2804,7 +2804,7 @@ index bb383acfa..ae911a8 100644
     So in order to unwind a function using a frame pointer, the very first
     function that is unwound must save the frame pointer.  That way the frame
 diff --git gcc/config/aarch64/aarch64.md gcc/config/aarch64/aarch64.md
-index 1cca0f5..ae69c04 100644
+index 1cca0f5c79f..ae69c04157d 100644
 --- gcc/config/aarch64/aarch64.md
 +++ gcc/config/aarch64/aarch64.md
 @@ -295,6 +295,7 @@
@@ -2878,7 +2878,7 @@ index 1cca0f5..ae69c04 100644
  )
  
 diff --git gcc/config/aarch64/aarch64.opt gcc/config/aarch64/aarch64.opt
-index 32191cf..2c5c503 100644
+index 32191cf1acf..2c5c503b3c3 100644
 --- gcc/config/aarch64/aarch64.opt
 +++ gcc/config/aarch64/aarch64.opt
 @@ -152,6 +152,13 @@ Enum(aarch64_abi) String(ilp32) Value(AARCH64_ABI_ILP32)
@@ -2896,7 +2896,7 @@ index 32191cf..2c5c503 100644
  Target Save Var(pcrelative_literal_loads) Init(2) Save
  PC relative literal loads.
 diff --git gcc/config/aarch64/constraints.md gcc/config/aarch64/constraints.md
-index 3b49b45..ef399a5 100644
+index 3b49b452119..ef399a5ba24 100644
 --- gcc/config/aarch64/constraints.md
 +++ gcc/config/aarch64/constraints.md
 @@ -474,6 +474,11 @@
@@ -2913,7 +2913,7 @@ index 3b49b45..ef399a5 100644
     A constraint that matches an immediate offset valid for SVE LD1B
 diff --git gcc/config/aarch64/darwin.h gcc/config/aarch64/darwin.h
 new file mode 100644
-index 0000000..2a855c1
+index 00000000000..2a855c11efa
 --- /dev/null
 +++ gcc/config/aarch64/darwin.h
 @@ -0,0 +1,280 @@
@@ -3199,7 +3199,7 @@ index 0000000..2a855c1
 +
 diff --git gcc/config/aarch64/darwinpcs.md gcc/config/aarch64/darwinpcs.md
 new file mode 100644
-index 0000000..1238c6b
+index 00000000000..1238c6bee91
 --- /dev/null
 +++ gcc/config/aarch64/darwinpcs.md
 @@ -0,0 +1,456 @@
@@ -3660,7 +3660,7 @@ index 0000000..1238c6b
 +## End.
 +
 diff --git gcc/config/aarch64/falkor-tag-collision-avoidance.c gcc/config/aarch64/falkor-tag-collision-avoidance.c
-index de214e4..6b16cd4 100644
+index de214e4a0f7..6b16cd4a273 100644
 --- gcc/config/aarch64/falkor-tag-collision-avoidance.c
 +++ gcc/config/aarch64/falkor-tag-collision-avoidance.c
 @@ -740,7 +740,7 @@ dump_insn_list (const rtx &t, const insn_info_list_t &insn_info,
@@ -3674,7 +3674,7 @@ index de214e4..6b16cd4 100644
      dump_insn_slim (dump_file, insn_info[i]->insn);
 diff --git gcc/config/aarch64/host-aarch64-darwin.c gcc/config/aarch64/host-aarch64-darwin.c
 new file mode 100644
-index 0000000..d70f2df
+index 00000000000..d70f2df3bf1
 --- /dev/null
 +++ gcc/config/aarch64/host-aarch64-darwin.c
 @@ -0,0 +1,33 @@
@@ -3712,7 +3712,7 @@ index 0000000..d70f2df
 +
 +const struct host_hooks host_hooks = HOST_HOOKS_INITIALIZER;
 diff --git gcc/config/aarch64/predicates.md gcc/config/aarch64/predicates.md
-index 49f02ae..e2af7bf 100644
+index 49f02ae0381..e2af7bfc08d 100644
 --- gcc/config/aarch64/predicates.md
 +++ gcc/config/aarch64/predicates.md
 @@ -257,9 +257,24 @@
@@ -3742,7 +3742,7 @@ index 49f02ae..e2af7bf 100644
  })
 diff --git gcc/config/aarch64/t-aarch64-darwin gcc/config/aarch64/t-aarch64-darwin
 new file mode 100644
-index 0000000..a8bfcff
+index 00000000000..a8bfcffad78
 --- /dev/null
 +++ gcc/config/aarch64/t-aarch64-darwin
 @@ -0,0 +1,25 @@
@@ -3773,7 +3773,7 @@ index 0000000..a8bfcff
 +# b) arm64_32
 diff --git gcc/config/aarch64/x-darwin gcc/config/aarch64/x-darwin
 new file mode 100644
-index 0000000..6d788d5
+index 00000000000..6d788d5e89c
 --- /dev/null
 +++ gcc/config/aarch64/x-darwin
 @@ -0,0 +1,3 @@
@@ -3781,7 +3781,7 @@ index 0000000..6d788d5
 +	$(COMPILE) $<
 +	$(POSTCOMPILE)
 diff --git gcc/config/avr/avr.c gcc/config/avr/avr.c
-index 3a250df..4d29e80 100644
+index 3a250dfb960..4d29e80dcc9 100644
 --- gcc/config/avr/avr.c
 +++ gcc/config/avr/avr.c
 @@ -10221,10 +10221,9 @@ avr_output_bss_section_asm_op (const void *data)
@@ -3798,7 +3798,7 @@ index 3a250df..4d29e80 100644
  
  
 diff --git gcc/config/darwin-driver.c gcc/config/darwin-driver.c
-index 61cbdff..9db19e6 100644
+index 61cbdff089f..9db19e6bcb0 100644
 --- gcc/config/darwin-driver.c
 +++ gcc/config/darwin-driver.c
 @@ -144,7 +144,7 @@ darwin_find_version_from_kernel (void)
@@ -4020,7 +4020,7 @@ index 61cbdff..9db19e6 100644
 +#endif
  }
 diff --git gcc/config/darwin.c gcc/config/darwin.c
-index b79c0d1..82fa868 100644
+index b79c0d1d2b4..82fa868b9a2 100644
 --- gcc/config/darwin.c
 +++ gcc/config/darwin.c
 @@ -42,6 +42,7 @@ along with GCC; see the file COPYING3.  If not see
@@ -4134,7 +4134,7 @@ index b79c0d1..82fa868 100644
  
  hashval_t
 diff --git gcc/config/darwin.h gcc/config/darwin.h
-index 504dfce..22bacd4 100644
+index 504dfcec4da..22bacd42102 100644
 --- gcc/config/darwin.h
 +++ gcc/config/darwin.h
 @@ -42,6 +42,9 @@ see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
@@ -4301,7 +4301,7 @@ index 504dfce..22bacd4 100644
  /* Emit macosx version (but only major).  */
  #define ASM_MMACOSX_VERSION_MIN_SPEC \
 diff --git gcc/config/darwin.opt gcc/config/darwin.opt
-index 48d3aa9..2a435c5 100644
+index 48d3aa97800..2a435c53859 100644
 --- gcc/config/darwin.opt
 +++ gcc/config/darwin.opt
 @@ -237,6 +237,10 @@ nodefaultexport
@@ -4316,7 +4316,7 @@ index 48d3aa9..2a435c5 100644
  Driver RejectNegative
  (Obsolete after 10.3.9) Set MH_NOPREFIXBINDING, in an executable.
 diff --git gcc/config/host-darwin.c gcc/config/host-darwin.c
-index 14a01fe..b578767 100644
+index 14a01fe71f2..b5787671545 100644
 --- gcc/config/host-darwin.c
 +++ gcc/config/host-darwin.c
 @@ -20,62 +20,164 @@
@@ -4524,7 +4524,7 @@ index 14a01fe..b578767 100644
 +  return 1;
  }
 diff --git gcc/config/host-darwin.h gcc/config/host-darwin.h
-index 4acae9c..f3a477e 100644
+index 4acae9cf341..f3a477e8837 100644
 --- gcc/config/host-darwin.h
 +++ gcc/config/host-darwin.h
 @@ -18,7 +18,7 @@
@@ -4537,7 +4537,7 @@ index 4acae9c..f3a477e 100644
  
  #undef HOST_HOOKS_GT_PCH_GET_ADDRESS
 diff --git gcc/config/host-hpux.c gcc/config/host-hpux.c
-index 6009810..796f501 100644
+index 6009810d732..796f501ebfb 100644
 --- gcc/config/host-hpux.c
 +++ gcc/config/host-hpux.c
 @@ -24,7 +24,7 @@
@@ -4559,7 +4559,7 @@ index 6009810..796f501 100644
    void *addr;
  
 diff --git gcc/config/host-linux.c gcc/config/host-linux.c
-index 34945f1..0481ecf 100644
+index 34945f14019..0481ecff3f2 100644
 --- gcc/config/host-linux.c
 +++ gcc/config/host-linux.c
 @@ -181,7 +181,7 @@ linux_gt_pch_get_address (size_t size, int fd)
@@ -4603,7 +4603,7 @@ index 34945f1..0481ecf 100644
      }
  
 diff --git gcc/config/host-netbsd.c gcc/config/host-netbsd.c
-index 818ecb2..32f86c8 100644
+index 818ecb2d0cb..32f86c83bb2 100644
 --- gcc/config/host-netbsd.c
 +++ gcc/config/host-netbsd.c
 @@ -66,7 +66,7 @@ netbsd_gt_pch_get_address (size_t size, int fd)
@@ -4616,7 +4616,7 @@ index 818ecb2..32f86c8 100644
    void *addr;
  
 diff --git gcc/config/host-openbsd.c gcc/config/host-openbsd.c
-index c5f8944..f7b9043 100644
+index c5f8944a62c..f7b90432b55 100644
 --- gcc/config/host-openbsd.c
 +++ gcc/config/host-openbsd.c
 @@ -66,7 +66,7 @@ openbsd_gt_pch_get_address (size_t size, int fd)
@@ -4629,7 +4629,7 @@ index c5f8944..f7b9043 100644
    void *addr;
  
 diff --git gcc/config/host-solaris.c gcc/config/host-solaris.c
-index 556e9cf..b08cf51 100644
+index 556e9cf649c..b08cf513ec5 100644
 --- gcc/config/host-solaris.c
 +++ gcc/config/host-solaris.c
 @@ -105,7 +105,7 @@ sol_gt_pch_get_address (size_t size, int fd)
@@ -4642,7 +4642,7 @@ index 556e9cf..b08cf51 100644
    void *addr;
  
 diff --git gcc/config/i386/darwin.h gcc/config/i386/darwin.h
-index 7c2211f..0ad6695 100644
+index 7c2211ffaff..0ad6695c52b 100644
 --- gcc/config/i386/darwin.h
 +++ gcc/config/i386/darwin.h
 @@ -336,3 +336,15 @@ along with GCC; see the file COPYING3.  If not see
@@ -4662,7 +4662,7 @@ index 7c2211f..0ad6695 100644
 +  (!flag_off_stack_trampolines && !flag_trampolines) ? 1 : 0
 +
 diff --git gcc/config/i386/host-mingw32.c gcc/config/i386/host-mingw32.c
-index 360a280..a182563 100644
+index 360a280b23a..a182563bf27 100644
 --- gcc/config/i386/host-mingw32.c
 +++ gcc/config/i386/host-mingw32.c
 @@ -32,7 +32,7 @@
@@ -4684,7 +4684,7 @@ index 360a280..a182563 100644
  {
    void * mmap_addr;
 diff --git gcc/config/i386/i386.c gcc/config/i386/i386.c
-index 6c9c99e..618fc39 100644
+index 6c9c99ee50b..618fc39bef0 100644
 --- gcc/config/i386/i386.c
 +++ gcc/config/i386/i386.c
 @@ -23856,7 +23856,7 @@ ix86_run_selftests (void)
@@ -4697,7 +4697,7 @@ index 6c9c99e..618fc39 100644
  #undef TARGET_ADDR_SPACE_ZERO_ADDRESS_VALID
  #define TARGET_ADDR_SPACE_ZERO_ADDRESS_VALID ix86_addr_space_zero_address_valid
 diff --git gcc/config/i386/i386.h gcc/config/i386/i386.h
-index ac0e5da..bca8315 100644
+index ac0e5da623c..bca83151e72 100644
 --- gcc/config/i386/i386.h
 +++ gcc/config/i386/i386.h
 @@ -953,6 +953,12 @@ extern const char *host_detect_local_cpu (int argc, const char **argv);
@@ -4714,7 +4714,7 @@ index ac0e5da..bca8315 100644
  #define TARGET_PTRMEMFUNC_VBIT_LOCATION ptrmemfunc_vbit_in_pfn
  
 diff --git gcc/config/pa/pa.c gcc/config/pa/pa.c
-index 341c5f0..8ac9c4b 100644
+index 341c5f0d765..8ac9c4b3a44 100644
 --- gcc/config/pa/pa.c
 +++ gcc/config/pa/pa.c
 @@ -10011,7 +10011,7 @@ pa_arg_partial_bytes (cumulative_args_t cum_v, const function_arg_info &arg)
@@ -4736,7 +4736,7 @@ index 341c5f0..8ac9c4b 100644
    in_section = NULL;
    output_section_asm_op (data);
 diff --git gcc/config/rs6000/rs6000.c gcc/config/rs6000/rs6000.c
-index eba5b20..1d4ed99 100644
+index eba5b200f6a..1d4ed99ace8 100644
 --- gcc/config/rs6000/rs6000.c
 +++ gcc/config/rs6000/rs6000.c
 @@ -20241,7 +20241,7 @@ rs6000_ms_bitfield_layout_p (const_tree record_type)
@@ -4828,7 +4828,7 @@ index eba5b20..1d4ed99 100644
    toc_section
      = get_unnamed_section (0, rs6000_xcoff_output_toc_section_asm_op, NULL);
 diff --git gcc/configure gcc/configure
-index 327c596..5dfecce 100755
+index 327c59652e8..5dfecce71f9 100755
 --- gcc/configure
 +++ gcc/configure
 @@ -634,6 +634,7 @@ LIBOBJS
@@ -5274,7 +5274,7 @@ index 327c596..5dfecce 100755
  : "${CONFIG_STATUS=./config.status}"
  ac_write_fail=0
 diff --git gcc/configure.ac gcc/configure.ac
-index 25a0597..5acfc1f 100644
+index 25a05978be9..5acfc1f4f95 100644
 --- gcc/configure.ac
 +++ gcc/configure.ac
 @@ -236,27 +236,48 @@ AC_ARG_WITH(gxx-libcxx-include-dir,
@@ -5423,7 +5423,7 @@ index 25a0597..5acfc1f 100644
  AC_CACHE_CHECK([for -fno-PIE option],
    [gcc_cv_c_no_fpie],
 diff --git gcc/coretypes.h gcc/coretypes.h
-index 732c76f..f4a185e 100644
+index 732c76f5cbf..f4a185e6bd7 100644
 --- gcc/coretypes.h
 +++ gcc/coretypes.h
 @@ -442,8 +442,10 @@ enum optimize_size_level
@@ -5440,7 +5440,7 @@ index 732c76f..f4a185e 100644
  #if !defined (HAVE_UCHAR)
  typedef unsigned char uchar;
 diff --git gcc/cp/call.c gcc/cp/call.c
-index 7c3ce16..c360fcc 100644
+index 7c3ce1693e1..c360fcc5003 100644
 --- gcc/cp/call.c
 +++ gcc/cp/call.c
 @@ -9435,7 +9435,7 @@ build_over_call (struct z_candidate *cand, int flags, tsubst_flags_t complain)
@@ -5462,7 +5462,7 @@ index 7c3ce16..c360fcc 100644
        return val;
      }
 diff --git gcc/cp/class.c gcc/cp/class.c
-index 3251aaa..2358b93 100644
+index 3251aaa1a46..2358b93edf2 100644
 --- gcc/cp/class.c
 +++ gcc/cp/class.c
 @@ -5768,6 +5768,7 @@ type_build_ctor_call (tree t)
@@ -5482,7 +5482,7 @@ index 3251aaa..2358b93 100644
  	return true;
      }
 diff --git gcc/cp/cp-tree.h gcc/cp/cp-tree.h
-index 8887e94..148ad71 100644
+index 8887e946d53..148ad71fb3c 100644
 --- gcc/cp/cp-tree.h
 +++ gcc/cp/cp-tree.h
 @@ -6503,7 +6503,7 @@ extern void validate_conversion_obstack		(void);
@@ -5495,7 +5495,7 @@ index 8887e94..148ad71 100644
  extern tree get_function_version_dispatcher	(tree);
  
 diff --git gcc/cp/decl.c gcc/cp/decl.c
-index 712e875..b190c83 100644
+index 712e875edd0..b190c83f9d6 100644
 --- gcc/cp/decl.c
 +++ gcc/cp/decl.c
 @@ -2412,6 +2412,10 @@ duplicate_decls (tree newdecl, tree olddecl, bool hiding, bool was_hidden)
@@ -5605,7 +5605,7 @@ index 712e875..b190c83 100644
  
  	  /* [dcl.fct] "A parameter with volatile-qualified type is
 diff --git gcc/cp/decl.h gcc/cp/decl.h
-index 387d807..4a9b399 100644
+index 387d807a5cf..4a9b399730a 100644
 --- gcc/cp/decl.h
 +++ gcc/cp/decl.h
 @@ -44,7 +44,8 @@ extern void name_unnamed_type (tree, tree);
@@ -5619,7 +5619,7 @@ index 387d807..4a9b399 100644
  
  extern enum deprecated_states deprecated_state;
 diff --git gcc/cp/decl2.c gcc/cp/decl2.c
-index 3ea37e0..107fd91 100644
+index 3ea37e0831f..107fd9120e1 100644
 --- gcc/cp/decl2.c
 +++ gcc/cp/decl2.c
 @@ -1617,6 +1617,17 @@ cplus_decl_attributes (tree *decl, tree attributes, int flags)
@@ -5829,7 +5829,7 @@ index 3ea37e0..107fd91 100644
    /* We can only check DECL_ODR_USED on variables or functions with
       DECL_LANG_SPECIFIC set, and these are also the only decls that we
 diff --git gcc/cp/g++spec.c gcc/cp/g++spec.c
-index 3c9bd14..984106f 100644
+index 3c9bd1490b4..984106f10dd 100644
 --- gcc/cp/g++spec.c
 +++ gcc/cp/g++spec.c
 @@ -222,7 +222,12 @@ lang_specific_driver (struct cl_decoded_option **in_decoded_options,
@@ -5846,7 +5846,7 @@ index 3c9bd14..984106f 100644
  
  	case OPT_stdlib_:
 diff --git gcc/cp/module.cc gcc/cp/module.cc
-index 6cb926c..83ff54d 100644
+index 6cb926c044a..83ff54d9627 100644
 --- gcc/cp/module.cc
 +++ gcc/cp/module.cc
 @@ -11745,7 +11745,7 @@ trees_out::mark_class_def (tree defn)
@@ -5859,7 +5859,7 @@ index 6cb926c..83ff54d 100644
  }
  
 diff --git gcc/cp/name-lookup.c gcc/cp/name-lookup.c
-index 2901e04..4f28556 100644
+index 2901e048b8d..4f285560c4d 100644
 --- gcc/cp/name-lookup.c
 +++ gcc/cp/name-lookup.c
 @@ -2126,8 +2126,8 @@ resort_member_name_cmp (const void *a_p, const void *b_p)
@@ -5874,7 +5874,7 @@ index 2901e04..4f28556 100644
    gcc_checking_assert (name_a != name_b);
  
 diff --git gcc/cp/parser.c gcc/cp/parser.c
-index 98f2661..7a1ca7e 100644
+index 98f266192fb..7a1ca7ed612 100644
 --- gcc/cp/parser.c
 +++ gcc/cp/parser.c
 @@ -17772,18 +17772,26 @@ cp_parser_template_name (cp_parser* parser,
@@ -5936,7 +5936,7 @@ index 98f2661..7a1ca7e 100644
        if (parameter)
  	{
 diff --git gcc/cp/typeck.c gcc/cp/typeck.c
-index 6e5a352..741a0a4 100644
+index 6e5a35202c7..741a0a4c748 100644
 --- gcc/cp/typeck.c
 +++ gcc/cp/typeck.c
 @@ -2556,7 +2556,10 @@ build_class_member_access_expr (cp_expr object, tree member,
@@ -5963,7 +5963,7 @@ index 6e5a352..741a0a4 100644
  
    if (template_p)
 diff --git gcc/cp/typeck2.c gcc/cp/typeck2.c
-index 8628a50..83fffbf 100644
+index 8628a5086ce..83fffbf37e8 100644
 --- gcc/cp/typeck2.c
 +++ gcc/cp/typeck2.c
 @@ -2198,7 +2198,7 @@ build_functional_cast_1 (location_t loc, tree exp, tree parms,
@@ -5977,7 +5977,7 @@ index 8628a50..83fffbf 100644
      type = exp;
 diff --git gcc/cumulative-args.h gcc/cumulative-args.h
 new file mode 100644
-index 0000000..b60928e
+index 00000000000..b60928e37f9
 --- /dev/null
 +++ gcc/cumulative-args.h
 @@ -0,0 +1,20 @@
@@ -6002,7 +6002,7 @@ index 0000000..b60928e
 +
 +#endif /* GCC_CUMULATIVE_ARGS_H */
 diff --git gcc/doc/extend.texi gcc/doc/extend.texi
-index 64bd4c1..b763b45 100644
+index 64bd4c1cb6c..b763b45ce7e 100644
 --- gcc/doc/extend.texi
 +++ gcc/doc/extend.texi
 @@ -2866,6 +2866,19 @@ types (@pxref{Variable Attributes}, @pxref{Type Attributes}.)
@@ -6080,7 +6080,7 @@ index 64bd4c1..b763b45 100644
  
  @node Statement Attributes
 diff --git gcc/doc/gty.texi gcc/doc/gty.texi
-index aaf97ae..2c62ab1 100644
+index aaf97ae9ad5..2c62ab11706 100644
 --- gcc/doc/gty.texi
 +++ gcc/doc/gty.texi
 @@ -197,6 +197,15 @@ If @code{skip} is applied to a field, the type machinery will ignore it.
@@ -6118,7 +6118,7 @@ index aaf97ae..2c62ab1 100644
  
  template<typename T>
 diff --git gcc/doc/invoke.texi gcc/doc/invoke.texi
-index f121781..011a559 100644
+index f1217812280..011a55990b1 100644
 --- gcc/doc/invoke.texi
 +++ gcc/doc/invoke.texi
 @@ -651,6 +651,7 @@ Objective-C and Objective-C++ Dialects}.
@@ -6176,7 +6176,7 @@ index f121781..011a559 100644
  @opindex fdelete-dead-exceptions
  Consider that instructions that may throw exceptions but don't otherwise
 diff --git gcc/doc/tm.texi gcc/doc/tm.texi
-index 6029295..21d3fa0 100644
+index 602929518ec..21d3fa02344 100644
 --- gcc/doc/tm.texi
 +++ gcc/doc/tm.texi
 @@ -4226,6 +4226,16 @@ with the specified mode and type.  The default hook returns
@@ -6214,7 +6214,7 @@ index 6029295..21d3fa0 100644
  A C expression that is nonzero if @var{regno} is the number of a hard
  register in which function arguments are sometimes passed.  This does
 diff --git gcc/doc/tm.texi.in gcc/doc/tm.texi.in
-index 732396a..7b8e70e 100644
+index 732396acb6d..7b8e70e3ab0 100644
 --- gcc/doc/tm.texi.in
 +++ gcc/doc/tm.texi.in
 @@ -3334,8 +3334,12 @@ required.
@@ -6231,7 +6231,7 @@ index 732396a..7b8e70e 100644
  A C expression that is nonzero if @var{regno} is the number of a hard
  register in which function arguments are sometimes passed.  This does
 diff --git gcc/function.c gcc/function.c
-index 1352863..abab124 100644
+index 1352863acbc..abab12409eb 100644
 --- gcc/function.c
 +++ gcc/function.c
 @@ -2443,7 +2443,10 @@ assign_parm_find_data_types (struct assign_parm_data_all *all, tree parm,
@@ -6311,7 +6311,7 @@ index 1352863..abab124 100644
  
    /* Alignment can't exceed MAX_SUPPORTED_STACK_ALIGNMENT.  */
 diff --git gcc/function.h gcc/function.h
-index a41514a..9f2f46e 100644
+index a41514acafc..9f2f46e32cb 100644
 --- gcc/function.h
 +++ gcc/function.h
 @@ -20,6 +20,7 @@ along with GCC; see the file COPYING3.  If not see
@@ -6331,7 +6331,7 @@ index a41514a..9f2f46e 100644
  				 struct locate_and_pad_arg_data *);
  extern void generate_setjmp_warnings (void);
 diff --git gcc/gcc.c gcc/gcc.c
-index 20a649e..0c4e3d8 100644
+index 20a649ea08e..0c4e3d8dbdc 100644
 --- gcc/gcc.c
 +++ gcc/gcc.c
 @@ -567,6 +567,7 @@ or with constant text in a single argument.
@@ -6410,7 +6410,7 @@ index 20a649e..0c4e3d8 100644
  	      for_each_path (&include_prefixes, false, info.append_len,
  			     spec_path, &info);
 diff --git gcc/gengtype-state.c gcc/gengtype-state.c
-index 891f2e1..fb99729 100644
+index 891f2e18a61..fb99729bc0e 100644
 --- gcc/gengtype-state.c
 +++ gcc/gengtype-state.c
 @@ -57,6 +57,7 @@ type_lineloc (const_type_p ty)
@@ -6488,7 +6488,7 @@ index 891f2e1..fb99729 100644
  	    {
  	      *current = XCNEW (struct type);
 diff --git gcc/gengtype.c gcc/gengtype.c
-index 98d4626..fdddb6f 100644
+index 98d4626f87e..fdddb6fe6f0 100644
 --- gcc/gengtype.c
 +++ gcc/gengtype.c
 @@ -167,6 +167,7 @@ dbgprint_count_type_at (const char *fil, int lin, const char *msg, type_p t)
@@ -6733,7 +6733,7 @@ index 98d4626..fdddb6f 100644
      case TYPE_STRUCT:
      case TYPE_UNION:
 diff --git gcc/gengtype.h gcc/gengtype.h
-index 4fe8f0f..c32faba 100644
+index 4fe8f0f7232..c32faba2995 100644
 --- gcc/gengtype.h
 +++ gcc/gengtype.h
 @@ -149,6 +149,9 @@ enum typekind {
@@ -6757,7 +6757,7 @@ index 4fe8f0f..c32faba 100644
     specific one.  */
  #define UNION_P(x)					\
 diff --git gcc/ggc-common.c gcc/ggc-common.c
-index 357bda1..a130db8 100644
+index 357bda13f97..a130db8b1e9 100644
 --- gcc/ggc-common.c
 +++ gcc/ggc-common.c
 @@ -43,7 +43,7 @@ static ggc_statistics *ggc_stats;
@@ -7162,7 +7162,7 @@ index 357bda1..a130db8 100644
    void *addr;
  
 diff --git gcc/ggc-tests.c gcc/ggc-tests.c
-index 4ee9550..03e6ed3 100644
+index 4ee95506625..03e6ed34130 100644
 --- gcc/ggc-tests.c
 +++ gcc/ggc-tests.c
 @@ -426,7 +426,7 @@ gt_pch_nx (user_struct *p)
@@ -7175,7 +7175,7 @@ index 4ee9550..03e6ed3 100644
  
  /* Verify that GTY((user)) works.  */
 diff --git gcc/ggc.h gcc/ggc.h
-index 65f6cb4..3339394 100644
+index 65f6cb4d19d..3339394b547 100644
 --- gcc/ggc.h
 +++ gcc/ggc.h
 @@ -46,6 +46,10 @@ typedef void (*gt_handle_reorder) (void *, void *, gt_pointer_operator,
@@ -7190,7 +7190,7 @@ index 65f6cb4..3339394 100644
     function.  */
  extern void gt_pch_note_reorder (void *, void *, gt_handle_reorder);
 diff --git gcc/ginclude/stddef.h gcc/ginclude/stddef.h
-index 66619fe..bc2074a 100644
+index 66619fe43b1..bc2074a6566 100644
 --- gcc/ginclude/stddef.h
 +++ gcc/ginclude/stddef.h
 @@ -418,9 +418,8 @@ typedef struct {
@@ -7206,7 +7206,7 @@ index 66619fe..bc2074a 100644
  #endif
  } max_align_t;
 diff --git gcc/hash-map.h gcc/hash-map.h
-index 0779c93..eaf0385 100644
+index 0779c930f0a..eaf03856c11 100644
 --- gcc/hash-map.h
 +++ gcc/hash-map.h
 @@ -126,7 +126,7 @@ class GTY((user)) hash_map
@@ -7228,7 +7228,7 @@ index 0779c93..eaf0385 100644
  
  enum hm_alloc { hm_heap = false, hm_ggc = true };
 diff --git gcc/hash-set.h gcc/hash-set.h
-index 85c31ef..60b3fcb 100644
+index 85c31efd412..60b3fcbf0c5 100644
 --- gcc/hash-set.h
 +++ gcc/hash-set.h
 @@ -206,7 +206,7 @@ template<typename K, typename H>
@@ -7241,7 +7241,7 @@ index 85c31ef..60b3fcb 100644
  
  #endif
 diff --git gcc/hash-table.h gcc/hash-table.h
-index a6e0ac8..548a9e2 100644
+index a6e0ac8eea9..548a9e23822 100644
 --- gcc/hash-table.h
 +++ gcc/hash-table.h
 @@ -1203,7 +1203,7 @@ template<typename D>
@@ -7254,7 +7254,7 @@ index a6e0ac8..548a9e2 100644
  
  template<typename H>
 diff --git gcc/hash-traits.h gcc/hash-traits.h
-index 57c81bf..6f0373e 100644
+index 57c81bfd34e..6f0373ec27f 100644
 --- gcc/hash-traits.h
 +++ gcc/hash-traits.h
 @@ -254,7 +254,7 @@ struct ggc_remove
@@ -7267,7 +7267,7 @@ index 57c81bf..6f0373e 100644
  };
  
 diff --git gcc/hosthooks-def.h gcc/hosthooks-def.h
-index a87b6d3..8f50932 100644
+index a87b6d3e580..8f50932274b 100644
 --- gcc/hosthooks-def.h
 +++ gcc/hosthooks-def.h
 @@ -35,10 +35,10 @@ along with GCC; see the file COPYING3.  If not see
@@ -7284,7 +7284,7 @@ index a87b6d3..8f50932 100644
  /* The structure is defined in hosthooks.h.  */
  #define HOST_HOOKS_INITIALIZER {		\
 diff --git gcc/hosthooks.h gcc/hosthooks.h
-index 42ed3dc..8241a53 100644
+index 42ed3dcebf6..8241a533905 100644
 --- gcc/hosthooks.h
 +++ gcc/hosthooks.h
 @@ -30,10 +30,12 @@ struct host_hooks
@@ -7305,7 +7305,7 @@ index 42ed3dc..8241a53 100644
    /*  Return the alignment required for allocating virtual memory. Usually
        this is the same as pagesize.  */
 diff --git gcc/jit/Make-lang.in gcc/jit/Make-lang.in
-index 2a774d7..5e93316 100644
+index 2a774d7feb1..5e9331639d7 100644
 --- gcc/jit/Make-lang.in
 +++ gcc/jit/Make-lang.in
 @@ -59,7 +59,7 @@ LIBGCCJIT_AGE = 1
@@ -7318,7 +7318,7 @@ index 2a774d7..5e93316 100644
  LIBGCCJIT_LINKER_NAME = $(LIBGCCJIT_BASENAME).dylib
  
 diff --git gcc/machmode.h gcc/machmode.h
-index 1583513..2e5bafd 100644
+index 158351350de..2e5bafd0f96 100644
 --- gcc/machmode.h
 +++ gcc/machmode.h
 @@ -1199,7 +1199,7 @@ gt_pch_nx (pod_mode<T> *)
@@ -7331,7 +7331,7 @@ index 1583513..2e5bafd 100644
  }
  
 diff --git gcc/objc/objc-act.c gcc/objc/objc-act.c
-index 1cbd586..e69bec8 100644
+index 1cbd586b8fb..e69bec86fae 100644
 --- gcc/objc/objc-act.c
 +++ gcc/objc/objc-act.c
 @@ -1302,6 +1302,7 @@ objc_add_property_declaration (location_t location, tree decl,
@@ -7645,7 +7645,7 @@ index 1cbd586..e69bec8 100644
    *expr_p = call_exp;
  }
 diff --git gcc/objc/objc-next-metadata-tags.h gcc/objc/objc-next-metadata-tags.h
-index ceb8783..aea1455 100644
+index ceb87832359..aea14558b5c 100644
 --- gcc/objc/objc-next-metadata-tags.h
 +++ gcc/objc/objc-next-metadata-tags.h
 @@ -79,6 +79,8 @@ enum objc_runtime_tree_index
@@ -7658,7 +7658,7 @@ index ceb8783..aea1455 100644
     sections for targets/runtimes (Darwin/NeXT) that require this.
     This information also survives LTO - which might produce mixed language
 diff --git gcc/objc/objc-next-runtime-abi-01.c gcc/objc/objc-next-runtime-abi-01.c
-index 3ec6e17..3d85996 100644
+index 3ec6e1703c1..3d859963385 100644
 --- gcc/objc/objc-next-runtime-abi-01.c
 +++ gcc/objc/objc-next-runtime-abi-01.c
 @@ -54,6 +54,7 @@ along with GCC; see the file COPYING3.  If not see
@@ -7685,7 +7685,7 @@ index 3ec6e17..3d85996 100644
  
  static tree next_runtime_abi_01_super_superclassfield_id (void);
 diff --git gcc/objc/objc-next-runtime-abi-02.c gcc/objc/objc-next-runtime-abi-02.c
-index af68c1c..8ea3d61 100644
+index af68c1c84a3..8ea3d61ddad 100644
 --- gcc/objc/objc-next-runtime-abi-02.c
 +++ gcc/objc/objc-next-runtime-abi-02.c
 @@ -54,6 +54,7 @@ along with GCC; see the file COPYING3.  If not see
@@ -7867,7 +7867,7 @@ index af68c1c..8ea3d61 100644
  
      /* TODO: delete the vec.  */
 diff --git gcc/objc/objc-runtime-shared-support.c gcc/objc/objc-runtime-shared-support.c
-index 40f506c..0d3036f 100644
+index 40f506c6e75..0d3036f478e 100644
 --- gcc/objc/objc-runtime-shared-support.c
 +++ gcc/objc/objc-runtime-shared-support.c
 @@ -44,16 +44,11 @@ along with GCC; see the file COPYING3.  If not see
@@ -7890,7 +7890,7 @@ index 40f506c..0d3036f 100644
  
  /* For building an objc struct.  These might not be used when this file
 diff --git gcc/output.h gcc/output.h
-index 2bfeed9..7412407 100644
+index 2bfeed93c56..7412407c2c0 100644
 --- gcc/output.h
 +++ gcc/output.h
 @@ -458,7 +458,7 @@ struct GTY(()) named_section {
@@ -7943,7 +7943,7 @@ index 2bfeed9..7412407 100644
  extern void record_tm_clone_pair (tree, tree);
  extern void finish_tm_clone_pairs (void);
 diff --git gcc/poly-int.h gcc/poly-int.h
-index f47f9e4..be53307 100644
+index f47f9e436a8..be5330775ca 100644
 --- gcc/poly-int.h
 +++ gcc/poly-int.h
 @@ -2717,7 +2717,7 @@ gt_pch_nx (poly_int_pod<N, C> *)
@@ -7956,7 +7956,7 @@ index f47f9e4..be53307 100644
  }
  
 diff --git gcc/print-tree.c gcc/print-tree.c
-index 8ad0dcf..d1fbd04 100644
+index 8ad0dcfbbf0..d1fbd044c27 100644
 --- gcc/print-tree.c
 +++ gcc/print-tree.c
 @@ -364,6 +364,8 @@ print_node (FILE *file, const char *prefix, tree node, int indent,
@@ -7969,7 +7969,7 @@ index 8ad0dcf..d1fbd04 100644
      fputs (" visited", file);
  
 diff --git gcc/stringpool.c gcc/stringpool.c
-index e4d79b0..fa4548e 100644
+index e4d79b0dca0..fa4548e93a5 100644
 --- gcc/stringpool.c
 +++ gcc/stringpool.c
 @@ -219,7 +219,7 @@ gt_pch_nx (unsigned char& x ATTRIBUTE_UNUSED)
@@ -7982,13 +7982,14 @@ index e4d79b0..fa4548e 100644
  
  /* Handle saving and restoring the string pool for PCH.  */
 diff --git gcc/target.def gcc/target.def
-index 258b414..9deddea 100644
+index 258b414e230..9deddea8835 100644
 --- gcc/target.def
 +++ gcc/target.def
-@@ -4944,6 +4944,18 @@ with the specified mode and type.  The default hook returns\n\
+@@ -4943,6 +4943,18 @@ with the specified mode and type.  The default hook returns\n\
+  unsigned int, (machine_mode mode, const_tree type),
   default_function_arg_boundary)
  
- DEFHOOK
++DEFHOOK
 +(function_arg_boundary_ca,
 + "This is the @code{cumulative_args_t}-based version of\n\
 +@code{TARGET_FUNCTION_ARG_BOUNDARY}. Define this hook if you need more\n\
@@ -8000,10 +8001,9 @@ index 258b414..9deddea 100644
 + unsigned int, (machine_mode mode, const_tree type, cumulative_args_t ca),
 + default_function_arg_boundary_ca)
 +
-+DEFHOOK
+ DEFHOOK
  (function_arg_round_boundary,
   "Normally, the size of an argument is rounded up to @code{PARM_BOUNDARY},\n\
- which is the default value for this hook.  You can define this hook to\n\
 @@ -4952,6 +4964,18 @@ value.",
   unsigned int, (machine_mode mode, const_tree type),
   default_function_arg_round_boundary)
@@ -8024,7 +8024,7 @@ index 258b414..9deddea 100644
     is not allowed for this 'val' argument; NULL otherwise. */
  DEFHOOK
 diff --git gcc/target.h gcc/target.h
-index d8f45fb..5b28ece 100644
+index d8f45fb99c3..5b28ece7e1c 100644
 --- gcc/target.h
 +++ gcc/target.h
 @@ -51,22 +51,7 @@
@@ -8052,13 +8052,14 @@ index d8f45fb..5b28ece 100644
  /* Types of memory operation understood by the "by_pieces" infrastructure.
     Used by the TARGET_USE_BY_PIECES_INFRASTRUCTURE_P target hook and
 diff --git gcc/targhooks.c gcc/targhooks.c
-index 952fad4..a6a0fc3 100644
+index 952fad422eb..a6a0fc39f52 100644
 --- gcc/targhooks.c
 +++ gcc/targhooks.c
-@@ -828,12 +828,28 @@ default_function_arg_boundary (machine_mode mode ATTRIBUTE_UNUSED,
+@@ -827,6 +827,14 @@ default_function_arg_boundary (machine_mode mode ATTRIBUTE_UNUSED,
+   return PARM_BOUNDARY;
  }
  
- unsigned int
++unsigned int
 +default_function_arg_boundary_ca (machine_mode mode ATTRIBUTE_UNUSED,
 +				  const_tree type ATTRIBUTE_UNUSED,
 +				  cumulative_args_t ca ATTRIBUTE_UNUSED)
@@ -8066,10 +8067,10 @@ index 952fad4..a6a0fc3 100644
 +  return default_function_arg_boundary (mode, type);
 +}
 +
-+unsigned int
+ unsigned int
  default_function_arg_round_boundary (machine_mode mode ATTRIBUTE_UNUSED,
  				     const_tree type ATTRIBUTE_UNUSED)
- {
+@@ -834,6 +842,14 @@ default_function_arg_round_boundary (machine_mode mode ATTRIBUTE_UNUSED,
    return PARM_BOUNDARY;
  }
  
@@ -8085,7 +8086,7 @@ index 952fad4..a6a0fc3 100644
  hook_void_bitmap (bitmap regs ATTRIBUTE_UNUSED)
  {
 diff --git gcc/targhooks.h gcc/targhooks.h
-index 9928d06..4efee44 100644
+index 9928d064abd..4efee4407b4 100644
 --- gcc/targhooks.h
 +++ gcc/targhooks.h
 @@ -158,6 +158,12 @@ extern unsigned int default_function_arg_boundary (machine_mode,
@@ -8102,7 +8103,7 @@ index 9928d06..4efee44 100644
  extern rtx default_function_value (const_tree, const_tree, bool);
  extern HARD_REG_SET default_zero_call_used_regs (HARD_REG_SET);
 diff --git gcc/testsuite/g++.dg/abi/aarch64_guard1.C gcc/testsuite/g++.dg/abi/aarch64_guard1.C
-index e2669a8..52be32d 100644
+index e2669a89fbf..52be32decc6 100644
 --- gcc/testsuite/g++.dg/abi/aarch64_guard1.C
 +++ gcc/testsuite/g++.dg/abi/aarch64_guard1.C
 @@ -12,5 +12,6 @@ int *foo ()
@@ -8114,7 +8115,7 @@ index e2669a8..52be32d 100644
 +// { dg-final { scan-assembler __DATA,__bss,__ZGVZ3foovE1x,8,3 { target *-*-darwin* } } }
  // { dg-final { scan-tree-dump "& 1" "original" } }
 diff --git gcc/testsuite/g++.dg/abi/arm_va_list.C gcc/testsuite/g++.dg/abi/arm_va_list.C
-index 4f6f3a4..ff9fd8b 100644
+index 4f6f3a46da4..ff9fd8bcf0d 100644
 --- gcc/testsuite/g++.dg/abi/arm_va_list.C
 +++ gcc/testsuite/g++.dg/abi/arm_va_list.C
 @@ -8,8 +8,10 @@
@@ -8132,7 +8133,7 @@ index 4f6f3a4..ff9fd8b 100644
  void g(va_list, va_list) {}
 diff --git gcc/testsuite/g++.dg/cpp0x/pr106435-b.cc gcc/testsuite/g++.dg/cpp0x/pr106435-b.cc
 new file mode 100644
-index 0000000..4f58169
+index 00000000000..4f581694177
 --- /dev/null
 +++ gcc/testsuite/g++.dg/cpp0x/pr106435-b.cc
 @@ -0,0 +1,17 @@
@@ -8155,7 +8156,7 @@ index 0000000..4f58169
 +thread_local Foo Bar::baz;
 diff --git gcc/testsuite/g++.dg/cpp0x/pr106435.C gcc/testsuite/g++.dg/cpp0x/pr106435.C
 new file mode 100644
-index 0000000..d600976
+index 00000000000..d600976f9f9
 --- /dev/null
 +++ gcc/testsuite/g++.dg/cpp0x/pr106435.C
 @@ -0,0 +1,20 @@
@@ -8181,7 +8182,7 @@ index 0000000..d600976
 +}
 diff --git gcc/testsuite/g++.dg/cpp0x/pr106435.h gcc/testsuite/g++.dg/cpp0x/pr106435.h
 new file mode 100644
-index 0000000..240de1e
+index 00000000000..240de1ee9a9
 --- /dev/null
 +++ gcc/testsuite/g++.dg/cpp0x/pr106435.h
 @@ -0,0 +1,14 @@
@@ -8200,7 +8201,7 @@ index 0000000..240de1e
 +  thread_local static Foo bat;
 +};
 diff --git gcc/testsuite/g++.dg/ext/arm-bf16/bf16-mangle-aarch64-1.C gcc/testsuite/g++.dg/ext/arm-bf16/bf16-mangle-aarch64-1.C
-index 5426a18..a017ce8 100644
+index 5426a1814b8..a017ce8ce5f 100644
 --- gcc/testsuite/g++.dg/ext/arm-bf16/bf16-mangle-aarch64-1.C
 +++ gcc/testsuite/g++.dg/ext/arm-bf16/bf16-mangle-aarch64-1.C
 @@ -2,12 +2,12 @@
@@ -8221,7 +8222,7 @@ index 5426a18..a017ce8 100644
  template <> int S<__bf16, __bf16>::i = 3;
 diff --git gcc/testsuite/g++.dg/ext/attr-unavailable-1.C gcc/testsuite/g++.dg/ext/attr-unavailable-1.C
 new file mode 100644
-index 0000000..862651f
+index 00000000000..862651f6cbf
 --- /dev/null
 +++ gcc/testsuite/g++.dg/ext/attr-unavailable-1.C
 @@ -0,0 +1,113 @@
@@ -8340,7 +8341,7 @@ index 0000000..862651f
 +#endif
 diff --git gcc/testsuite/g++.dg/ext/attr-unavailable-2.C gcc/testsuite/g++.dg/ext/attr-unavailable-2.C
 new file mode 100644
-index 0000000..3de5532
+index 00000000000..3de5532817e
 --- /dev/null
 +++ gcc/testsuite/g++.dg/ext/attr-unavailable-2.C
 @@ -0,0 +1,10 @@
@@ -8356,7 +8357,7 @@ index 0000000..3de5532
 +}
 diff --git gcc/testsuite/g++.dg/ext/attr-unavailable-3.C gcc/testsuite/g++.dg/ext/attr-unavailable-3.C
 new file mode 100644
-index 0000000..1f267ea
+index 00000000000..1f267ea78c4
 --- /dev/null
 +++ gcc/testsuite/g++.dg/ext/attr-unavailable-3.C
 @@ -0,0 +1,14 @@
@@ -8376,7 +8377,7 @@ index 0000000..1f267ea
 +}
 diff --git gcc/testsuite/g++.dg/ext/attr-unavailable-4.C gcc/testsuite/g++.dg/ext/attr-unavailable-4.C
 new file mode 100644
-index 0000000..b7f352e
+index 00000000000..b7f352ee3bd
 --- /dev/null
 +++ gcc/testsuite/g++.dg/ext/attr-unavailable-4.C
 @@ -0,0 +1,11 @@
@@ -8393,7 +8394,7 @@ index 0000000..b7f352e
 +}
 diff --git gcc/testsuite/g++.dg/ext/attr-unavailable-5.C gcc/testsuite/g++.dg/ext/attr-unavailable-5.C
 new file mode 100644
-index 0000000..3beea5d
+index 00000000000..3beea5d22c5
 --- /dev/null
 +++ gcc/testsuite/g++.dg/ext/attr-unavailable-5.C
 @@ -0,0 +1,6 @@
@@ -8405,7 +8406,7 @@ index 0000000..3beea5d
 +void foo() { Foo f; }		// { dg-error "unavailable" }
 diff --git gcc/testsuite/g++.dg/ext/attr-unavailable-6.C gcc/testsuite/g++.dg/ext/attr-unavailable-6.C
 new file mode 100644
-index 0000000..8a57ea0
+index 00000000000..8a57ea0d88c
 --- /dev/null
 +++ gcc/testsuite/g++.dg/ext/attr-unavailable-6.C
 @@ -0,0 +1,110 @@
@@ -8521,7 +8522,7 @@ index 0000000..8a57ea0
 +}
 diff --git gcc/testsuite/g++.dg/ext/attr-unavailable-7.C gcc/testsuite/g++.dg/ext/attr-unavailable-7.C
 new file mode 100644
-index 0000000..c061aa3
+index 00000000000..c061aa3b6a2
 --- /dev/null
 +++ gcc/testsuite/g++.dg/ext/attr-unavailable-7.C
 @@ -0,0 +1,19 @@
@@ -8546,7 +8547,7 @@ index 0000000..c061aa3
 +}
 diff --git gcc/testsuite/g++.dg/ext/attr-unavailable-8.C gcc/testsuite/g++.dg/ext/attr-unavailable-8.C
 new file mode 100644
-index 0000000..334a2cf
+index 00000000000..334a2cf7286
 --- /dev/null
 +++ gcc/testsuite/g++.dg/ext/attr-unavailable-8.C
 @@ -0,0 +1,17 @@
@@ -8569,7 +8570,7 @@ index 0000000..334a2cf
 +}
 diff --git gcc/testsuite/g++.dg/ext/attr-unavailable-9.C gcc/testsuite/g++.dg/ext/attr-unavailable-9.C
 new file mode 100644
-index 0000000..4416133
+index 00000000000..44161336e78
 --- /dev/null
 +++ gcc/testsuite/g++.dg/ext/attr-unavailable-9.C
 @@ -0,0 +1,17 @@
@@ -8591,7 +8592,7 @@ index 0000000..4416133
 +  void (*p)() = f<char>;	// { dg-error "unavailable" }
 +}
 diff --git gcc/testsuite/g++.dg/modules/bad-mapper-1.C gcc/testsuite/g++.dg/modules/bad-mapper-1.C
-index 7ed75b8..6d0ed4b 100644
+index 7ed75b824b4..6d0ed4b5895 100644
 --- gcc/testsuite/g++.dg/modules/bad-mapper-1.C
 +++ gcc/testsuite/g++.dg/modules/bad-mapper-1.C
 @@ -1,6 +1,9 @@
@@ -8606,7 +8607,7 @@ index 7ed75b8..6d0ed4b 100644
 +// { dg-prune-output "trying to exec .this-will-not-work."  }
 +// { dg-prune-output "unknown Compiled Module Interface"  }
 diff --git gcc/testsuite/g++.dg/torture/darwin-cfstring-3.C gcc/testsuite/g++.dg/torture/darwin-cfstring-3.C
-index ee4b385..eabb3b5 100644
+index ee4b385b17f..eabb3b517a4 100644
 --- gcc/testsuite/g++.dg/torture/darwin-cfstring-3.C
 +++ gcc/testsuite/g++.dg/torture/darwin-cfstring-3.C
 @@ -26,5 +26,5 @@ void foo(void) {
@@ -8618,7 +8619,7 @@ index ee4b385..eabb3b5 100644
 +/* { dg-final { scan-assembler {.(quad|xword)\t___CFConstantStringClassReference\n\t.(long|word)\t1992\n\t.space 4\n\t.(quad|xword)\t.*\n\t.(quad|xword)\t4\n} { target { *-*-darwin* && {  lp64 } } } } } */
 +/* { dg-final { scan-assembler {.(quad|xword)\t___CFConstantStringClassReference\n\t.(long|word)\t1992\n\t.space 4\n\t.(quad|xword)\t.*\n\t.(quad|xword)\t10\n} { target { *-*-darwin* && {  lp64 } } } } } */
 diff --git gcc/testsuite/g++.target/aarch64/bitfield-abi-warning-align16-O2-extra.C gcc/testsuite/g++.target/aarch64/bitfield-abi-warning-align16-O2-extra.C
-index fb3194b..f10b15f 100644
+index fb3194bd231..f10b15fc1a5 100644
 --- gcc/testsuite/g++.target/aarch64/bitfield-abi-warning-align16-O2-extra.C
 +++ gcc/testsuite/g++.target/aarch64/bitfield-abi-warning-align16-O2-extra.C
 @@ -1,4 +1,5 @@
@@ -8628,7 +8629,7 @@ index fb3194b..f10b15f 100644
  
  #define ALIGN 16
 diff --git gcc/testsuite/g++.target/aarch64/bitfield-abi-warning-align16-O2.C gcc/testsuite/g++.target/aarch64/bitfield-abi-warning-align16-O2.C
-index edb0214..be09acc 100644
+index edb02141dd5..be09acc8583 100644
 --- gcc/testsuite/g++.target/aarch64/bitfield-abi-warning-align16-O2.C
 +++ gcc/testsuite/g++.target/aarch64/bitfield-abi-warning-align16-O2.C
 @@ -1,4 +1,5 @@
@@ -8638,7 +8639,7 @@ index edb0214..be09acc 100644
  
  #define ALIGN 16
 diff --git gcc/testsuite/g++.target/aarch64/bitfield-abi-warning-align32-O2-extra.C gcc/testsuite/g++.target/aarch64/bitfield-abi-warning-align32-O2-extra.C
-index a2ee597..be893c8 100644
+index a2ee5972cd7..be893c81542 100644
 --- gcc/testsuite/g++.target/aarch64/bitfield-abi-warning-align32-O2-extra.C
 +++ gcc/testsuite/g++.target/aarch64/bitfield-abi-warning-align32-O2-extra.C
 @@ -1,4 +1,5 @@
@@ -8648,7 +8649,7 @@ index a2ee597..be893c8 100644
  
  #define ALIGN 32
 diff --git gcc/testsuite/g++.target/aarch64/bitfield-abi-warning-align32-O2.C gcc/testsuite/g++.target/aarch64/bitfield-abi-warning-align32-O2.C
-index 44d7779..9cab442 100644
+index 44d77791a63..9cab4425173 100644
 --- gcc/testsuite/g++.target/aarch64/bitfield-abi-warning-align32-O2.C
 +++ gcc/testsuite/g++.target/aarch64/bitfield-abi-warning-align32-O2.C
 @@ -1,4 +1,5 @@
@@ -8658,7 +8659,7 @@ index 44d7779..9cab442 100644
  
  #define ALIGN 32
 diff --git gcc/testsuite/g++.target/aarch64/bitfield-abi-warning-align8-O2.C gcc/testsuite/g++.target/aarch64/bitfield-abi-warning-align8-O2.C
-index b1764d9..646bdd3 100644
+index b1764d97ea0..646bdd3ce38 100644
 --- gcc/testsuite/g++.target/aarch64/bitfield-abi-warning-align8-O2.C
 +++ gcc/testsuite/g++.target/aarch64/bitfield-abi-warning-align8-O2.C
 @@ -1,4 +1,5 @@
@@ -8668,7 +8669,7 @@ index b1764d9..646bdd3 100644
  
  #define ALIGN 8
 diff --git gcc/testsuite/g++.target/aarch64/no_unique_address_1.C gcc/testsuite/g++.target/aarch64/no_unique_address_1.C
-index 5fc68ea5d..5faf915 100644
+index 5fc68ea5d6d..5faf915fa54 100644
 --- gcc/testsuite/g++.target/aarch64/no_unique_address_1.C
 +++ gcc/testsuite/g++.target/aarch64/no_unique_address_1.C
 @@ -1,5 +1,5 @@
@@ -8679,7 +8680,7 @@ index 5fc68ea5d..5faf915 100644
  struct X { };
  struct Y { int : 0; };
 diff --git gcc/testsuite/g++.target/aarch64/no_unique_address_2.C gcc/testsuite/g++.target/aarch64/no_unique_address_2.C
-index f071713..322ec12 100644
+index f0717133ccd..322ec127c79 100644
 --- gcc/testsuite/g++.target/aarch64/no_unique_address_2.C
 +++ gcc/testsuite/g++.target/aarch64/no_unique_address_2.C
 @@ -1,5 +1,5 @@
@@ -8690,7 +8691,7 @@ index f071713..322ec12 100644
  struct X { };
  struct Y { int : 0; };
 diff --git gcc/testsuite/g++.target/aarch64/sve/aarch64-sve.exp gcc/testsuite/g++.target/aarch64/sve/aarch64-sve.exp
-index 2b85023..eea60f6 100644
+index 2b850232229..eea60f62451 100644
 --- gcc/testsuite/g++.target/aarch64/sve/aarch64-sve.exp
 +++ gcc/testsuite/g++.target/aarch64/sve/aarch64-sve.exp
 @@ -25,6 +25,11 @@ if {![istarget aarch64*-*-*] } then {
@@ -8706,7 +8707,7 @@ index 2b85023..eea60f6 100644
  load_lib g++-dg.exp
  
 diff --git gcc/testsuite/g++.target/aarch64/sve/acle/aarch64-sve-acle-asm.exp gcc/testsuite/g++.target/aarch64/sve/acle/aarch64-sve-acle-asm.exp
-index 070a049..b32b613 100644
+index 070a049c149..b32b613300b 100644
 --- gcc/testsuite/g++.target/aarch64/sve/acle/aarch64-sve-acle-asm.exp
 +++ gcc/testsuite/g++.target/aarch64/sve/acle/aarch64-sve-acle-asm.exp
 @@ -24,6 +24,11 @@ if { ![istarget aarch64*-*-*] } {
@@ -8722,7 +8723,7 @@ index 070a049..b32b613 100644
  load_lib g++-dg.exp
  
 diff --git gcc/testsuite/g++.target/aarch64/sve/acle/aarch64-sve-acle.exp gcc/testsuite/g++.target/aarch64/sve/acle/aarch64-sve-acle.exp
-index 8d3d8b4..f31e236 100644
+index 8d3d8b4a8b3..f31e236f9ce 100644
 --- gcc/testsuite/g++.target/aarch64/sve/acle/aarch64-sve-acle.exp
 +++ gcc/testsuite/g++.target/aarch64/sve/acle/aarch64-sve-acle.exp
 @@ -25,6 +25,11 @@ if {![istarget aarch64*-*-*] } {
@@ -8738,7 +8739,7 @@ index 8d3d8b4..f31e236 100644
  load_lib g++-dg.exp
  
 diff --git gcc/testsuite/g++.target/aarch64/sve2/acle/aarch64-sve2-acle-asm.exp gcc/testsuite/g++.target/aarch64/sve2/acle/aarch64-sve2-acle-asm.exp
-index 4989818..e20b386 100644
+index 4989818664c..e20b386d794 100644
 --- gcc/testsuite/g++.target/aarch64/sve2/acle/aarch64-sve2-acle-asm.exp
 +++ gcc/testsuite/g++.target/aarch64/sve2/acle/aarch64-sve2-acle-asm.exp
 @@ -24,6 +24,11 @@ if { ![istarget aarch64*-*-*] } {
@@ -8755,7 +8756,7 @@ index 4989818..e20b386 100644
  
 diff --git gcc/testsuite/gcc.dg/attr-unavailable-1.c gcc/testsuite/gcc.dg/attr-unavailable-1.c
 new file mode 100644
-index 0000000..768214f
+index 00000000000..768214fcd3a
 --- /dev/null
 +++ gcc/testsuite/gcc.dg/attr-unavailable-1.c
 @@ -0,0 +1,88 @@
@@ -8849,7 +8850,7 @@ index 0000000..768214f
 +struct SS2 *p2;				/* { dg-error "'SS2' is unavailable" "" } */
 diff --git gcc/testsuite/gcc.dg/attr-unavailable-2.c gcc/testsuite/gcc.dg/attr-unavailable-2.c
 new file mode 100644
-index 0000000..303f973
+index 00000000000..303f973d5db
 --- /dev/null
 +++ gcc/testsuite/gcc.dg/attr-unavailable-2.c
 @@ -0,0 +1,6 @@
@@ -8861,7 +8862,7 @@ index 0000000..303f973
 +typeof(x) y; /* { dg-error "type is unavailable" } */
 diff --git gcc/testsuite/gcc.dg/attr-unavailable-3.c gcc/testsuite/gcc.dg/attr-unavailable-3.c
 new file mode 100644
-index 0000000..7274c19
+index 00000000000..7274c193f3f
 --- /dev/null
 +++ gcc/testsuite/gcc.dg/attr-unavailable-3.c
 @@ -0,0 +1,10 @@
@@ -8877,7 +8878,7 @@ index 0000000..7274c19
 +}
 diff --git gcc/testsuite/gcc.dg/attr-unavailable-4.c gcc/testsuite/gcc.dg/attr-unavailable-4.c
 new file mode 100644
-index 0000000..9e39c50
+index 00000000000..9e39c50fec6
 --- /dev/null
 +++ gcc/testsuite/gcc.dg/attr-unavailable-4.c
 @@ -0,0 +1,88 @@
@@ -8971,7 +8972,7 @@ index 0000000..9e39c50
 +struct SS2 *p2;				/* { dg-error "'SS2' is unavailable: You can't use SS2" "" } */
 diff --git gcc/testsuite/gcc.dg/attr-unavailable-5.c gcc/testsuite/gcc.dg/attr-unavailable-5.c
 new file mode 100644
-index 0000000..051f960
+index 00000000000..051f960c5cf
 --- /dev/null
 +++ gcc/testsuite/gcc.dg/attr-unavailable-5.c
 @@ -0,0 +1,6 @@
@@ -8983,7 +8984,7 @@ index 0000000..051f960
 +typeof(x) y; /* { dg-error "type is unavailable: Do not use" } */
 diff --git gcc/testsuite/gcc.dg/attr-unavailable-6.c gcc/testsuite/gcc.dg/attr-unavailable-6.c
 new file mode 100644
-index 0000000..f5f4560
+index 00000000000..f5f4560c735
 --- /dev/null
 +++ gcc/testsuite/gcc.dg/attr-unavailable-6.c
 @@ -0,0 +1,11 @@
@@ -8999,7 +9000,7 @@ index 0000000..f5f4560
 +  func(); /* { dg-error "'func' is unavailable: Do not use" } */
 +}
 diff --git gcc/testsuite/gcc.dg/builtin-apply2.c gcc/testsuite/gcc.dg/builtin-apply2.c
-index 9049af5..c472045 100644
+index 9049af5821f..c472045ef6d 100644
 --- gcc/testsuite/gcc.dg/builtin-apply2.c
 +++ gcc/testsuite/gcc.dg/builtin-apply2.c
 @@ -1,7 +1,7 @@
@@ -9012,7 +9013,7 @@ index 9049af5..c472045 100644
  
  /* PR target/12503 */
 diff --git gcc/testsuite/gcc.dg/cwsc1.c gcc/testsuite/gcc.dg/cwsc1.c
-index e793e26..7d8b472 100644
+index e793e26116a..7d8b472bdf6 100644
 --- gcc/testsuite/gcc.dg/cwsc1.c
 +++ gcc/testsuite/gcc.dg/cwsc1.c
 @@ -6,7 +6,11 @@
@@ -9029,7 +9030,7 @@ index e793e26..7d8b472 100644
  # define CHAIN  "$1"
  #elif defined(__arm__)
 diff --git gcc/testsuite/gcc.dg/darwin-segaddr.c gcc/testsuite/gcc.dg/darwin-segaddr.c
-index 526db77..fcc324b 100644
+index 526db77bd9c..fcc324b3031 100644
 --- gcc/testsuite/gcc.dg/darwin-segaddr.c
 +++ gcc/testsuite/gcc.dg/darwin-segaddr.c
 @@ -1,7 +1,8 @@
@@ -9043,7 +9044,7 @@ index 526db77..fcc324b 100644
  extern void abort ();
  
 diff --git gcc/testsuite/gcc.dg/pr26427.c gcc/testsuite/gcc.dg/pr26427.c
-index add13ca..2c09f28 100644
+index add13ca209e..2c09f28195d 100644
 --- gcc/testsuite/gcc.dg/pr26427.c
 +++ gcc/testsuite/gcc.dg/pr26427.c
 @@ -1,4 +1,4 @@
@@ -9053,7 +9054,7 @@ index add13ca..2c09f28 100644
  /* { dg-options { -fsection-anchors -O } } */
  /* PR target/26427 */
 diff --git gcc/testsuite/gcc.dg/pubtypes-2.c gcc/testsuite/gcc.dg/pubtypes-2.c
-index 116e348..b3d1231 100644
+index 116e3489bc0..b3d1231ad44 100644
 --- gcc/testsuite/gcc.dg/pubtypes-2.c
 +++ gcc/testsuite/gcc.dg/pubtypes-2.c
 @@ -2,7 +2,8 @@
@@ -9067,7 +9068,7 @@ index 116e348..b3d1231 100644
  /* { dg-final { scan-assembler-not "unused_struct\\\\0\"+\[ \t\]+\[#;]+\[ \t\]+external name" } } */
  
 diff --git gcc/testsuite/gcc.dg/pubtypes-3.c gcc/testsuite/gcc.dg/pubtypes-3.c
-index 3fb3468..950a9ba 100644
+index 3fb3468fb00..950a9ba72fc 100644
 --- gcc/testsuite/gcc.dg/pubtypes-3.c
 +++ gcc/testsuite/gcc.dg/pubtypes-3.c
 @@ -2,7 +2,8 @@
@@ -9081,7 +9082,7 @@ index 3fb3468..950a9ba 100644
  /* { dg-final { scan-assembler-not "unused_struct\\\\0\"+\[ \t\]+\[#;]+\[ \t\]+external name" } } */
  /* { dg-final { scan-assembler-not "\"list_name_type\\\\0\"+\[ \t\]+\[#;]+\[ \t\]+external name" } } */
 diff --git gcc/testsuite/gcc.dg/pubtypes-4.c gcc/testsuite/gcc.dg/pubtypes-4.c
-index 83fba8d..7250771 100644
+index 83fba8dfabc..7250771587b 100644
 --- gcc/testsuite/gcc.dg/pubtypes-4.c
 +++ gcc/testsuite/gcc.dg/pubtypes-4.c
 @@ -2,7 +2,8 @@
@@ -9095,7 +9096,7 @@ index 83fba8d..7250771 100644
  /* { dg-final { scan-assembler-not "unused_struct\\\\0\"+\[ \t\]+\[#;]+\[ \t\]+external name" } } */
  /* { dg-final { scan-assembler "\"list_name_type\\\\0\"+\[ \t\]+\[#;]+\[ \t\]+external name" } } */
 diff --git gcc/testsuite/gcc.dg/tls/pr78796.c gcc/testsuite/gcc.dg/tls/pr78796.c
-index 038e536..31e03dd 100644
+index 038e5366e41..31e03dd419c 100644
 --- gcc/testsuite/gcc.dg/tls/pr78796.c
 +++ gcc/testsuite/gcc.dg/tls/pr78796.c
 @@ -1,7 +1,7 @@
@@ -9108,7 +9109,7 @@ index 038e536..31e03dd 100644
  /* { dg-add-options tls } */
  
 diff --git gcc/testsuite/gcc.dg/torture/darwin-cfstring-3.c gcc/testsuite/gcc.dg/torture/darwin-cfstring-3.c
-index ee4b385..eabb3b5 100644
+index ee4b385b17f..eabb3b517a4 100644
 --- gcc/testsuite/gcc.dg/torture/darwin-cfstring-3.c
 +++ gcc/testsuite/gcc.dg/torture/darwin-cfstring-3.c
 @@ -26,5 +26,5 @@ void foo(void) {
@@ -9120,7 +9121,7 @@ index ee4b385..eabb3b5 100644
 +/* { dg-final { scan-assembler {.(quad|xword)\t___CFConstantStringClassReference\n\t.(long|word)\t1992\n\t.space 4\n\t.(quad|xword)\t.*\n\t.(quad|xword)\t4\n} { target { *-*-darwin* && {  lp64 } } } } } */
 +/* { dg-final { scan-assembler {.(quad|xword)\t___CFConstantStringClassReference\n\t.(long|word)\t1992\n\t.space 4\n\t.(quad|xword)\t.*\n\t.(quad|xword)\t10\n} { target { *-*-darwin* && {  lp64 } } } } } */
 diff --git gcc/testsuite/gcc.dg/torture/pr100786.c gcc/testsuite/gcc.dg/torture/pr100786.c
-index 42f4e48..7c03b08 100644
+index 42f4e485593..7c03b08d8cb 100644
 --- gcc/testsuite/gcc.dg/torture/pr100786.c
 +++ gcc/testsuite/gcc.dg/torture/pr100786.c
 @@ -1,4 +1,5 @@
@@ -9130,7 +9131,7 @@ index 42f4e48..7c03b08 100644
  const double a = 0;
  extern int b __attribute__((alias("a")));
 diff --git gcc/testsuite/gcc.dg/torture/stackalign/builtin-apply-2.c gcc/testsuite/gcc.dg/torture/stackalign/builtin-apply-2.c
-index 5ec0558..19c4aeb 100644
+index 5ec05587dba..19c4aebbc7d 100644
 --- gcc/testsuite/gcc.dg/torture/stackalign/builtin-apply-2.c
 +++ gcc/testsuite/gcc.dg/torture/stackalign/builtin-apply-2.c
 @@ -9,7 +9,7 @@
@@ -9143,7 +9144,7 @@ index 5ec0558..19c4aeb 100644
  /* { dg-require-effective-target untyped_assembly } */
     
 diff --git gcc/testsuite/gcc.dg/tree-ssa/stdarg-2.c gcc/testsuite/gcc.dg/tree-ssa/stdarg-2.c
-index 0224997..3684cff 100644
+index 0224997f18a..3684cffdc64 100644
 --- gcc/testsuite/gcc.dg/tree-ssa/stdarg-2.c
 +++ gcc/testsuite/gcc.dg/tree-ssa/stdarg-2.c
 @@ -25,9 +25,9 @@ f1 (int i, ...)
@@ -9330,7 +9331,7 @@ index 0224997..3684cff 100644
 +/* { dg-final { scan-tree-dump-not "f15: va_list escapes 0, needs to save 0 GPR units" "stdarg" { target ia64-*-* aarch64-apple-darwin* } } } */
  /* { dg-final { scan-tree-dump-not "f15: va_list escapes 0, needs to save 0 GPR units" "stdarg" { target { powerpc*-*-* && lp64 } } } } */
 diff --git gcc/testsuite/gcc.dg/tree-ssa/stdarg-4.c gcc/testsuite/gcc.dg/tree-ssa/stdarg-4.c
-index 1a637d6..77cdf38 100644
+index 1a637d6efe4..77cdf384df4 100644
 --- gcc/testsuite/gcc.dg/tree-ssa/stdarg-4.c
 +++ gcc/testsuite/gcc.dg/tree-ssa/stdarg-4.c
 @@ -27,9 +27,9 @@ f1 (int i, ...)
@@ -9380,7 +9381,7 @@ index 1a637d6..77cdf38 100644
 +/* { dg-final { scan-tree-dump "f4: va_list escapes 0, needs to save \[148\] GPR units" "stdarg" { target ia64-*-* aarch64-apple-darwin* } } } */
  /* { dg-final { scan-tree-dump "f4: va_list escapes 0, needs to save \[148\] GPR units" "stdarg" { target { powerpc*-*-* && lp64 } } } } */
 diff --git gcc/testsuite/gcc.dg/tree-ssa/stdarg-5.c gcc/testsuite/gcc.dg/tree-ssa/stdarg-5.c
-index c8ad4fe..b0484f2 100644
+index c8ad4fe320d..b0484f2f053 100644
 --- gcc/testsuite/gcc.dg/tree-ssa/stdarg-5.c
 +++ gcc/testsuite/gcc.dg/tree-ssa/stdarg-5.c
 @@ -25,7 +25,8 @@ f1 (int i, ...)
@@ -9451,7 +9452,7 @@ index c8ad4fe..b0484f2 100644
 +/* { dg-final { scan-tree-dump "f7: va_list escapes 0, needs to save 0 GPR units and 64 FPR units" "stdarg" { target { { aarch64*-*-* } && { ! aarch64-apple-darwin* } } } } } */
 +/* { dg-final { scan-tree-dump "f7: va_list escapes 0, needs to save 32 GPR units" "stdarg" { target aarch64-apple-darwin* } } } */
 diff --git gcc/testsuite/gcc.target/aarch64/aapcs64/aapcs64.exp gcc/testsuite/gcc.target/aarch64/aapcs64/aapcs64.exp
-index 0a74c35..ba34dcf 100644
+index 0a74c35bad6..ba34dcfde4c 100644
 --- gcc/testsuite/gcc.target/aarch64/aapcs64/aapcs64.exp
 +++ gcc/testsuite/gcc.target/aarch64/aapcs64/aapcs64.exp
 @@ -25,6 +25,11 @@ if { ![istarget aarch64*-*-*] } then {
@@ -9467,7 +9468,7 @@ index 0a74c35..ba34dcf 100644
  set-torture-options $C_TORTURE_OPTIONS
  set additional_flags "-W -Wall -Wno-abi"
 diff --git gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/bf16_dup.c gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/bf16_dup.c
-index c42c7ac..76917a6 100644
+index c42c7acbbe9..76917a6ff5b 100644
 --- gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/bf16_dup.c
 +++ gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/bf16_dup.c
 @@ -1,4 +1,5 @@
@@ -9477,7 +9478,7 @@ index c42c7ac..76917a6 100644
  /* { dg-options "-O2" } */
  /* { dg-add-options arm_v8_2a_bf16_neon }  */
 diff --git gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/bf16_get.c gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/bf16_get.c
-index 2193753..d29b222 100644
+index 2193753ffbb..d29b222b032 100644
 --- gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/bf16_get.c
 +++ gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/bf16_get.c
 @@ -1,4 +1,5 @@
@@ -9487,7 +9488,7 @@ index 2193753..d29b222 100644
  /* { dg-add-options arm_v8_2a_bf16_neon } */
  /* { dg-additional-options "-save-temps" } */
 diff --git gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/bf16_reinterpret.c gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/bf16_reinterpret.c
-index f5adf40..4e3a3d9 100644
+index f5adf40c648..4e3a3d94416 100644
 --- gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/bf16_reinterpret.c
 +++ gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/bf16_reinterpret.c
 @@ -1,4 +1,5 @@
@@ -9497,7 +9498,7 @@ index f5adf40..4e3a3d9 100644
  /* { dg-add-options arm_v8_2a_bf16_neon }  */
  /* { dg-additional-options "-save-temps" } */
 diff --git gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/bfcvt-compile.c gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/bfcvt-compile.c
-index 47af7c4..a2f415f 100644
+index 47af7c494d9..a2f415f67b7 100644
 --- gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/bfcvt-compile.c
 +++ gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/bfcvt-compile.c
 @@ -1,4 +1,5 @@
@@ -9507,7 +9508,7 @@ index 47af7c4..a2f415f 100644
  /* { dg-add-options arm_v8_2a_bf16_neon } */
  /* { dg-additional-options "-save-temps" } */
 diff --git gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/bfcvt-nosimd.c gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/bfcvt-nosimd.c
-index a914680..c6b2ef3 100644
+index a914680937d..c6b2ef3e444 100644
 --- gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/bfcvt-nosimd.c
 +++ gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/bfcvt-nosimd.c
 @@ -2,7 +2,7 @@
@@ -9520,7 +9521,7 @@ index a914680..c6b2ef3 100644
  #include <arm_neon.h>
  
 diff --git gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/bfcvtnq2-untied.c gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/bfcvtnq2-untied.c
-index 4b730e3..fd2abad 100644
+index 4b730e39d4e..fd2abadb457 100644
 --- gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/bfcvtnq2-untied.c
 +++ gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/bfcvtnq2-untied.c
 @@ -1,8 +1,9 @@
@@ -9535,7 +9536,7 @@ index 4b730e3..fd2abad 100644
  
  #include <arm_neon.h>
 diff --git gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/bfdot-1.c gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/bfdot-1.c
-index ad51507..e57053d 100755
+index ad51507731b..e57053d2193 100755
 --- gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/bfdot-1.c
 +++ gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/bfdot-1.c
 @@ -1,8 +1,9 @@
@@ -9550,7 +9551,7 @@ index ad51507..e57053d 100755
  
  #include <arm_neon.h>
 diff --git gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/bfdot-2.c gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/bfdot-2.c
-index ae0a953..9f5669a 100755
+index ae0a953f7b4..9f5669a8974 100755
 --- gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/bfdot-2.c
 +++ gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/bfdot-2.c
 @@ -3,7 +3,7 @@
@@ -9563,7 +9564,7 @@ index ae0a953..9f5669a 100755
  
  #include <arm_neon.h>
 diff --git gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/bfmlalbt-compile.c gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/bfmlalbt-compile.c
-index 9810e4b..315cabd 100644
+index 9810e4ba374..315cabd464b 100644
 --- gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/bfmlalbt-compile.c
 +++ gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/bfmlalbt-compile.c
 @@ -1,8 +1,9 @@
@@ -9578,7 +9579,7 @@ index 9810e4b..315cabd 100644
  #include <arm_neon.h>
  
 diff --git gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/bfmmla-compile.c gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/bfmmla-compile.c
-index 0aaa69f..ddc391b 100644
+index 0aaa69f0037..ddc391b1332 100644
 --- gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/bfmmla-compile.c
 +++ gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/bfmmla-compile.c
 @@ -1,8 +1,9 @@
@@ -9593,7 +9594,7 @@ index 0aaa69f..ddc391b 100644
  #include <arm_neon.h>
  
 diff --git gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/vdot-3-1.c gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/vdot-3-1.c
-index ac4f821..978eac2 100755
+index ac4f821e771..978eac29815 100755
 --- gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/vdot-3-1.c
 +++ gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/vdot-3-1.c
 @@ -1,8 +1,9 @@
@@ -9608,7 +9609,7 @@ index ac4f821..978eac2 100755
  
  #include <arm_neon.h>
 diff --git gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/vdot-3-2.c gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/vdot-3-2.c
-index 61c7c51..f84ed68 100755
+index 61c7c51f5ec..f84ed68e2f7 100755
 --- gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/vdot-3-2.c
 +++ gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/vdot-3-2.c
 @@ -3,7 +3,7 @@
@@ -9621,7 +9622,7 @@ index 61c7c51..f84ed68 100755
  
  #include <arm_neon.h>
 diff --git gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/vmls_n.c gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/vmls_n.c
-index 228673b..5f18a3b 100644
+index 228673b4723..5f18a3bc5bd 100644
 --- gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/vmls_n.c
 +++ gcc/testsuite/gcc.target/aarch64/advsimd-intrinsics/vmls_n.c
 @@ -1,3 +1,4 @@
@@ -9630,7 +9631,7 @@ index 228673b..5f18a3b 100644
  #include "arm-neon-ref.h"
  #include "compute-ref-data.h"
 diff --git gcc/testsuite/gcc.target/aarch64/arm_align_max_pwr.c gcc/testsuite/gcc.target/aarch64/arm_align_max_pwr.c
-index ffa4d22..38b9ef0 100644
+index ffa4d229922..38b9ef01eb7 100644
 --- gcc/testsuite/gcc.target/aarch64/arm_align_max_pwr.c
 +++ gcc/testsuite/gcc.target/aarch64/arm_align_max_pwr.c
 @@ -19,5 +19,7 @@ dummy ()
@@ -9644,7 +9645,7 @@ index ffa4d22..38b9ef0 100644
 +/* { dg-final { scan-assembler-times ".zerofill __DATA,__bss,_y,4,28" 1 { target { *-*-darwin* } } } } */
 +/* { dg-final { scan-assembler-times ".zerofill __DATA,__bss,_x,4,28" 1 { target { *-*-darwin* } } } } */
 diff --git gcc/testsuite/gcc.target/aarch64/bitfield-abi-warning-align16-O2-extra.c gcc/testsuite/gcc.target/aarch64/bitfield-abi-warning-align16-O2-extra.c
-index 56f056d..acf3937 100644
+index 56f056daa27..acf3937f508 100644
 --- gcc/testsuite/gcc.target/aarch64/bitfield-abi-warning-align16-O2-extra.c
 +++ gcc/testsuite/gcc.target/aarch64/bitfield-abi-warning-align16-O2-extra.c
 @@ -1,4 +1,5 @@
@@ -9654,7 +9655,7 @@ index 56f056d..acf3937 100644
  
  #define ALIGN 16
 diff --git gcc/testsuite/gcc.target/aarch64/bitfield-abi-warning-align16-O2.c gcc/testsuite/gcc.target/aarch64/bitfield-abi-warning-align16-O2.c
-index add33e4..283a72a 100644
+index add33e479a6..283a72a31cd 100644
 --- gcc/testsuite/gcc.target/aarch64/bitfield-abi-warning-align16-O2.c
 +++ gcc/testsuite/gcc.target/aarch64/bitfield-abi-warning-align16-O2.c
 @@ -1,4 +1,5 @@
@@ -9664,7 +9665,7 @@ index add33e4..283a72a 100644
  
  #define ALIGN 16
 diff --git gcc/testsuite/gcc.target/aarch64/bitfield-abi-warning-align32-O2-extra.c gcc/testsuite/gcc.target/aarch64/bitfield-abi-warning-align32-O2-extra.c
-index 3228bbc..327d815 100644
+index 3228bbc64e5..327d8156b69 100644
 --- gcc/testsuite/gcc.target/aarch64/bitfield-abi-warning-align32-O2-extra.c
 +++ gcc/testsuite/gcc.target/aarch64/bitfield-abi-warning-align32-O2-extra.c
 @@ -1,4 +1,5 @@
@@ -9674,7 +9675,7 @@ index 3228bbc..327d815 100644
  
  #define ALIGN 32
 diff --git gcc/testsuite/gcc.target/aarch64/bitfield-abi-warning-align32-O2.c gcc/testsuite/gcc.target/aarch64/bitfield-abi-warning-align32-O2.c
-index 22fa28a..9c62459 100644
+index 22fa28a414b..9c624590a7e 100644
 --- gcc/testsuite/gcc.target/aarch64/bitfield-abi-warning-align32-O2.c
 +++ gcc/testsuite/gcc.target/aarch64/bitfield-abi-warning-align32-O2.c
 @@ -1,4 +1,5 @@
@@ -9684,7 +9685,7 @@ index 22fa28a..9c62459 100644
  
  #define ALIGN 32
 diff --git gcc/testsuite/gcc.target/aarch64/bitfield-abi-warning-align8-O2.c gcc/testsuite/gcc.target/aarch64/bitfield-abi-warning-align8-O2.c
-index cb2a945..941d5a3 100644
+index cb2a945a819..941d5a33fbc 100644
 --- gcc/testsuite/gcc.target/aarch64/bitfield-abi-warning-align8-O2.c
 +++ gcc/testsuite/gcc.target/aarch64/bitfield-abi-warning-align8-O2.c
 @@ -1,4 +1,5 @@
@@ -9694,7 +9695,7 @@ index cb2a945..941d5a3 100644
  
  #define ALIGN 8
 diff --git gcc/testsuite/gcc.target/aarch64/c-output-template-2.c gcc/testsuite/gcc.target/aarch64/c-output-template-2.c
-index ced96d0..86e4f5f 100644
+index ced96d04542..86e4f5fa82c 100644
 --- gcc/testsuite/gcc.target/aarch64/c-output-template-2.c
 +++ gcc/testsuite/gcc.target/aarch64/c-output-template-2.c
 @@ -6,4 +6,4 @@ test (void)
@@ -9704,7 +9705,7 @@ index ced96d0..86e4f5f 100644
 -/* { dg-final { scan-assembler "@ test" } } */
 +/* { dg-final { scan-assembler "@ _?test" } } */
 diff --git gcc/testsuite/gcc.target/aarch64/c-output-template-3.c gcc/testsuite/gcc.target/aarch64/c-output-template-3.c
-index 8bde4cb..4531a38 100644
+index 8bde4cbeb0c..4531a381518 100644
 --- gcc/testsuite/gcc.target/aarch64/c-output-template-3.c
 +++ gcc/testsuite/gcc.target/aarch64/c-output-template-3.c
 @@ -7,4 +7,4 @@ test (void)
@@ -9714,7 +9715,7 @@ index 8bde4cb..4531a38 100644
 -/* { dg-final { scan-assembler "@ test\\+4" } } */
 +/* { dg-final { scan-assembler "@ _?test\\+4" } } */
 diff --git gcc/testsuite/gcc.target/aarch64/c-output-template-4.c gcc/testsuite/gcc.target/aarch64/c-output-template-4.c
-index c5a9391..800d52b 100644
+index c5a93915af1..800d52bfab8 100644
 --- gcc/testsuite/gcc.target/aarch64/c-output-template-4.c
 +++ gcc/testsuite/gcc.target/aarch64/c-output-template-4.c
 @@ -7,4 +7,4 @@ test (void)
@@ -9725,7 +9726,7 @@ index c5a9391..800d52b 100644
 +/* { dg-final { scan-assembler "@ _?test\\+4" } } */
 diff --git gcc/testsuite/gcc.target/aarch64/darwin/aarch64-darwin.exp gcc/testsuite/gcc.target/aarch64/darwin/aarch64-darwin.exp
 new file mode 100644
-index 0000000..b0b7f49
+index 00000000000..b0b7f49aede
 --- /dev/null
 +++ gcc/testsuite/gcc.target/aarch64/darwin/aarch64-darwin.exp
 @@ -0,0 +1,46 @@
@@ -9777,7 +9778,7 @@ index 0000000..b0b7f49
 +dg-finish
 diff --git gcc/testsuite/gcc.target/aarch64/darwin/complex-in-regs.c gcc/testsuite/gcc.target/aarch64/darwin/complex-in-regs.c
 new file mode 100644
-index 0000000..974f02c
+index 00000000000..974f02ca2ec
 --- /dev/null
 +++ gcc/testsuite/gcc.target/aarch64/darwin/complex-in-regs.c
 @@ -0,0 +1,103 @@
@@ -9886,7 +9887,7 @@ index 0000000..974f02c
 +}
 diff --git gcc/testsuite/gcc.target/aarch64/darwin/darwinpcs-d1.c gcc/testsuite/gcc.target/aarch64/darwin/darwinpcs-d1.c
 new file mode 100644
-index 0000000..e2dd574
+index 00000000000..e2dd574fac7
 --- /dev/null
 +++ gcc/testsuite/gcc.target/aarch64/darwin/darwinpcs-d1.c
 @@ -0,0 +1,54 @@
@@ -9946,7 +9947,7 @@ index 0000000..e2dd574
 +}
 diff --git gcc/testsuite/gcc.target/aarch64/darwin/darwinpcs-d2-00.c gcc/testsuite/gcc.target/aarch64/darwin/darwinpcs-d2-00.c
 new file mode 100644
-index 0000000..bd76856
+index 00000000000..bd76856308b
 --- /dev/null
 +++ gcc/testsuite/gcc.target/aarch64/darwin/darwinpcs-d2-00.c
 @@ -0,0 +1,126 @@
@@ -10078,7 +10079,7 @@ index 0000000..bd76856
 +
 diff --git gcc/testsuite/gcc.target/aarch64/darwin/darwinpcs-d2-01.c gcc/testsuite/gcc.target/aarch64/darwin/darwinpcs-d2-01.c
 new file mode 100644
-index 0000000..d21fd55
+index 00000000000..d21fd551b4a
 --- /dev/null
 +++ gcc/testsuite/gcc.target/aarch64/darwin/darwinpcs-d2-01.c
 @@ -0,0 +1,115 @@
@@ -10199,7 +10200,7 @@ index 0000000..d21fd55
 +}
 diff --git gcc/testsuite/gcc.target/aarch64/darwin/darwinpcs-d2-02.c gcc/testsuite/gcc.target/aarch64/darwin/darwinpcs-d2-02.c
 new file mode 100644
-index 0000000..55e5acd
+index 00000000000..55e5acdaf41
 --- /dev/null
 +++ gcc/testsuite/gcc.target/aarch64/darwin/darwinpcs-d2-02.c
 @@ -0,0 +1,75 @@
@@ -10280,7 +10281,7 @@ index 0000000..55e5acd
 +}
 diff --git gcc/testsuite/gcc.target/aarch64/darwin/darwinpcs-d2-03.c gcc/testsuite/gcc.target/aarch64/darwin/darwinpcs-d2-03.c
 new file mode 100644
-index 0000000..b0d2593d
+index 00000000000..b0d2593dfd7
 --- /dev/null
 +++ gcc/testsuite/gcc.target/aarch64/darwin/darwinpcs-d2-03.c
 @@ -0,0 +1,67 @@
@@ -10353,7 +10354,7 @@ index 0000000..b0d2593d
 +}
 diff --git gcc/testsuite/gcc.target/aarch64/darwin/darwinpcs-d2-04.c gcc/testsuite/gcc.target/aarch64/darwin/darwinpcs-d2-04.c
 new file mode 100644
-index 0000000..33c60c6
+index 00000000000..33c60c69b78
 --- /dev/null
 +++ gcc/testsuite/gcc.target/aarch64/darwin/darwinpcs-d2-04.c
 @@ -0,0 +1,66 @@
@@ -10425,7 +10426,7 @@ index 0000000..33c60c6
 +}
 diff --git gcc/testsuite/gcc.target/aarch64/darwin/darwinpcs-d3.c gcc/testsuite/gcc.target/aarch64/darwin/darwinpcs-d3.c
 new file mode 100644
-index 0000000..21c6b69
+index 00000000000..21c6b696b7c
 --- /dev/null
 +++ gcc/testsuite/gcc.target/aarch64/darwin/darwinpcs-d3.c
 @@ -0,0 +1,40 @@
@@ -10471,7 +10472,7 @@ index 0000000..21c6b69
 +}
 diff --git gcc/testsuite/gcc.target/aarch64/darwin/darwinpcs-d4.c gcc/testsuite/gcc.target/aarch64/darwin/darwinpcs-d4.c
 new file mode 100644
-index 0000000..2aab482
+index 00000000000..2aab48260f4
 --- /dev/null
 +++ gcc/testsuite/gcc.target/aarch64/darwin/darwinpcs-d4.c
 @@ -0,0 +1,62 @@
@@ -10539,7 +10540,7 @@ index 0000000..2aab482
 +}
 diff --git gcc/testsuite/gcc.target/aarch64/darwin/float128-00.c gcc/testsuite/gcc.target/aarch64/darwin/float128-00.c
 new file mode 100644
-index 0000000..29aec80
+index 00000000000..29aec80fbaa
 --- /dev/null
 +++ gcc/testsuite/gcc.target/aarch64/darwin/float128-00.c
 @@ -0,0 +1,38 @@
@@ -10583,7 +10584,7 @@ index 0000000..29aec80
 +}
 diff --git gcc/testsuite/gcc.target/aarch64/darwin/homogeneous-aggr.c gcc/testsuite/gcc.target/aarch64/darwin/homogeneous-aggr.c
 new file mode 100644
-index 0000000..bee9755
+index 00000000000..bee97557a4d
 --- /dev/null
 +++ gcc/testsuite/gcc.target/aarch64/darwin/homogeneous-aggr.c
 @@ -0,0 +1,25 @@
@@ -10614,7 +10615,7 @@ index 0000000..bee9755
 +}
 diff --git gcc/testsuite/gcc.target/aarch64/darwin/k+r-00.c gcc/testsuite/gcc.target/aarch64/darwin/k+r-00.c
 new file mode 100644
-index 0000000..443fb96
+index 00000000000..443fb968811
 --- /dev/null
 +++ gcc/testsuite/gcc.target/aarch64/darwin/k+r-00.c
 @@ -0,0 +1,28 @@
@@ -10648,7 +10649,7 @@ index 0000000..443fb96
 +}
 diff --git gcc/testsuite/gcc.target/aarch64/darwin/tu-accesses-0.c gcc/testsuite/gcc.target/aarch64/darwin/tu-accesses-0.c
 new file mode 100644
-index 0000000..ba5cc49
+index 00000000000..ba5cc493bc9
 --- /dev/null
 +++ gcc/testsuite/gcc.target/aarch64/darwin/tu-accesses-0.c
 @@ -0,0 +1,82 @@
@@ -10736,7 +10737,7 @@ index 0000000..ba5cc49
 +}
 diff --git gcc/testsuite/gcc.target/aarch64/darwin/variadic-00.c gcc/testsuite/gcc.target/aarch64/darwin/variadic-00.c
 new file mode 100644
-index 0000000..6420fca
+index 00000000000..6420fca11d5
 --- /dev/null
 +++ gcc/testsuite/gcc.target/aarch64/darwin/variadic-00.c
 @@ -0,0 +1,91 @@
@@ -10833,7 +10834,7 @@ index 0000000..6420fca
 +}
 diff --git gcc/testsuite/gcc.target/aarch64/darwin/variadic-01.c gcc/testsuite/gcc.target/aarch64/darwin/variadic-01.c
 new file mode 100644
-index 0000000..c055aea
+index 00000000000..c055aeae580
 --- /dev/null
 +++ gcc/testsuite/gcc.target/aarch64/darwin/variadic-01.c
 @@ -0,0 +1,102 @@
@@ -10941,7 +10942,7 @@ index 0000000..c055aea
 +}
 diff --git gcc/testsuite/gcc.target/aarch64/darwin/variadic-02.c gcc/testsuite/gcc.target/aarch64/darwin/variadic-02.c
 new file mode 100644
-index 0000000..9d796bfc0
+index 00000000000..9d796bfc07f
 --- /dev/null
 +++ gcc/testsuite/gcc.target/aarch64/darwin/variadic-02.c
 @@ -0,0 +1,104 @@
@@ -11050,7 +11051,7 @@ index 0000000..9d796bfc0
 +  return baro (2, (__int128)1, 42, (__int128)2);
 +}
 diff --git gcc/testsuite/gcc.target/aarch64/dbl_mov_immediate_1.c gcc/testsuite/gcc.target/aarch64/dbl_mov_immediate_1.c
-index ba6a230..cc30dd5 100644
+index ba6a230457b..cc30dd546f4 100644
 --- gcc/testsuite/gcc.target/aarch64/dbl_mov_immediate_1.c
 +++ gcc/testsuite/gcc.target/aarch64/dbl_mov_immediate_1.c
 @@ -41,8 +41,10 @@ double d4(void)
@@ -11067,7 +11068,7 @@ index ba6a230..cc30dd5 100644
  /* { dg-final { scan-assembler-times "fmov\td\[0-9\]+, 1\\\.5e\\\+0"        1 } } */
  
 diff --git gcc/testsuite/gcc.target/aarch64/dwarf-cfa-reg.c gcc/testsuite/gcc.target/aarch64/dwarf-cfa-reg.c
-index ae5b379..8a691ad 100644
+index ae5b3797021..8a691add222 100644
 --- gcc/testsuite/gcc.target/aarch64/dwarf-cfa-reg.c
 +++ gcc/testsuite/gcc.target/aarch64/dwarf-cfa-reg.c
 @@ -1,5 +1,6 @@
@@ -11078,7 +11079,7 @@ index ae5b379..8a691ad 100644
  /* { dg-final { scan-assembler ".cfi_restore 30" } } */
  /* { dg-final { scan-assembler ".cfi_restore 29" } } */
 diff --git gcc/testsuite/gcc.target/aarch64/inline-lrint_1.c gcc/testsuite/gcc.target/aarch64/inline-lrint_1.c
-index 478875f..9a2b2e4 100644
+index 478875ff874..9a2b2e44893 100644
 --- gcc/testsuite/gcc.target/aarch64/inline-lrint_1.c
 +++ gcc/testsuite/gcc.target/aarch64/inline-lrint_1.c
 @@ -15,4 +15,4 @@ TEST (fllf, float , long long, l)
@@ -11088,7 +11089,7 @@ index 478875f..9a2b2e4 100644
 -/* { dg-final { scan-assembler-not "bl"    } } */
 +/* { dg-final { scan-assembler-not "bl\t" } } */
 diff --git gcc/testsuite/gcc.target/aarch64/ldp_stp_13.c gcc/testsuite/gcc.target/aarch64/ldp_stp_13.c
-index 9cc3942..52c90a9 100644
+index 9cc3942f153..52c90a92114 100644
 --- gcc/testsuite/gcc.target/aarch64/ldp_stp_13.c
 +++ gcc/testsuite/gcc.target/aarch64/ldp_stp_13.c
 @@ -1,4 +1,5 @@
@@ -11098,7 +11099,7 @@ index 9cc3942..52c90a9 100644
  
  long long
 diff --git gcc/testsuite/gcc.target/aarch64/memset-corner-cases.c gcc/testsuite/gcc.target/aarch64/memset-corner-cases.c
-index c43f019..733a11e 100644
+index c43f0199adc..733a11e585a 100644
 --- gcc/testsuite/gcc.target/aarch64/memset-corner-cases.c
 +++ gcc/testsuite/gcc.target/aarch64/memset-corner-cases.c
 @@ -77,7 +77,7 @@ set256byte (int64_t *src, char c)
@@ -11111,7 +11112,7 @@ index c43f019..733a11e 100644
  void __attribute__((__noinline__))
  set257byte (int64_t *src)
 diff --git gcc/testsuite/gcc.target/aarch64/no-inline-lrint_1.c gcc/testsuite/gcc.target/aarch64/no-inline-lrint_1.c
-index d5e9200..7f504ad 100644
+index d5e9200562c..7f504ad687f 100644
 --- gcc/testsuite/gcc.target/aarch64/no-inline-lrint_1.c
 +++ gcc/testsuite/gcc.target/aarch64/no-inline-lrint_1.c
 @@ -14,6 +14,6 @@ TEST (dlld, double, long long, l)
@@ -11124,7 +11125,7 @@ index d5e9200..7f504ad 100644
 +/* { dg-final { scan-assembler-times "bl\t_*llrint" 2 } } */
  /* { dg-final { scan-assembler-not "fcvtzs" } } */
 diff --git gcc/testsuite/gcc.target/aarch64/pcs_attribute-2.c gcc/testsuite/gcc.target/aarch64/pcs_attribute-2.c
-index e85465f..9eff866 100644
+index e85465f25fb..9eff866e0c8 100644
 --- gcc/testsuite/gcc.target/aarch64/pcs_attribute-2.c
 +++ gcc/testsuite/gcc.target/aarch64/pcs_attribute-2.c
 @@ -1,4 +1,5 @@
@@ -11134,7 +11135,7 @@ index e85465f..9eff866 100644
  
  /* Test that .variant_pcs is emitted for vector PCS symbol references.  */
 diff --git gcc/testsuite/gcc.target/aarch64/pr62308.c gcc/testsuite/gcc.target/aarch64/pr62308.c
-index 1cf6e21..4c1a733 100644
+index 1cf6e212dca..4c1a733e84d 100644
 --- gcc/testsuite/gcc.target/aarch64/pr62308.c
 +++ gcc/testsuite/gcc.target/aarch64/pr62308.c
 @@ -1,4 +1,5 @@
@@ -11144,7 +11145,7 @@ index 1cf6e21..4c1a733 100644
  
  typedef int __attribute__((vector_size(16))) v4si;
 diff --git gcc/testsuite/gcc.target/aarch64/pr78255.c gcc/testsuite/gcc.target/aarch64/pr78255.c
-index b078cf3..fc5d859 100644
+index b078cf3e1c1..fc5d859ee68 100644
 --- gcc/testsuite/gcc.target/aarch64/pr78255.c
 +++ gcc/testsuite/gcc.target/aarch64/pr78255.c
 @@ -1,4 +1,5 @@
@@ -11154,7 +11155,7 @@ index b078cf3..fc5d859 100644
  
  extern int bar (void *);
 diff --git gcc/testsuite/gcc.target/aarch64/pr78561.c gcc/testsuite/gcc.target/aarch64/pr78561.c
-index 048d2d7..635214e 100644
+index 048d2d7969f..635214edde1 100644
 --- gcc/testsuite/gcc.target/aarch64/pr78561.c
 +++ gcc/testsuite/gcc.target/aarch64/pr78561.c
 @@ -1,4 +1,5 @@
@@ -11164,7 +11165,7 @@ index 048d2d7..635214e 100644
  
  int
 diff --git gcc/testsuite/gcc.target/aarch64/pr80295.c gcc/testsuite/gcc.target/aarch64/pr80295.c
-index b3866d8..7a7f127 100644
+index b3866d8d6a9..7a7f127b65f 100644
 --- gcc/testsuite/gcc.target/aarch64/pr80295.c
 +++ gcc/testsuite/gcc.target/aarch64/pr80295.c
 @@ -1,4 +1,5 @@
@@ -11174,7 +11175,7 @@ index b3866d8..7a7f127 100644
  
  void f (void *b) 
 diff --git gcc/testsuite/gcc.target/aarch64/pr87305.c gcc/testsuite/gcc.target/aarch64/pr87305.c
-index 8beaa91..c3f98e8 100644
+index 8beaa9176e0..c3f98e8eaec 100644
 --- gcc/testsuite/gcc.target/aarch64/pr87305.c
 +++ gcc/testsuite/gcc.target/aarch64/pr87305.c
 @@ -1,4 +1,5 @@
@@ -11184,7 +11185,7 @@ index 8beaa91..c3f98e8 100644
  
  int cc;
 diff --git gcc/testsuite/gcc.target/aarch64/pr92424-1.c gcc/testsuite/gcc.target/aarch64/pr92424-1.c
-index c413a2c..59f7435 100644
+index c413a2c306e..59f7435dc83 100644
 --- gcc/testsuite/gcc.target/aarch64/pr92424-1.c
 +++ gcc/testsuite/gcc.target/aarch64/pr92424-1.c
 @@ -1,6 +1,7 @@
@@ -11196,7 +11197,7 @@ index c413a2c..59f7435 100644
  /* Note: this test only checks the instructions in the function bodies,
     not the placement of the patch label or nops before the futncion.  */
 diff --git gcc/testsuite/gcc.target/aarch64/pr94201.c gcc/testsuite/gcc.target/aarch64/pr94201.c
-index 6917616..051c742 100644
+index 69176169186..051c742e98e 100644
 --- gcc/testsuite/gcc.target/aarch64/pr94201.c
 +++ gcc/testsuite/gcc.target/aarch64/pr94201.c
 @@ -1,4 +1,5 @@
@@ -11206,7 +11207,7 @@ index 6917616..051c742 100644
  
  extern int bar (void *);
 diff --git gcc/testsuite/gcc.target/aarch64/pr94577.c gcc/testsuite/gcc.target/aarch64/pr94577.c
-index 6f2d361..6a52e52 100644
+index 6f2d3612c26..6a52e52dc39 100644
 --- gcc/testsuite/gcc.target/aarch64/pr94577.c
 +++ gcc/testsuite/gcc.target/aarch64/pr94577.c
 @@ -1,4 +1,5 @@
@@ -11216,7 +11217,7 @@ index 6f2d361..6a52e52 100644
  
  void
 diff --git gcc/testsuite/gcc.target/aarch64/pr97535.c gcc/testsuite/gcc.target/aarch64/pr97535.c
-index 7d4db48..6f1ee80 100644
+index 7d4db485f1f..6f1ee8035eb 100644
 --- gcc/testsuite/gcc.target/aarch64/pr97535.c
 +++ gcc/testsuite/gcc.target/aarch64/pr97535.c
 @@ -13,4 +13,4 @@ void setRaw(const void *raw)
@@ -11226,7 +11227,7 @@ index 7d4db48..6f1ee80 100644
 -/* { dg-final { scan-assembler "bl\tmemcpy" } } */
 +/* { dg-final { scan-assembler "bl\t_*memcpy" } } */
 diff --git gcc/testsuite/gcc.target/aarch64/simd_pcs_attribute-2.c gcc/testsuite/gcc.target/aarch64/simd_pcs_attribute-2.c
-index 8eec682..193c657 100644
+index 8eec6824f37..193c65717ed 100644
 --- gcc/testsuite/gcc.target/aarch64/simd_pcs_attribute-2.c
 +++ gcc/testsuite/gcc.target/aarch64/simd_pcs_attribute-2.c
 @@ -1,5 +1,6 @@
@@ -11245,7 +11246,7 @@ index 8eec682..193c657 100644
 +/* { dg-final { scan-assembler-not {\.variant_pcs\t_?foo} } } */
 +/* { dg-final { scan-assembler-times {\.variant_pcs\t_?_ZGVnN2v_foo} 1 } } */
 diff --git gcc/testsuite/gcc.target/aarch64/simd_pcs_attribute-3.c gcc/testsuite/gcc.target/aarch64/simd_pcs_attribute-3.c
-index 95f6a68..6fd5773 100644
+index 95f6a6803e8..6fd57735b3a 100644
 --- gcc/testsuite/gcc.target/aarch64/simd_pcs_attribute-3.c
 +++ gcc/testsuite/gcc.target/aarch64/simd_pcs_attribute-3.c
 @@ -1,5 +1,6 @@
@@ -11270,7 +11271,7 @@ index 95f6a68..6fd5773 100644
 +/* { dg-final { scan-assembler-times {\.variant_pcs\t_?_ZGVnN1v_foo} 1 } } */
 +/* { dg-final { scan-assembler-times {\.variant_pcs\t_?_ZGVnN2v_foo} 1 } } */
 diff --git gcc/testsuite/gcc.target/aarch64/simd_pcs_attribute.c gcc/testsuite/gcc.target/aarch64/simd_pcs_attribute.c
-index eddcef3..62ee482 100644
+index eddcef3597c..62ee482a892 100644
 --- gcc/testsuite/gcc.target/aarch64/simd_pcs_attribute.c
 +++ gcc/testsuite/gcc.target/aarch64/simd_pcs_attribute.c
 @@ -1,5 +1,6 @@
@@ -11289,7 +11290,7 @@ index eddcef3..62ee482 100644
 +/* { dg-final { scan-assembler-not {\.variant_pcs\t_?log} } } */
 +/* { dg-final { scan-assembler-times {\.variant_pcs\t_?_ZGVnN2v_log} 1 } } */
 diff --git gcc/testsuite/gcc.target/aarch64/stack-check-cfa-1.c gcc/testsuite/gcc.target/aarch64/stack-check-cfa-1.c
-index 6885894..ebba23c 100644
+index 6885894a97e..ebba23c9d02 100644
 --- gcc/testsuite/gcc.target/aarch64/stack-check-cfa-1.c
 +++ gcc/testsuite/gcc.target/aarch64/stack-check-cfa-1.c
 @@ -1,6 +1,7 @@
@@ -11301,7 +11302,7 @@ index 6885894..ebba23c 100644
  #define SIZE 128*1024
  #include "stack-check-prologue.h"
 diff --git gcc/testsuite/gcc.target/aarch64/stack-check-cfa-2.c gcc/testsuite/gcc.target/aarch64/stack-check-cfa-2.c
-index 5796a53..e15fbd6 100644
+index 5796a53be06..e15fbd6196c 100644
 --- gcc/testsuite/gcc.target/aarch64/stack-check-cfa-2.c
 +++ gcc/testsuite/gcc.target/aarch64/stack-check-cfa-2.c
 @@ -1,6 +1,7 @@
@@ -11313,7 +11314,7 @@ index 5796a53..e15fbd6 100644
  #define SIZE 1280*1024 + 512
  #include "stack-check-prologue.h"
 diff --git gcc/testsuite/gcc.target/aarch64/stack-check-cfa-3.c gcc/testsuite/gcc.target/aarch64/stack-check-cfa-3.c
-index c4b7bb6..ccaf2e6 100644
+index c4b7bb601c4..ccaf2e6f8cf 100644
 --- gcc/testsuite/gcc.target/aarch64/stack-check-cfa-3.c
 +++ gcc/testsuite/gcc.target/aarch64/stack-check-cfa-3.c
 @@ -1,6 +1,7 @@
@@ -11325,7 +11326,7 @@ index c4b7bb6..ccaf2e6 100644
  #include "stack-check-prologue-16.c"
  
 diff --git gcc/testsuite/gcc.target/aarch64/sve/aarch64-sve.exp gcc/testsuite/gcc.target/aarch64/sve/aarch64-sve.exp
-index 439a012..0e0c1dc 100644
+index 439a012ce43..0e0c1dcec18 100644
 --- gcc/testsuite/gcc.target/aarch64/sve/aarch64-sve.exp
 +++ gcc/testsuite/gcc.target/aarch64/sve/aarch64-sve.exp
 @@ -25,6 +25,11 @@ if {![istarget aarch64*-*-*] } then {
@@ -11341,7 +11342,7 @@ index 439a012..0e0c1dc 100644
  load_lib gcc-dg.exp
  
 diff --git gcc/testsuite/gcc.target/aarch64/sve/acle/aarch64-sve-acle-asm.exp gcc/testsuite/gcc.target/aarch64/sve/acle/aarch64-sve-acle-asm.exp
-index 3522991..9b075a8 100644
+index 35229910da8..9b075a8956a 100644
 --- gcc/testsuite/gcc.target/aarch64/sve/acle/aarch64-sve-acle-asm.exp
 +++ gcc/testsuite/gcc.target/aarch64/sve/acle/aarch64-sve-acle-asm.exp
 @@ -24,6 +24,11 @@ if {![istarget aarch64*-*-*] } {
@@ -11357,7 +11358,7 @@ index 3522991..9b075a8 100644
  load_lib gcc-dg.exp
  
 diff --git gcc/testsuite/gcc.target/aarch64/sve/acle/aarch64-sve-acle.exp gcc/testsuite/gcc.target/aarch64/sve/acle/aarch64-sve-acle.exp
-index 2f36f1c..36ef882 100644
+index 2f36f1c57d1..36ef882f40e 100644
 --- gcc/testsuite/gcc.target/aarch64/sve/acle/aarch64-sve-acle.exp
 +++ gcc/testsuite/gcc.target/aarch64/sve/acle/aarch64-sve-acle.exp
 @@ -25,6 +25,11 @@ if {![istarget aarch64*-*-*] } {
@@ -11373,7 +11374,7 @@ index 2f36f1c..36ef882 100644
  load_lib gcc-dg.exp
  
 diff --git gcc/testsuite/gcc.target/aarch64/sve/pcs/aarch64-sve-pcs.exp gcc/testsuite/gcc.target/aarch64/sve/pcs/aarch64-sve-pcs.exp
-index 64218fb..0f9407c 100644
+index 64218fb3f49..0f9407ca2c7 100644
 --- gcc/testsuite/gcc.target/aarch64/sve/pcs/aarch64-sve-pcs.exp
 +++ gcc/testsuite/gcc.target/aarch64/sve/pcs/aarch64-sve-pcs.exp
 @@ -25,6 +25,10 @@ if {![istarget aarch64*-*-*] } then {
@@ -11388,7 +11389,7 @@ index 64218fb..0f9407c 100644
  load_lib gcc-dg.exp
  
 diff --git gcc/testsuite/gcc.target/aarch64/sve2/aarch64-sve2.exp gcc/testsuite/gcc.target/aarch64/sve2/aarch64-sve2.exp
-index 28d6155..a5298a6 100644
+index 28d61555ff2..a5298a692cb 100644
 --- gcc/testsuite/gcc.target/aarch64/sve2/aarch64-sve2.exp
 +++ gcc/testsuite/gcc.target/aarch64/sve2/aarch64-sve2.exp
 @@ -25,6 +25,11 @@ if {![istarget aarch64*-*-*] } then {
@@ -11404,7 +11405,7 @@ index 28d6155..a5298a6 100644
  load_lib gcc-dg.exp
  
 diff --git gcc/testsuite/gcc.target/aarch64/sve2/acle/aarch64-sve2-acle-asm.exp gcc/testsuite/gcc.target/aarch64/sve2/acle/aarch64-sve2-acle-asm.exp
-index 67f817d..d61e837 100644
+index 67f817dd21f..d61e837a6f1 100644
 --- gcc/testsuite/gcc.target/aarch64/sve2/acle/aarch64-sve2-acle-asm.exp
 +++ gcc/testsuite/gcc.target/aarch64/sve2/acle/aarch64-sve2-acle-asm.exp
 @@ -24,6 +24,11 @@ if {![istarget aarch64*-*-*] } {
@@ -11420,7 +11421,7 @@ index 67f817d..d61e837 100644
  load_lib gcc-dg.exp
  
 diff --git gcc/testsuite/gcc.target/aarch64/sve2/acle/aarch64-sve2-acle.exp gcc/testsuite/gcc.target/aarch64/sve2/acle/aarch64-sve2-acle.exp
-index a8c5421..362d865 100644
+index a8c54219c0c..362d8658b5b 100644
 --- gcc/testsuite/gcc.target/aarch64/sve2/acle/aarch64-sve2-acle.exp
 +++ gcc/testsuite/gcc.target/aarch64/sve2/acle/aarch64-sve2-acle.exp
 @@ -25,6 +25,11 @@ if {![istarget aarch64*-*-*] } {
@@ -11436,7 +11437,7 @@ index a8c5421..362d865 100644
  load_lib gcc-dg.exp
  
 diff --git gcc/testsuite/gcc.target/aarch64/symbol-range-tiny.c gcc/testsuite/gcc.target/aarch64/symbol-range-tiny.c
-index fc6a4f3..2d9e94b 100644
+index fc6a4f3ec78..2d9e94bc625 100644
 --- gcc/testsuite/gcc.target/aarch64/symbol-range-tiny.c
 +++ gcc/testsuite/gcc.target/aarch64/symbol-range-tiny.c
 @@ -1,4 +1,5 @@
@@ -11446,7 +11447,7 @@ index fc6a4f3..2d9e94b 100644
  
  char fixed_regs[0x00080000];
 diff --git gcc/testsuite/gcc.target/aarch64/uaddw-3.c gcc/testsuite/gcc.target/aarch64/uaddw-3.c
-index 39cbd6b..b4ed187 100644
+index 39cbd6b6cc2..b4ed187bd2c 100644
 --- gcc/testsuite/gcc.target/aarch64/uaddw-3.c
 +++ gcc/testsuite/gcc.target/aarch64/uaddw-3.c
 @@ -1,10 +1,11 @@
@@ -11463,7 +11464,7 @@ index 39cbd6b..b4ed187 100644
    len = len & ~31;
    unsigned short result = 0;
 diff --git gcc/testsuite/gcc.target/i386/memcpy-strategy-10.c gcc/testsuite/gcc.target/i386/memcpy-strategy-10.c
-index 970aa74..860fcc9 100644
+index 970aa741971..860fcc9f801 100644
 --- gcc/testsuite/gcc.target/i386/memcpy-strategy-10.c
 +++ gcc/testsuite/gcc.target/i386/memcpy-strategy-10.c
 @@ -1,7 +1,7 @@
@@ -11477,7 +11478,7 @@ index 970aa74..860fcc9 100644
  
  void
 diff --git gcc/testsuite/gcc.target/i386/memcpy-strategy-5.c gcc/testsuite/gcc.target/i386/memcpy-strategy-5.c
-index 83c333b..833e37f 100644
+index 83c333b551d..833e37fa325 100644
 --- gcc/testsuite/gcc.target/i386/memcpy-strategy-5.c
 +++ gcc/testsuite/gcc.target/i386/memcpy-strategy-5.c
 @@ -1,7 +1,7 @@
@@ -11491,7 +11492,7 @@ index 83c333b..833e37f 100644
  
  void
 diff --git gcc/testsuite/gcc.target/i386/memset-strategy-5.c gcc/testsuite/gcc.target/i386/memset-strategy-5.c
-index dc1de8e..73ce2df 100644
+index dc1de8e79c2..73ce2df6060 100644
 --- gcc/testsuite/gcc.target/i386/memset-strategy-5.c
 +++ gcc/testsuite/gcc.target/i386/memset-strategy-5.c
 @@ -1,7 +1,7 @@
@@ -11505,7 +11506,7 @@ index dc1de8e..73ce2df 100644
  
  void
 diff --git gcc/testsuite/gcc.target/i386/memset-strategy-7.c gcc/testsuite/gcc.target/i386/memset-strategy-7.c
-index 07c2816..653829e 100644
+index 07c2816910c..653829e6fc7 100644
 --- gcc/testsuite/gcc.target/i386/memset-strategy-7.c
 +++ gcc/testsuite/gcc.target/i386/memset-strategy-7.c
 @@ -1,7 +1,7 @@
@@ -11519,7 +11520,7 @@ index 07c2816..653829e 100644
  
  void
 diff --git gcc/testsuite/gfortran.dg/coarray/caf.exp gcc/testsuite/gfortran.dg/coarray/caf.exp
-index b13aaca..e5ca3b1 100644
+index b13aacaccda..e5ca3b173b5 100644
 --- gcc/testsuite/gfortran.dg/coarray/caf.exp
 +++ gcc/testsuite/gfortran.dg/coarray/caf.exp
 @@ -28,6 +28,7 @@
@@ -11563,7 +11564,7 @@ index b13aaca..e5ca3b1 100644
  
  # Main loop.
 diff --git gcc/testsuite/gfortran.dg/dg.exp gcc/testsuite/gfortran.dg/dg.exp
-index 0668981..0a139a2 100644
+index 06689813d07..0a139a27da5 100644
 --- gcc/testsuite/gfortran.dg/dg.exp
 +++ gcc/testsuite/gfortran.dg/dg.exp
 @@ -18,6 +18,7 @@
@@ -11614,7 +11615,7 @@ index 0668981..0a139a2 100644
  
  # All done.
 diff --git gcc/testsuite/gfortran.dg/pr95690.f90 gcc/testsuite/gfortran.dg/pr95690.f90
-index 47a5df9..1afa9d3 100644
+index 47a5df9e894..1afa9d3c467 100644
 --- gcc/testsuite/gfortran.dg/pr95690.f90
 +++ gcc/testsuite/gfortran.dg/pr95690.f90
 @@ -2,8 +2,8 @@
@@ -11629,7 +11630,7 @@ index 47a5df9..1afa9d3 100644
     end
  end
 diff --git gcc/testsuite/lib/asan-dg.exp gcc/testsuite/lib/asan-dg.exp
-index e926dc3..d1429e6 100644
+index e926dc3ad03..d1429e6d999 100644
 --- gcc/testsuite/lib/asan-dg.exp
 +++ gcc/testsuite/lib/asan-dg.exp
 @@ -78,7 +78,7 @@ proc asan_link_flags_1 { paths lib } {
@@ -11642,7 +11643,7 @@ index e926dc3..d1429e6 100644
        }
      } else {
 diff --git gcc/testsuite/lib/atomic-dg.exp gcc/testsuite/lib/atomic-dg.exp
-index cc19d27..a803b36 100644
+index cc19d273ad7..a803b367fbc 100644
 --- gcc/testsuite/lib/atomic-dg.exp
 +++ gcc/testsuite/lib/atomic-dg.exp
 @@ -33,7 +33,7 @@ proc atomic_link_flags { paths } {
@@ -11655,7 +11656,7 @@ index cc19d27..a803b36 100644
        }
      } else {
 diff --git gcc/testsuite/lib/scanasm.exp gcc/testsuite/lib/scanasm.exp
-index 0dcb893..7eac70e 100644
+index 0dcb893ec4f..7eac70e022b 100644
 --- gcc/testsuite/lib/scanasm.exp
 +++ gcc/testsuite/lib/scanasm.exp
 @@ -763,7 +763,7 @@ proc scan-lto-assembler { args } {
@@ -11751,7 +11752,7 @@ index 0dcb893..7eac70e 100644
  		if { !$have_bodies } {
  		    unresolved $testname
 diff --git gcc/testsuite/lib/target-libpath.exp gcc/testsuite/lib/target-libpath.exp
-index 4f68cd3..ffa578c 100644
+index 4f68cd3c4ff..ffa578c083b 100644
 --- gcc/testsuite/lib/target-libpath.exp
 +++ gcc/testsuite/lib/target-libpath.exp
 @@ -67,6 +67,7 @@ proc set_ld_library_path_env_vars { } {
@@ -11807,7 +11808,7 @@ index 4f68cd3..ffa578c 100644
    verbose -log "LD_RUN_PATH=[getenv LD_RUN_PATH]"
    verbose -log "SHLIB_PATH=[getenv SHLIB_PATH]"
 diff --git gcc/testsuite/lib/target-supports.exp gcc/testsuite/lib/target-supports.exp
-index a09606e..34159cf 100644
+index a09606e4497..34159cf71e4 100644
 --- gcc/testsuite/lib/target-supports.exp
 +++ gcc/testsuite/lib/target-supports.exp
 @@ -5812,6 +5812,43 @@ proc check_effective_target_arm_v8_2a_dotprod_neon_hw { } {
@@ -11897,7 +11898,7 @@ index a09606e..34159cf 100644
  proc check_effective_target_glibc { } {
 diff --git gcc/testsuite/obj-c++.dg/attributes/method-unavailable-1.mm gcc/testsuite/obj-c++.dg/attributes/method-unavailable-1.mm
 new file mode 100644
-index 0000000..e5708c2
+index 00000000000..e5708c202c0
 --- /dev/null
 +++ gcc/testsuite/obj-c++.dg/attributes/method-unavailable-1.mm
 @@ -0,0 +1,34 @@
@@ -11937,7 +11938,7 @@ index 0000000..e5708c2
 +}
 diff --git gcc/testsuite/obj-c++.dg/attributes/method-unavailable-2.mm gcc/testsuite/obj-c++.dg/attributes/method-unavailable-2.mm
 new file mode 100644
-index 0000000..68ea46d
+index 00000000000..68ea46d2543
 --- /dev/null
 +++ gcc/testsuite/obj-c++.dg/attributes/method-unavailable-2.mm
 @@ -0,0 +1,24 @@
@@ -11967,7 +11968,7 @@ index 0000000..68ea46d
 +}
 diff --git gcc/testsuite/obj-c++.dg/attributes/method-unavailable-3.mm gcc/testsuite/obj-c++.dg/attributes/method-unavailable-3.mm
 new file mode 100644
-index 0000000..9e55ae1
+index 00000000000..9e55ae11e1f
 --- /dev/null
 +++ gcc/testsuite/obj-c++.dg/attributes/method-unavailable-3.mm
 @@ -0,0 +1,22 @@
@@ -11994,10 +11995,10 @@ index 0000000..9e55ae1
 +  [object unavailableInstanceMethod: object, nil];         /* { dg-error "is unavailable" } */
 +}
 diff --git gcc/testsuite/obj-c++.dg/gnu-api-2-class-meta.mm gcc/testsuite/obj-c++.dg/gnu-api-2-class-meta.mm
-index 92852c3..e097453 100644
+index 92852c3ecea..e0974539ecf 100644
 --- gcc/testsuite/obj-c++.dg/gnu-api-2-class-meta.mm
 +++ gcc/testsuite/obj-c++.dg/gnu-api-2-class-meta.mm
-@@ -19,6 +19,7 @@
+@@ -19,6 +19,7 @@ this behavior may be defined or documented (for example, if class
  
  /* { dg-do run } */
  /* { dg-skip-if "No API#2 pre-Darwin9" { *-*-darwin[5-8]* } { "-fnext-runtime" } { "" } } */
@@ -12006,7 +12007,7 @@ index 92852c3..e097453 100644
  /* { dg-additional-options "-DOBJC_OLD_DISPATCH_PROTOTYPES" { target { *-*-darwin* } } } */
  // { dg-additional-options "-Wno-objc-root-class" }
 diff --git gcc/testsuite/obj-c++.dg/gnu-api-2-class.mm gcc/testsuite/obj-c++.dg/gnu-api-2-class.mm
-index f6e3d8d..a23968a 100644
+index f6e3d8d22e0..a23968a89b5 100644
 --- gcc/testsuite/obj-c++.dg/gnu-api-2-class.mm
 +++ gcc/testsuite/obj-c++.dg/gnu-api-2-class.mm
 @@ -6,6 +6,7 @@
@@ -12019,7 +12020,7 @@ index f6e3d8d..a23968a 100644
  // { dg-additional-options "-Wno-objc-root-class" }
 diff --git gcc/testsuite/obj-c++.dg/pr101666-0.mm gcc/testsuite/obj-c++.dg/pr101666-0.mm
 new file mode 100644
-index 0000000..5f87f60
+index 00000000000..5f87f605ae4
 --- /dev/null
 +++ gcc/testsuite/obj-c++.dg/pr101666-0.mm
 @@ -0,0 +1,7 @@
@@ -12032,7 +12033,7 @@ index 0000000..5f87f60
 +
 diff --git gcc/testsuite/obj-c++.dg/pr101666-1.mm gcc/testsuite/obj-c++.dg/pr101666-1.mm
 new file mode 100644
-index 0000000..41ef370
+index 00000000000..41ef3704bff
 --- /dev/null
 +++ gcc/testsuite/obj-c++.dg/pr101666-1.mm
 @@ -0,0 +1,10 @@
@@ -12048,7 +12049,7 @@ index 0000000..41ef370
 +#include "pr101666.inc"
 diff --git gcc/testsuite/obj-c++.dg/pr101666.inc gcc/testsuite/obj-c++.dg/pr101666.inc
 new file mode 100644
-index 0000000..e81e1be
+index 00000000000..e81e1be2e4c
 --- /dev/null
 +++ gcc/testsuite/obj-c++.dg/pr101666.inc
 @@ -0,0 +1,29 @@
@@ -12083,7 +12084,7 @@ index 0000000..e81e1be
 +}
 diff --git gcc/testsuite/obj-c++.dg/property/at-property-unavailable-1.mm gcc/testsuite/obj-c++.dg/property/at-property-unavailable-1.mm
 new file mode 100644
-index 0000000..6bb4755
+index 00000000000..6bb4755220d
 --- /dev/null
 +++ gcc/testsuite/obj-c++.dg/property/at-property-unavailable-1.mm
 @@ -0,0 +1,38 @@
@@ -12127,7 +12128,7 @@ index 0000000..6bb4755
 +}
 diff --git gcc/testsuite/obj-c++.dg/property/at-property-unavailable-2.mm gcc/testsuite/obj-c++.dg/property/at-property-unavailable-2.mm
 new file mode 100644
-index 0000000..5edc162
+index 00000000000..5edc1626c89
 --- /dev/null
 +++ gcc/testsuite/obj-c++.dg/property/at-property-unavailable-2.mm
 @@ -0,0 +1,26 @@
@@ -12159,7 +12160,7 @@ index 0000000..5edc162
 +}
 diff --git gcc/testsuite/obj-c++.dg/property/dotsyntax-unavailable-1.mm gcc/testsuite/obj-c++.dg/property/dotsyntax-unavailable-1.mm
 new file mode 100644
-index 0000000..e2ef2a5
+index 00000000000..e2ef2a5b23b
 --- /dev/null
 +++ gcc/testsuite/obj-c++.dg/property/dotsyntax-unavailable-1.mm
 @@ -0,0 +1,42 @@
@@ -12206,40 +12207,40 @@ index 0000000..e2ef2a5
 +    object.count2 = 74;
 +}
 diff --git gcc/testsuite/obj-c++.dg/torture/strings/const-cfstring-4.mm gcc/testsuite/obj-c++.dg/torture/strings/const-cfstring-4.mm
-index 1155db5..e0dd806 100644
+index 1155db5f83f..e0dd8062373 100644
 --- gcc/testsuite/obj-c++.dg/torture/strings/const-cfstring-4.mm
 +++ gcc/testsuite/obj-c++.dg/torture/strings/const-cfstring-4.mm
-@@ -18,4 +18,4 @@ void *foo (void)
+@@ -18,4 +18,4 @@
  
  /* { dg-final { scan-assembler ".section __DATA, __cfstring" } } */
  /* { dg-final { scan-assembler ".long\t___CFConstantStringClassReference\n\t.long\t1992\n\t.long\t.*\n\t.long\t19\n" { target { *-*-darwin* && { ! lp64 } } } } } */
 -/* { dg-final { scan-assembler ".quad\t___CFConstantStringClassReference\n\t.long\t1992\n\t.space 4\n\t.quad\t.*\n\t.quad\t19\n" { target { *-*-darwin* && {  lp64 } } } } } */
 +/* { dg-final { scan-assembler {.(quad|xword)\t___CFConstantStringClassReference\n\t.(long|word)\t1992\n\t.space 4\n\t.(quad|xword)\t.*\n\t.(quad|xword)\t19\n} { target { *-*-darwin* && {  lp64 } } } } } */
 diff --git gcc/testsuite/obj-c++.dg/torture/strings/const-str-10.mm gcc/testsuite/obj-c++.dg/torture/strings/const-str-10.mm
-index e1dad12..eb89710 100644
+index e1dad124cd6..eb89710d890 100644
 --- gcc/testsuite/obj-c++.dg/torture/strings/const-str-10.mm
 +++ gcc/testsuite/obj-c++.dg/torture/strings/const-str-10.mm
-@@ -33,4 +33,4 @@ const NSConstantString *appKey = @"MyApp";
+@@ -33,4 +33,4 @@ @interface NSConstantString : NSSimpleCString
  /* { dg-final { scan-assembler ".section __OBJC, __cstring_object" { target { *-*-darwin* && { ! lp64 } } } } } */
  /* { dg-final { scan-assembler ".section __DATA, __objc_stringobj" { target { *-*-darwin* && { lp64 } } } } } */
  /* { dg-final { scan-assembler ".long\t__NSConstantStringClassReference\n\t.long\t.*\n\t.long\t5\n\t.data" { target { *-*-darwin* && { ! lp64 } } } } } */
 -/* { dg-final { scan-assembler ".quad\t_OBJC_CLASS_._NSConstantString\n\t.quad\t.*\n\t.long\t5\n\t.space" { target { *-*-darwin* && { lp64 } } } } } */
 +/* { dg-final { scan-assembler {.(quad|xword)\t_OBJC_CLASS_._NSConstantString\n\t.(quad|xword)\t.*\n\t.(long|word)\t5\n\t.space} { target { *-*-darwin* && { lp64 } } } } } */
 diff --git gcc/testsuite/obj-c++.dg/torture/strings/const-str-11.mm gcc/testsuite/obj-c++.dg/torture/strings/const-str-11.mm
-index 30a9228..c1b58dc 100644
+index 30a9228a64e..c1b58dc6cb8 100644
 --- gcc/testsuite/obj-c++.dg/torture/strings/const-str-11.mm
 +++ gcc/testsuite/obj-c++.dg/torture/strings/const-str-11.mm
-@@ -33,4 +33,4 @@ const XStr *appKey = @"MyApp";
+@@ -33,4 +33,4 @@ @interface XStr : XString {
  /* { dg-final { scan-assembler ".section __OBJC, __cstring_object" { target { *-*-darwin* && { ! lp64 } } } } } */
  /* { dg-final { scan-assembler ".section __DATA, __objc_stringobj" { target { *-*-darwin* && { lp64 } } } } } */
  /* { dg-final { scan-assembler ".long\t__XStrClassReference\n\t.long\t.*\n\t.long\t5\n\t.data"  { target { *-*-darwin* && { ! lp64 } } } } } */
 -/* { dg-final { scan-assembler ".quad\t_OBJC_CLASS_._XStr\n\t.quad\t.*\n\t.long\t5\n\t.space" { target { *-*-darwin* && { lp64 } } } } } */
 +/* { dg-final { scan-assembler {.(quad|xword)\t_OBJC_CLASS_._XStr\n\t.(quad|xword)\t.*\n\t.(long|word)\t5\n\t.space} { target { *-*-darwin* && { lp64 } } } } } */
 diff --git gcc/testsuite/obj-c++.dg/torture/strings/const-str-9.mm gcc/testsuite/obj-c++.dg/torture/strings/const-str-9.mm
-index a1a1429..8457f46 100644
+index a1a14295e90..8457f46be53 100644
 --- gcc/testsuite/obj-c++.dg/torture/strings/const-str-9.mm
 +++ gcc/testsuite/obj-c++.dg/torture/strings/const-str-9.mm
-@@ -25,4 +25,4 @@ const NSConstantString *appKey = @"MyApp";
+@@ -25,4 +25,4 @@ @interface NSConstantString: NSObject {
  /* { dg-final { scan-assembler ".section __OBJC, __cstring_object" { target { *-*-darwin* && { ! lp64 } } } } } */
  /* { dg-final { scan-assembler ".section __DATA, __objc_stringobj" { target { *-*-darwin* && { lp64 } } } } } */
  /* { dg-final { scan-assembler ".long\t__NSConstantStringClassReference\n\t.long\t.*\n\t.long\t5\n\t.data" { target { *-*-darwin* && { ! lp64 } } } } } */
@@ -12247,7 +12248,7 @@ index a1a1429..8457f46 100644
 +/* { dg-final { scan-assembler {.(quad|xword)\t_OBJC_CLASS_._NSConstantString\n\t.(quad|xword)\t.*\n\t.(long|word)\t5\n\t.space} { target { *-*-darwin* && { lp64 } } } } } */
 diff --git gcc/testsuite/objc.dg/attributes/method-unavailable-1.m gcc/testsuite/objc.dg/attributes/method-unavailable-1.m
 new file mode 100644
-index 0000000..7a3de6b
+index 00000000000..7a3de6b245d
 --- /dev/null
 +++ gcc/testsuite/objc.dg/attributes/method-unavailable-1.m
 @@ -0,0 +1,34 @@
@@ -12287,7 +12288,7 @@ index 0000000..7a3de6b
 +}
 diff --git gcc/testsuite/objc.dg/attributes/method-unavailable-2.m gcc/testsuite/objc.dg/attributes/method-unavailable-2.m
 new file mode 100644
-index 0000000..68ea46d
+index 00000000000..68ea46d2543
 --- /dev/null
 +++ gcc/testsuite/objc.dg/attributes/method-unavailable-2.m
 @@ -0,0 +1,24 @@
@@ -12317,7 +12318,7 @@ index 0000000..68ea46d
 +}
 diff --git gcc/testsuite/objc.dg/attributes/method-unavailable-3.m gcc/testsuite/objc.dg/attributes/method-unavailable-3.m
 new file mode 100644
-index 0000000..9e55ae1
+index 00000000000..9e55ae11e1f
 --- /dev/null
 +++ gcc/testsuite/objc.dg/attributes/method-unavailable-3.m
 @@ -0,0 +1,22 @@
@@ -12344,10 +12345,10 @@ index 0000000..9e55ae1
 +  [object unavailableInstanceMethod: object, nil];         /* { dg-error "is unavailable" } */
 +}
 diff --git gcc/testsuite/objc.dg/gnu-api-2-class-meta.m gcc/testsuite/objc.dg/gnu-api-2-class-meta.m
-index 6c1c76a..41a48f9 100644
+index 6c1c76a87a3..41a48f9c685 100644
 --- gcc/testsuite/objc.dg/gnu-api-2-class-meta.m
 +++ gcc/testsuite/objc.dg/gnu-api-2-class-meta.m
-@@ -19,6 +19,7 @@
+@@ -19,6 +19,7 @@ this behavior may be defined or documented (for example, if class
  
  /* { dg-do run } */
  /* { dg-skip-if "No API#2 pre-Darwin9" { *-*-darwin[5-8]* } { "-fnext-runtime" } { "" } } */
@@ -12356,7 +12357,7 @@ index 6c1c76a..41a48f9 100644
  /* { dg-additional-options "-Wno-objc-root-class" } */
  /* { dg-additional-options "-DOBJC_OLD_DISPATCH_PROTOTYPES" { target { *-*-darwin* } } } */
 diff --git gcc/testsuite/objc.dg/gnu-api-2-class.m gcc/testsuite/objc.dg/gnu-api-2-class.m
-index d11dae0..1386ebc 100644
+index d11dae0e6dc..1386ebc2f99 100644
 --- gcc/testsuite/objc.dg/gnu-api-2-class.m
 +++ gcc/testsuite/objc.dg/gnu-api-2-class.m
 @@ -6,6 +6,7 @@
@@ -12369,7 +12370,7 @@ index d11dae0..1386ebc 100644
  /* { dg-additional-options "-DOBJC_OLD_DISPATCH_PROTOTYPES" { target { *-*-darwin* } } } */
 diff --git gcc/testsuite/objc.dg/pr101666-0.m gcc/testsuite/objc.dg/pr101666-0.m
 new file mode 100644
-index 0000000..5f87f60
+index 00000000000..5f87f605ae4
 --- /dev/null
 +++ gcc/testsuite/objc.dg/pr101666-0.m
 @@ -0,0 +1,7 @@
@@ -12382,7 +12383,7 @@ index 0000000..5f87f60
 +
 diff --git gcc/testsuite/objc.dg/pr101666-1.m gcc/testsuite/objc.dg/pr101666-1.m
 new file mode 100644
-index 0000000..41ef370
+index 00000000000..41ef3704bff
 --- /dev/null
 +++ gcc/testsuite/objc.dg/pr101666-1.m
 @@ -0,0 +1,10 @@
@@ -12398,7 +12399,7 @@ index 0000000..41ef370
 +#include "pr101666.inc"
 diff --git gcc/testsuite/objc.dg/pr101666.inc gcc/testsuite/objc.dg/pr101666.inc
 new file mode 100644
-index 0000000..f1dddca
+index 00000000000..f1dddca6498
 --- /dev/null
 +++ gcc/testsuite/objc.dg/pr101666.inc
 @@ -0,0 +1,29 @@
@@ -12433,7 +12434,7 @@ index 0000000..f1dddca
 +}
 diff --git gcc/testsuite/objc.dg/property/at-property-unavailable-1.m gcc/testsuite/objc.dg/property/at-property-unavailable-1.m
 new file mode 100644
-index 0000000..c33e1b6
+index 00000000000..c33e1b6f466
 --- /dev/null
 +++ gcc/testsuite/objc.dg/property/at-property-unavailable-1.m
 @@ -0,0 +1,39 @@
@@ -12478,7 +12479,7 @@ index 0000000..c33e1b6
 +}
 diff --git gcc/testsuite/objc.dg/property/at-property-unavailable-2.m gcc/testsuite/objc.dg/property/at-property-unavailable-2.m
 new file mode 100644
-index 0000000..5edc162
+index 00000000000..5edc1626c89
 --- /dev/null
 +++ gcc/testsuite/objc.dg/property/at-property-unavailable-2.m
 @@ -0,0 +1,26 @@
@@ -12510,7 +12511,7 @@ index 0000000..5edc162
 +}
 diff --git gcc/testsuite/objc.dg/property/dotsyntax-unavailable-1.m gcc/testsuite/objc.dg/property/dotsyntax-unavailable-1.m
 new file mode 100644
-index 0000000..e2ef2a5
+index 00000000000..e2ef2a5b23b
 --- /dev/null
 +++ gcc/testsuite/objc.dg/property/dotsyntax-unavailable-1.m
 @@ -0,0 +1,42 @@
@@ -12557,47 +12558,47 @@ index 0000000..e2ef2a5
 +    object.count2 = 74;
 +}
 diff --git gcc/testsuite/objc.dg/torture/strings/const-cfstring-4.m gcc/testsuite/objc.dg/torture/strings/const-cfstring-4.m
-index 1155db5..e0dd806 100644
+index 1155db5f83f..e0dd8062373 100644
 --- gcc/testsuite/objc.dg/torture/strings/const-cfstring-4.m
 +++ gcc/testsuite/objc.dg/torture/strings/const-cfstring-4.m
-@@ -18,4 +18,4 @@ void *foo (void)
+@@ -18,4 +18,4 @@
  
  /* { dg-final { scan-assembler ".section __DATA, __cfstring" } } */
  /* { dg-final { scan-assembler ".long\t___CFConstantStringClassReference\n\t.long\t1992\n\t.long\t.*\n\t.long\t19\n" { target { *-*-darwin* && { ! lp64 } } } } } */
 -/* { dg-final { scan-assembler ".quad\t___CFConstantStringClassReference\n\t.long\t1992\n\t.space 4\n\t.quad\t.*\n\t.quad\t19\n" { target { *-*-darwin* && {  lp64 } } } } } */
 +/* { dg-final { scan-assembler {.(quad|xword)\t___CFConstantStringClassReference\n\t.(long|word)\t1992\n\t.space 4\n\t.(quad|xword)\t.*\n\t.(quad|xword)\t19\n} { target { *-*-darwin* && {  lp64 } } } } } */
 diff --git gcc/testsuite/objc.dg/torture/strings/const-str-10.m gcc/testsuite/objc.dg/torture/strings/const-str-10.m
-index 6565dc2..81b0d32 100644
+index 6565dc20007..81b0d326c56 100644
 --- gcc/testsuite/objc.dg/torture/strings/const-str-10.m
 +++ gcc/testsuite/objc.dg/torture/strings/const-str-10.m
-@@ -34,4 +34,4 @@ const NSConstantString *appKey = @"MyApp";
+@@ -34,4 +34,4 @@ @interface NSConstantString : NSSimpleCString
  /* { dg-final { scan-assembler ".section __OBJC, __cstring_object" { target { *-*-darwin* && { ! lp64 } } } } } */
  /* { dg-final { scan-assembler ".section __DATA, __objc_stringobj" { target { *-*-darwin* && { lp64 } } } } } */
  /* { dg-final { scan-assembler ".long\t__NSConstantStringClassReference\n\t.long\t.*\n\t.long\t5\n\t.data" { target { *-*-darwin* && { ! lp64 } } } } } */
 -/* { dg-final { scan-assembler ".quad\t_OBJC_CLASS_._NSConstantString\n\t.quad\t.*\n\t.long\t5\n\t.space" { target { *-*-darwin* && { lp64 } } } } } */
 +/* { dg-final { scan-assembler {.(quad|xword)\t_OBJC_CLASS_._NSConstantString\n\t.(quad|xword)\t.*\n\t.(long|word)\t5\n\t.space} { target { *-*-darwin* && { lp64 } } } } } */
 diff --git gcc/testsuite/objc.dg/torture/strings/const-str-11.m gcc/testsuite/objc.dg/torture/strings/const-str-11.m
-index 2bdb153..b044b0f 100644
+index 2bdb1531e1d..b044b0fd8c7 100644
 --- gcc/testsuite/objc.dg/torture/strings/const-str-11.m
 +++ gcc/testsuite/objc.dg/torture/strings/const-str-11.m
-@@ -33,4 +33,4 @@ const XStr *appKey = @"MyApp";
+@@ -33,4 +33,4 @@ @interface XStr : XString {
  /* { dg-final { scan-assembler ".section __OBJC, __cstring_object" { target { *-*-darwin* && { ! lp64 } } } } } */
  /* { dg-final { scan-assembler ".section __DATA, __objc_stringobj" { target { *-*-darwin* && { lp64 } } } } } */
  /* { dg-final { scan-assembler ".long\t__XStrClassReference\n\t.long\t.*\n\t.long\t5\n\t.data"  { target { *-*-darwin* && { ! lp64 } } } } } */
 -/* { dg-final { scan-assembler ".quad\t_OBJC_CLASS_._XStr\n\t.quad\t.*\n\t.long\t5\n\t.space" { target { *-*-darwin* && { lp64 } } } } } */
 +/* { dg-final { scan-assembler {.(quad|xword)\t_OBJC_CLASS_._XStr\n\t.(quad|xword)\t.*\n\t.(long|word)\t5\n\t.space} { target { *-*-darwin* && { lp64 } } } } } */
 diff --git gcc/testsuite/objc.dg/torture/strings/const-str-9.m gcc/testsuite/objc.dg/torture/strings/const-str-9.m
-index 966ea5e..d3d2916 100644
+index 966ea5e498d..d3d2916ed06 100644
 --- gcc/testsuite/objc.dg/torture/strings/const-str-9.m
 +++ gcc/testsuite/objc.dg/torture/strings/const-str-9.m
-@@ -25,4 +25,4 @@ const NSConstantString *appKey = @"MyApp";
+@@ -25,4 +25,4 @@ @interface NSConstantString: NSObject {
  /* { dg-final { scan-assembler ".section __OBJC, __cstring_object" { target { *-*-darwin* && { ! lp64 } } } } } */
  /* { dg-final { scan-assembler ".section __DATA, __objc_stringobj" { target { *-*-darwin* && { lp64 } } } } } */
  /* { dg-final { scan-assembler ".long\t__NSConstantStringClassReference\n\t.long\t.*\n\t.long\t5\n\t.data" { target { *-*-darwin* && { ! lp64 } } } } } */
 -/* { dg-final { scan-assembler ".quad\t_OBJC_CLASS_._NSConstantString\n\t.quad\t.*\n\t.long\t5\n\t.space" { target { *-*-darwin* && { lp64 } } } } } */
 +/* { dg-final { scan-assembler {.(quad|xword)\t_OBJC_CLASS_._NSConstantString\n\t.(quad|xword)\t.*\n\t.(long|word)\t5\n\t.space} { target { *-*-darwin* && { lp64 } } } } } */
 diff --git gcc/tree-cfg.c gcc/tree-cfg.c
-index f4ec77f..ebe8585 100644
+index f4ec77f1bb0..ebe8585d034 100644
 --- gcc/tree-cfg.c
 +++ gcc/tree-cfg.c
 @@ -9884,13 +9884,13 @@ void
@@ -12620,7 +12621,7 @@ index f4ec77f..ebe8585 100644
  
  #if CHECKING_P
 diff --git gcc/tree-core.h gcc/tree-core.h
-index c31b8eb..2b7adad 100644
+index c31b8ebf249..2b7adaddbe0 100644
 --- gcc/tree-core.h
 +++ gcc/tree-core.h
 @@ -1023,7 +1023,8 @@ struct GTY(()) tree_base {
@@ -12664,7 +12665,7 @@ index c31b8eb..2b7adad 100644
    /* TODO: Root of a partial DWARF tree for global types and decls.  */
  };
 diff --git gcc/tree-nested.c gcc/tree-nested.c
-index c9b4c30..8b5942a 100644
+index c9b4c30ebdf..8b5942afcf9 100644
 --- gcc/tree-nested.c
 +++ gcc/tree-nested.c
 @@ -611,6 +611,14 @@ get_trampoline_type (struct nesting_info *info)
@@ -12826,7 +12827,7 @@ index c9b4c30..8b5942a 100644
  
    /* If a chain_decl was created, then it needs to be registered with
 diff --git gcc/tree.c gcc/tree.c
-index 79e03204..076c2ad 100644
+index 79e03204a6e..076c2adafda 100644
 --- gcc/tree.c
 +++ gcc/tree.c
 @@ -10769,6 +10769,23 @@ build_common_builtin_nodes (void)
@@ -12933,7 +12934,7 @@ index 79e03204..076c2ad 100644
     somewhere in it.  */
  
 diff --git gcc/tree.h gcc/tree.h
-index 32e7024..353896b 100644
+index 32e7024ff23..353896b4210 100644
 --- gcc/tree.h
 +++ gcc/tree.h
 @@ -955,6 +955,11 @@ extern void omp_clause_range_check_failed (const_tree, const char *, int,
@@ -12957,7 +12958,7 @@ index 32e7024..353896b 100644
  extern const char *combined_fn_name (combined_fn);
  
 diff --git gcc/value-range.h gcc/value-range.h
-index 54623b9..3dbc092 100644
+index 54623b97a1f..3dbc092eed8 100644
 --- gcc/value-range.h
 +++ gcc/value-range.h
 @@ -376,8 +376,8 @@ gt_pch_nx (int_range<N> *x, gt_pointer_operator op, void *cookie)
@@ -12972,7 +12973,7 @@ index 54623b9..3dbc092 100644
  }
  
 diff --git gcc/varasm.c gcc/varasm.c
-index 8e45657..872fe68 100644
+index 8e456576010..872fe68d4f2 100644
 --- gcc/varasm.c
 +++ gcc/varasm.c
 @@ -250,8 +250,8 @@ object_block_hasher::hash (object_block *old)
@@ -12999,7 +13000,7 @@ index 8e45657..872fe68 100644
  
  /* Emit assembly code to switch to section NEW_SECTION.  Do nothing if
 diff --git gcc/vec.h gcc/vec.h
-index 24df2db..4dd4296 100644
+index 24df2db0eeb..4dd4296b006 100644
 --- gcc/vec.h
 +++ gcc/vec.h
 @@ -1378,7 +1378,7 @@ void
@@ -13012,7 +13013,7 @@ index 24df2db..4dd4296 100644
  
  template<typename T, typename A>
 diff --git gcc/wide-int.h gcc/wide-int.h
-index 84c8fa3..dfd7ff3 100644
+index 84c8fa36fb8..dfd7ff3328f 100644
 --- gcc/wide-int.h
 +++ gcc/wide-int.h
 @@ -3341,7 +3341,7 @@ gt_pch_nx (generic_wide_int <T> *)
@@ -13034,7 +13035,7 @@ index 84c8fa3..dfd7ff3 100644
  }
  
 diff --git libatomic/Makefile.am libatomic/Makefile.am
-index ab8c2da2..01f3402 100644
+index ab8c2da24a1..01f3402c8b9 100644
 --- libatomic/Makefile.am
 +++ libatomic/Makefile.am
 @@ -65,8 +65,13 @@ libatomic_version_script =
@@ -13053,7 +13054,7 @@ index ab8c2da2..01f3402 100644
  	fenv.c fence.c flag.c
  
 diff --git libatomic/Makefile.in libatomic/Makefile.in
-index 80d2565..179f921 100644
+index 80d25653dc7..179f9217ad6 100644
 --- libatomic/Makefile.in
 +++ libatomic/Makefile.in
 @@ -403,7 +403,12 @@ noinst_LTLIBRARIES = libatomic_convenience.la
@@ -13071,7 +13072,7 @@ index 80d2565..179f921 100644
  	fenv.c fence.c flag.c
  
 diff --git libatomic/configure libatomic/configure
-index 5867e69..9db63ed 100755
+index 5867e69ac14..9db63ed7c75 100755
 --- libatomic/configure
 +++ libatomic/configure
 @@ -658,6 +658,8 @@ OPT_LDFLAGS
@@ -13227,7 +13228,7 @@ index 5867e69..9db63ed 100755
  if test -z "${LIBAT_BUILD_VERSIONED_SHLIB_TRUE}" && test -z "${LIBAT_BUILD_VERSIONED_SHLIB_FALSE}"; then
    as_fn_error $? "conditional \"LIBAT_BUILD_VERSIONED_SHLIB\" was never defined.
 diff --git libatomic/configure.ac libatomic/configure.ac
-index 2a37187..9669da7 100644
+index 2a371870c2f..9669da72109 100644
 --- libatomic/configure.ac
 +++ libatomic/configure.ac
 @@ -156,6 +156,8 @@ AC_SUBST(enable_shared)
@@ -13240,7 +13241,7 @@ index 2a37187..9669da7 100644
  libtool_VERSION=3:0:2
  AC_SUBST(libtool_VERSION)
 diff --git libatomic/testsuite/Makefile.in libatomic/testsuite/Makefile.in
-index 333980ec..8bc7056 100644
+index 333980ec2c1..8bc70562e5b 100644
 --- libatomic/testsuite/Makefile.in
 +++ libatomic/testsuite/Makefile.in
 @@ -262,6 +262,7 @@ target_alias = @target_alias@
@@ -13252,7 +13253,7 @@ index 333980ec..8bc7056 100644
  toolexeclibdir = @toolexeclibdir@
  top_build_prefix = @top_build_prefix@
 diff --git libatomic/testsuite/lib/libatomic.exp libatomic/testsuite/lib/libatomic.exp
-index 38f3e56..300e509 100644
+index 38f3e5673e2..300e5096f79 100644
 --- libatomic/testsuite/lib/libatomic.exp
 +++ libatomic/testsuite/lib/libatomic.exp
 @@ -152,6 +152,7 @@ proc libatomic_init { args } {
@@ -13264,7 +13265,7 @@ index 38f3e56..300e509 100644
      }
  
 diff --git libbacktrace/Makefile.in libbacktrace/Makefile.in
-index 2ba8dfa..2f5472a 100644
+index 2ba8dfa8428..2f5472a8b7b 100644
 --- libbacktrace/Makefile.in
 +++ libbacktrace/Makefile.in
 @@ -15,7 +15,7 @@
@@ -13277,7 +13278,7 @@ index 2ba8dfa..2f5472a 100644
  # Redistribution and use in source and binary forms, with or without
  # modification, are permitted provided that the following conditions are
 diff --git libbacktrace/configure libbacktrace/configure
-index 9b66bf5..533c35c 100755
+index 9b66bf5563a..533c35c418b 100755
 --- libbacktrace/configure
 +++ libbacktrace/configure
 @@ -675,6 +675,8 @@ PIC_FLAG
@@ -13424,7 +13425,7 @@ index 9b66bf5..533c35c 100755
    as_fn_error $? "conditional \"HAVE_ELF\" was never defined.
  Usually this means the macro was only invoked conditionally." "$LINENO" 5
 diff --git libbacktrace/configure.ac libbacktrace/configure.ac
-index 43a33a6..7560d1c 100644
+index 43a33a66b82..7560d1c6c34 100644
 --- libbacktrace/configure.ac
 +++ libbacktrace/configure.ac
 @@ -84,6 +84,8 @@ AM_CONDITIONAL(HAVE_DWZ, test "$DWZ" != "")
@@ -13437,7 +13438,7 @@ index 43a33a6..7560d1c 100644
  
  backtrace_supported=yes
 diff --git libcc1/Makefile.am libcc1/Makefile.am
-index 3b75e7d..d0af87f 100644
+index 3b75e7d9290..d0af87f47eb 100644
 --- libcc1/Makefile.am
 +++ libcc1/Makefile.am
 @@ -56,6 +56,10 @@ marshall_c_source = marshall-c.hh
@@ -13474,7 +13475,7 @@ index 3b75e7d..d0af87f 100644
  		names.cc names.hh $(shared_source) \
  		$(marshall_c_source) $(marshall_cxx_source)
 diff --git libcc1/Makefile.in libcc1/Makefile.in
-index 07fa9d9..bb49d2d 100644
+index 07fa9d94c83..bb49d2dff17 100644
 --- libcc1/Makefile.in
 +++ libcc1/Makefile.in
 @@ -90,6 +90,12 @@ build_triplet = @build@
@@ -13521,7 +13522,7 @@ index 07fa9d9..bb49d2d 100644
  		names.cc names.hh $(shared_source) \
  		$(marshall_c_source) $(marshall_cxx_source)
 diff --git libcc1/configure libcc1/configure
-index 021ec26..d91a012 100755
+index 021ec265526..d91a0121d2b 100755
 --- libcc1/configure
 +++ libcc1/configure
 @@ -787,6 +787,7 @@ with_pic
@@ -13764,7 +13765,7 @@ index 021ec26..d91a012 100755
       # If plugin support had been requested but not available, fail.
       if test x"$enable_plugin" = x"no" ; then
 diff --git libcody/netclient.cc libcody/netclient.cc
-index 7f81dd9..558808b 100644
+index 7f81dd91810..558808be485 100644
 --- libcody/netclient.cc
 +++ libcody/netclient.cc
 @@ -93,7 +93,7 @@ int OpenInet6 (char const **e, char const *name, int port)
@@ -13788,7 +13789,7 @@ index 7f81dd9..558808b 100644
        errstr = gai_strerror (err);
        // What's the best errno to set?
 diff --git libcpp/include/line-map.h libcpp/include/line-map.h
-index 7d96417..1073542 100644
+index 7d964172469..1073542681d 100644
 --- libcpp/include/line-map.h
 +++ libcpp/include/line-map.h
 @@ -803,11 +803,11 @@ public:
@@ -13806,7 +13807,7 @@ index 7d96417..1073542 100644
    struct location_adhoc_data_map location_adhoc_data_map;
  
 diff --git libffi/Makefile.am libffi/Makefile.am
-index 203b7d1..46fa6dc 100644
+index 203b7d10a42..46fa6dce919 100644
 --- libffi/Makefile.am
 +++ libffi/Makefile.am
 @@ -233,7 +233,12 @@ libffi_version_info = -version-info `grep -v '^\#' $(srcdir)/libtool-version`
@@ -13824,7 +13825,7 @@ index 203b7d1..46fa6dc 100644
  
  AM_CPPFLAGS = -I. -I$(top_srcdir)/include -Iinclude -I$(top_srcdir)/src
 diff --git libffi/Makefile.in libffi/Makefile.in
-index 745bdd8..11ff229 100644
+index 745bdd80777..11ff229e561 100644
 --- libffi/Makefile.in
 +++ libffi/Makefile.in
 @@ -612,7 +612,11 @@ AM_CFLAGS = -Wall -g -fexceptions $(am__append_2)
@@ -13841,7 +13842,7 @@ index 745bdd8..11ff229 100644
  AM_CPPFLAGS = -I. -I$(top_srcdir)/include -Iinclude -I$(top_srcdir)/src
  AM_CCASFLAGS = $(AM_CPPFLAGS)
 diff --git libffi/configure libffi/configure
-index 8d52ec4..8f78af7 100755
+index 8d52ec4f495..8f78af7287a 100755
 --- libffi/configure
 +++ libffi/configure
 @@ -664,6 +664,8 @@ TESTSUBDIR_TRUE
@@ -14092,7 +14093,7 @@ index 8d52ec4..8f78af7 100755
    as_fn_error $? "conditional \"MAINTAINER_MODE\" was never defined.
  Usually this means the macro was only invoked conditionally." "$LINENO" 5
 diff --git libffi/configure.ac libffi/configure.ac
-index 0bf4af4..b10afba 100644
+index 0bf4af410d3..b10afba5602 100644
 --- libffi/configure.ac
 +++ libffi/configure.ac
 @@ -57,6 +57,7 @@ AC_SUBST(CFLAGS)
@@ -14104,7 +14105,7 @@ index 0bf4af4..b10afba 100644
  # Test for 64-bit build.
  AC_CHECK_SIZEOF([size_t])
 diff --git libgcc/config.host libgcc/config.host
-index 45f8e19..8f3d81c 100644
+index 45f8e19ada4..8f3d81c9fc7 100644
 --- libgcc/config.host
 +++ libgcc/config.host
 @@ -82,7 +82,7 @@ m32c*-*-*)
@@ -14220,7 +14221,7 @@ index 45f8e19..8f3d81c 100644
  powerpc*-*-freebsd*)
 diff --git libgcc/config/aarch64/heap-trampoline.c libgcc/config/aarch64/heap-trampoline.c
 new file mode 100644
-index 0000000..c8b8368
+index 00000000000..c8b83681ed7
 --- /dev/null
 +++ libgcc/config/aarch64/heap-trampoline.c
 @@ -0,0 +1,172 @@
@@ -14397,7 +14398,7 @@ index 0000000..c8b8368
 +    }
 +}
 diff --git libgcc/config/aarch64/lse.S libgcc/config/aarch64/lse.S
-index 9215873..0e65cbc 100644
+index 9215873842b..0e65cbcabde 100644
 --- libgcc/config/aarch64/lse.S
 +++ libgcc/config/aarch64/lse.S
 @@ -58,7 +58,11 @@ see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
@@ -14451,7 +14452,7 @@ index 9215873..0e65cbc 100644
  
  STARTFN	NAME(cas)
 diff --git libgcc/config/aarch64/sfp-machine.h libgcc/config/aarch64/sfp-machine.h
-index 2d3288a..9ed1ab7 100644
+index 2d3288ad7d9..9ed1ab7047b 100644
 --- libgcc/config/aarch64/sfp-machine.h
 +++ libgcc/config/aarch64/sfp-machine.h
 @@ -122,6 +122,27 @@ void __sfp_handle_exceptions (int);
@@ -14484,7 +14485,7 @@ index 2d3288a..9ed1ab7 100644
 +#endif
 diff --git libgcc/config/aarch64/t-darwin libgcc/config/aarch64/t-darwin
 new file mode 100644
-index 0000000..f6ecda7
+index 00000000000..f6ecda7b608
 --- /dev/null
 +++ libgcc/config/aarch64/t-darwin
 @@ -0,0 +1,7 @@
@@ -14497,7 +14498,7 @@ index 0000000..f6ecda7
 +BUILD_LIBGCCS1 =
 diff --git libgcc/config/aarch64/t-heap-trampoline libgcc/config/aarch64/t-heap-trampoline
 new file mode 100644
-index 0000000..3f70c2c
+index 00000000000..3f70c2cd0c0
 --- /dev/null
 +++ libgcc/config/aarch64/t-heap-trampoline
 @@ -0,0 +1,20 @@
@@ -14523,7 +14524,7 @@ index 0000000..3f70c2c
 +HOST_LIBGCC2_CFLAGS += -mmacosx-version-min=11.0
 diff --git libgcc/config/i386/heap-trampoline.c libgcc/config/i386/heap-trampoline.c
 new file mode 100644
-index 0000000..96e13bf
+index 00000000000..96e13bf828e
 --- /dev/null
 +++ libgcc/config/i386/heap-trampoline.c
 @@ -0,0 +1,172 @@
@@ -14701,7 +14702,7 @@ index 0000000..96e13bf
 +}
 diff --git libgcc/config/i386/t-heap-trampoline libgcc/config/i386/t-heap-trampoline
 new file mode 100644
-index 0000000..76f438d
+index 00000000000..76f438d9529
 --- /dev/null
 +++ libgcc/config/i386/t-heap-trampoline
 @@ -0,0 +1,20 @@
@@ -14727,7 +14728,7 @@ index 0000000..76f438d
 +HOST_LIBGCC2_CFLAGS += -mmacosx-version-min=10.8
 diff --git libgcc/config/t-darwin-rpath libgcc/config/t-darwin-rpath
 new file mode 100644
-index 0000000..7cf63d9
+index 00000000000..7cf63d9cb6b
 --- /dev/null
 +++ libgcc/config/t-darwin-rpath
 @@ -0,0 +1,5 @@
@@ -14737,7 +14738,7 @@ index 0000000..7cf63d9
 +# Which does not work for Darwin < 9
 +HOST_LIBGCC2_CFLAGS += -mmacosx-version-min=10.5
 diff --git libgcc/config/t-slibgcc-darwin libgcc/config/t-slibgcc-darwin
-index cb0cbbd..da48868 100644
+index cb0cbbdb1c5..da4886848e8 100644
 --- libgcc/config/t-slibgcc-darwin
 +++ libgcc/config/t-slibgcc-darwin
 @@ -1,4 +1,4 @@
@@ -14819,7 +14820,7 @@ index cb0cbbd..da48868 100644
  	$(LIPO) -output libgcc_s.1$(SHLIB_EXT) -create libgcc_s.1$(SHLIB_EXT)_T*
  	rm libgcc_s.$(SHLIB_SOVERSION)$(SHLIB_EXT)_T*
 diff --git libgcc/configure libgcc/configure
-index 4919a56..e7b5196 100755
+index 4919a56f518..e7b5196344d 100755
 --- libgcc/configure
 +++ libgcc/configure
 @@ -654,6 +654,7 @@ build
@@ -14889,7 +14890,7 @@ index 4919a56..e7b5196 100755
  if test "${enable_gcov+set}" = set; then :
    enableval=$enable_gcov;
 diff --git libgcc/configure.ac libgcc/configure.ac
-index 13a80b2..349f669 100644
+index 13a80b2551b..349f6694f33 100644
 --- libgcc/configure.ac
 +++ libgcc/configure.ac
 @@ -68,6 +68,35 @@ AC_ARG_ENABLE(shared,
@@ -14929,7 +14930,7 @@ index 13a80b2..349f669 100644
  [  --disable-gcov          don't provide libgcov and related host tools],
  [], [enable_gcov=yes])
 diff --git libgcc/libgcc-std.ver.in libgcc/libgcc-std.ver.in
-index cea3326..f26ad3c 100644
+index cea33267e53..f26ad3cdf5d 100644
 --- libgcc/libgcc-std.ver.in
 +++ libgcc/libgcc-std.ver.in
 @@ -1943,4 +1943,7 @@ GCC_4.8.0 {
@@ -14941,7 +14942,7 @@ index cea3326..f26ad3c 100644
 +  __builtin_nested_func_ptr_deleted
  }
 diff --git libgcc/libgcc2.h libgcc/libgcc2.h
-index 1819ff3..1a448c0 100644
+index 1819ff3ac3d..1a448c02c04 100644
 --- libgcc/libgcc2.h
 +++ libgcc/libgcc2.h
 @@ -29,6 +29,9 @@ see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
@@ -14955,7 +14956,7 @@ index 1819ff3..1a448c0 100644
  extern void __clear_cache (void *, void *);
  extern void __eprintf (const char *, const char *, unsigned int, const char *)
 diff --git libgfortran/Makefile.am libgfortran/Makefile.am
-index 61bf05d..b33ace0 100644
+index 61bf05dd40d..b33ace09977 100644
 --- libgfortran/Makefile.am
 +++ libgfortran/Makefile.am
 @@ -29,6 +29,10 @@ else
@@ -14979,7 +14980,7 @@ index 61bf05d..b33ace0 100644
  libgfortran_la_DEPENDENCIES = $(version_dep) libgfortran.spec $(LIBQUADLIB_DEP)
  
 diff --git libgfortran/Makefile.in libgfortran/Makefile.in
-index 3d043aa..19db968 100644
+index 3d043aaa924..19db968df58 100644
 --- libgfortran/Makefile.in
 +++ libgfortran/Makefile.in
 @@ -91,8 +91,10 @@ POST_UNINSTALL = :
@@ -15102,7 +15103,7 @@ index 3d043aa..19db968 100644
  
 diff --git libgfortran/config/fpu-aarch64.h libgfortran/config/fpu-aarch64.h
 new file mode 100644
-index 0000000..0746f42
+index 00000000000..0746f42938a
 --- /dev/null
 +++ libgfortran/config/fpu-aarch64.h
 @@ -0,0 +1,331 @@
@@ -15438,7 +15439,7 @@ index 0000000..0746f42
 +  __builtin_aarch64_set_fpcr(fpcr);
 +}
 diff --git libgfortran/configure libgfortran/configure
-index f363438..b438bc9 100755
+index f3634389cf8..b438bc979d3 100755
 --- libgfortran/configure
 +++ libgfortran/configure
 @@ -655,9 +655,12 @@ extra_ldflags_libgfortran
@@ -15854,7 +15855,7 @@ index f363438..b438bc9 100755
    as_fn_error $? "conditional \"LIBGFOR_BUILD_QUAD\" was never defined.
  Usually this means the macro was only invoked conditionally." "$LINENO" 5
 diff --git libgfortran/configure.ac libgfortran/configure.ac
-index 8961e31..30275f6 100644
+index 8961e314d82..30275f6dadf 100644
 --- libgfortran/configure.ac
 +++ libgfortran/configure.ac
 @@ -264,9 +264,11 @@ AC_PROG_INSTALL
@@ -15881,7 +15882,7 @@ index 8961e31..30275f6 100644
      ;;
  esac
 diff --git libgfortran/configure.host libgfortran/configure.host
-index e9d92c9..3d6c2db 100644
+index e9d92c9d34d..3d6c2db7772 100644
 --- libgfortran/configure.host
 +++ libgfortran/configure.host
 @@ -39,17 +39,29 @@ if test "x${have_feenableexcept}" = "xyes"; then
@@ -15918,7 +15919,7 @@ index e9d92c9..3d6c2db 100644
  
  # Some targets require additional compiler options for NaN/Inf.
 diff --git libgfortran/kinds-override.h libgfortran/kinds-override.h
-index c9e874a..5f7840b 100644
+index c9e874a3f38..5f7840b0c89 100644
 --- libgfortran/kinds-override.h
 +++ libgfortran/kinds-override.h
 @@ -23,24 +23,9 @@ see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
@@ -15951,7 +15952,7 @@ index c9e874a..5f7840b 100644
  #endif
  
 diff --git libgfortran/libgfortran.spec.in libgfortran/libgfortran.spec.in
-index 95aa3f8..367d485 100644
+index 95aa3f842a3..367d485c230 100644
 --- libgfortran/libgfortran.spec.in
 +++ libgfortran/libgfortran.spec.in
 @@ -5,4 +5,4 @@
@@ -15961,7 +15962,7 @@ index 95aa3f8..367d485 100644
 -*lib: @LIBQUADSPEC@ -lm %(libgcc) %(liborig)
 +*lib: @LIBQUADSPEC@ @LIBM@ %(libgcc) %(liborig)
 diff --git libgfortran/mk-kinds-h.sh libgfortran/mk-kinds-h.sh
-index 2496190..572878c 100755
+index 249619061c6..572878ce891 100755
 --- libgfortran/mk-kinds-h.sh
 +++ libgfortran/mk-kinds-h.sh
 @@ -64,15 +64,19 @@ for k in $possible_real_kinds; do
@@ -15986,7 +15987,7 @@ index 2496190..572878c 100755
        *) echo "$0: Unknown type" >&2 ; exit 1 ;;
      esac
 diff --git libgo/configure libgo/configure
-index 70f64c9..a241770 100755
+index 70f64c974fd..a241770b177 100755
 --- libgo/configure
 +++ libgo/configure
 @@ -708,6 +708,8 @@ glibgo_toolexecdir
@@ -16043,7 +16044,7 @@ index 70f64c9..a241770 100755
    as_fn_error $? "conditional \"USE_LIBFFI\" was never defined.
  Usually this means the macro was only invoked conditionally." "$LINENO" 5
 diff --git libgo/configure.ac libgo/configure.ac
-index ebab9d9..5566460 100644
+index ebab9d9de3e..5566460ace1 100644
 --- libgo/configure.ac
 +++ libgo/configure.ac
 @@ -53,6 +53,7 @@ AC_LIBTOOL_DLOPEN
@@ -16055,7 +16056,7 @@ index ebab9d9..5566460 100644
  CC_FOR_BUILD=${CC_FOR_BUILD:-gcc}
  AC_SUBST(CC_FOR_BUILD)
 diff --git libgomp/Makefile.am libgomp/Makefile.am
-index 4cf1f58..1b39421 100644
+index 4cf1f581995..1b39421d5c8 100644
 --- libgomp/Makefile.am
 +++ libgomp/Makefile.am
 @@ -53,9 +53,14 @@ else
@@ -16075,7 +16076,7 @@ index 4cf1f58..1b39421 100644
  libgomp_la_LINK = $(LINK) $(libgomp_la_LDFLAGS)
  
 diff --git libgomp/Makefile.in libgomp/Makefile.in
-index eb868b3..b51c0ff 100644
+index eb868b36704..b51c0ffbd4b 100644
 --- libgomp/Makefile.in
 +++ libgomp/Makefile.in
 @@ -16,7 +16,7 @@
@@ -16101,7 +16102,7 @@ index eb868b3..b51c0ff 100644
  libgomp_la_DEPENDENCIES = $(libgomp_version_dep)
  libgomp_la_LINK = $(LINK) $(libgomp_la_LDFLAGS)
 diff --git libgomp/configure libgomp/configure
-index 718a76b..91c1621 100755
+index 718a76b4a40..91c162194d5 100755
 --- libgomp/configure
 +++ libgomp/configure
 @@ -692,6 +692,8 @@ FC
@@ -16319,7 +16320,7 @@ index 718a76b..91c1621 100755
    as_fn_error $? "conditional \"MAINTAINER_MODE\" was never defined.
  Usually this means the macro was only invoked conditionally." "$LINENO" 5
 diff --git libgomp/configure.ac libgomp/configure.ac
-index 0e238b6..e7644ee 100644
+index 0e238b6a559..e7644ee5c3d 100644
 --- libgomp/configure.ac
 +++ libgomp/configure.ac
 @@ -146,6 +146,7 @@ AM_PROG_LIBTOOL
@@ -16331,7 +16332,7 @@ index 0e238b6..e7644ee 100644
  AM_MAINTAINER_MODE
  
 diff --git libiberty/aclocal.m4 libiberty/aclocal.m4
-index 3378316..1a00b77 100644
+index 3378316dced..1a00b771fe1 100644
 --- libiberty/aclocal.m4
 +++ libiberty/aclocal.m4
 @@ -12,10 +12,61 @@
@@ -16397,7 +16398,7 @@ index 3378316..1a00b77 100644
  m4_include([../config/warnings.m4])
  m4_include([acinclude.m4])
 diff --git libiberty/configure libiberty/configure
-index 26c882e..ad9e30c 100755
+index 26c882e7a97..ad9e30c6ed3 100755
 --- libiberty/configure
 +++ libiberty/configure
 @@ -632,6 +632,8 @@ PICFLAG
@@ -16447,7 +16448,7 @@ index 26c882e..ad9e30c 100755
  : "${CONFIG_STATUS=./config.status}"
  ac_write_fail=0
 diff --git libiberty/configure.ac libiberty/configure.ac
-index dd62ce5..014d310 100644
+index dd62ce5a0b9..014d3108d86 100644
 --- libiberty/configure.ac
 +++ libiberty/configure.ac
 @@ -185,6 +185,8 @@ dnl AM_DISABLE_SHARED
@@ -16460,7 +16461,7 @@ index dd62ce5..014d310 100644
  dnl AM_CONFIG_HEADER(config.h:config.in)
  AC_CONFIG_HEADER(config.h:config.in)
 diff --git libiberty/simple-object-mach-o.c libiberty/simple-object-mach-o.c
-index 72b69d1..a8869e7 100644
+index 72b69d19c21..a8869e7c639 100644
 --- libiberty/simple-object-mach-o.c
 +++ libiberty/simple-object-mach-o.c
 @@ -1228,7 +1228,7 @@ simple_object_mach_o_write_segment (simple_object_write *sobj, int descriptor,
@@ -16473,7 +16474,7 @@ index 72b69d1..a8869e7 100644
        sechdr_offset += sechdrsize;
  
 diff --git libitm/Makefile.am libitm/Makefile.am
-index 3f31ad3..d56ef81 100644
+index 3f31ad30556..d56ef81ecb6 100644
 --- libitm/Makefile.am
 +++ libitm/Makefile.am
 @@ -54,7 +54,11 @@ libitm_version_info = -version-info $(libtool_VERSION)
@@ -16490,7 +16491,7 @@ index 3f31ad3..d56ef81 100644
  libitm_la_SOURCES = \
  	aatree.cc alloc.cc alloc_c.cc alloc_cpp.cc barrier.cc beginend.cc \
 diff --git libitm/Makefile.in libitm/Makefile.in
-index 7f53ea9..cf58ec0 100644
+index 7f53ea9b9db..cf58ec01402 100644
 --- libitm/Makefile.in
 +++ libitm/Makefile.in
 @@ -481,7 +481,10 @@ libitm_version_info = -version-info $(libtool_VERSION)
@@ -16506,7 +16507,7 @@ index 7f53ea9..cf58ec0 100644
  	barrier.cc beginend.cc clone.cc eh_cpp.cc local.cc query.cc \
  	retry.cc rwlock.cc useraction.cc util.cc sjlj.S tls.cc \
 diff --git libitm/config/aarch64/sjlj.S libitm/config/aarch64/sjlj.S
-index 58d7b33..79251fd 100644
+index 58d7b335782..79251fd6737 100644
 --- libitm/config/aarch64/sjlj.S
 +++ libitm/config/aarch64/sjlj.S
 @@ -57,10 +57,19 @@
@@ -16579,7 +16580,7 @@ index 58d7b33..79251fd 100644
  /* GNU_PROPERTY_AARCH64_* macros from elf.h for use in asm code.  */
  #define FEATURE_1_AND 0xc0000000
 diff --git libitm/configure libitm/configure
-index b8f1e23..757b7aa 100755
+index b8f1e2360d0..757b7aa2705 100755
 --- libitm/configure
 +++ libitm/configure
 @@ -660,6 +660,8 @@ libtool_VERSION
@@ -16839,7 +16840,7 @@ index b8f1e23..757b7aa 100755
    as_fn_error $? "conditional \"MAINTAINER_MODE\" was never defined.
  Usually this means the macro was only invoked conditionally." "$LINENO" 5
 diff --git libitm/configure.ac libitm/configure.ac
-index 241ec27..f86cdf3 100644
+index 241ec2790dc..f86cdf3b2b5 100644
 --- libitm/configure.ac
 +++ libitm/configure.ac
 @@ -157,6 +157,7 @@ AM_CONDITIONAL(BUILD_INFO, test $gcc_cv_prog_makeinfo_modern = "yes")
@@ -16851,7 +16852,7 @@ index 241ec27..f86cdf3 100644
  AM_MAINTAINER_MODE
  
 diff --git libitm/configure.tgt libitm/configure.tgt
-index a3d8489..8497dfb 100644
+index a3d84896cc5..8497dfb9c87 100644
 --- libitm/configure.tgt
 +++ libitm/configure.tgt
 @@ -50,7 +50,7 @@ fi
@@ -16864,7 +16865,7 @@ index a3d8489..8497dfb 100644
    rs6000 | powerpc*)
  	XCFLAGS="${XCFLAGS} -mhtm"
 diff --git libitm/testsuite/lib/libitm.exp libitm/testsuite/lib/libitm.exp
-index 6d8e3e7..9065340 100644
+index 6d8e3e71310..906534022eb 100644
 --- libitm/testsuite/lib/libitm.exp
 +++ libitm/testsuite/lib/libitm.exp
 @@ -158,6 +158,7 @@ proc libitm_init { args } {
@@ -16876,7 +16877,7 @@ index 6d8e3e7..9065340 100644
      }
  
 diff --git libitm/testsuite/libitm.c++/c++.exp libitm/testsuite/libitm.c++/c++.exp
-index 1ad49be7..36e5553 100644
+index 1ad49be734a..36e55530d5e 100644
 --- libitm/testsuite/libitm.c++/c++.exp
 +++ libitm/testsuite/libitm.c++/c++.exp
 @@ -56,8 +56,10 @@ if { $lang_test_file_found } {
@@ -16900,7 +16901,7 @@ index 1ad49be7..36e5553 100644
  
  # All done.
 diff --git libobjc/Makefile.in libobjc/Makefile.in
-index 792f342..c7311a2 100644
+index 792f34269b0..c7311a28efa 100644
 --- libobjc/Makefile.in
 +++ libobjc/Makefile.in
 @@ -264,12 +264,14 @@ LTLDFLAGS = $(shell $(SHELL) $(top_srcdir)/../libtool-ldflags $(LDFLAGS))
@@ -16919,7 +16920,7 @@ index 792f342..c7311a2 100644
  		$(LTLDFLAGS)
  
 diff --git libobjc/configure libobjc/configure
-index 5d1b424..0085c75 100755
+index 5d1b424a66d..0085c759f83 100755
 --- libobjc/configure
 +++ libobjc/configure
 @@ -636,6 +636,8 @@ OBJC_BOEHM_GC_LIBS
@@ -17115,7 +17116,7 @@ index 5d1b424..0085c75 100755
  : "${CONFIG_STATUS=./config.status}"
  ac_write_fail=0
 diff --git libobjc/configure.ac libobjc/configure.ac
-index c1104db..ea031e5 100644
+index c1104db85f0..ea031e5bb3c 100644
 --- libobjc/configure.ac
 +++ libobjc/configure.ac
 @@ -147,16 +147,6 @@ m4_rename_force([real_PRECIOUS],[_AC_ARG_VAR_PRECIOUS])
@@ -17168,7 +17169,7 @@ index c1104db..ea031e5 100644
  # Headers
  # -------
 diff --git liboffloadmic/configure liboffloadmic/configure
-index dfa8287..84447cb 100644
+index dfa8287fd75..84447cbb7eb 100644
 --- liboffloadmic/configure
 +++ liboffloadmic/configure
 @@ -639,6 +639,8 @@ link_offloadmic_host
@@ -17460,7 +17461,7 @@ index dfa8287..84447cb 100644
  : "${CONFIG_STATUS=./config.status}"
  ac_write_fail=0
 diff --git liboffloadmic/configure.ac liboffloadmic/configure.ac
-index f64f182..b96e7ea 100644
+index f64f182e8ef..b96e7eaf9e3 100644
 --- liboffloadmic/configure.ac
 +++ liboffloadmic/configure.ac
 @@ -118,6 +118,8 @@ esac
@@ -17473,7 +17474,7 @@ index f64f182..b96e7ea 100644
  # library search directory using LD_LIBRARY_PATH
  hardcode_into_libs=no
 diff --git liboffloadmic/plugin/Makefile.in liboffloadmic/plugin/Makefile.in
-index 8d5ad00..c53f2d3 100644
+index 8d5ad0025c2..c53f2d32b3b 100644
 --- liboffloadmic/plugin/Makefile.in
 +++ liboffloadmic/plugin/Makefile.in
 @@ -123,10 +123,10 @@ subdir = .
@@ -17489,7 +17490,7 @@ index 8d5ad00..c53f2d3 100644
  	$(top_srcdir)/../../ltoptions.m4 \
  	$(top_srcdir)/../../ltsugar.m4 \
 diff --git liboffloadmic/plugin/aclocal.m4 liboffloadmic/plugin/aclocal.m4
-index 9fa1d12..1bb9140 100644
+index 9fa1d1216c1..1bb91402f66 100644
 --- liboffloadmic/plugin/aclocal.m4
 +++ liboffloadmic/plugin/aclocal.m4
 @@ -1169,10 +1169,10 @@ AC_SUBST([am__untar])
@@ -17505,7 +17506,7 @@ index 9fa1d12..1bb9140 100644
  m4_include([../../ltoptions.m4])
  m4_include([../../ltsugar.m4])
 diff --git liboffloadmic/plugin/configure liboffloadmic/plugin/configure
-index 0b21d7d..a941640 100644
+index 0b21d7d4eed..a9416401a65 100644
 --- liboffloadmic/plugin/configure
 +++ liboffloadmic/plugin/configure
 @@ -635,6 +635,8 @@ LIBOBJS
@@ -17797,7 +17798,7 @@ index 0b21d7d..a941640 100644
  : "${CONFIG_STATUS=./config.status}"
  ac_write_fail=0
 diff --git liboffloadmic/plugin/configure.ac liboffloadmic/plugin/configure.ac
-index cbcd013..3329b03 100644
+index cbcd0130d05..3329b03638d 100644
 --- liboffloadmic/plugin/configure.ac
 +++ liboffloadmic/plugin/configure.ac
 @@ -134,6 +134,8 @@ esac
@@ -17810,7 +17811,7 @@ index cbcd013..3329b03 100644
  # library search directory using LD_LIBRARY_PATH
  hardcode_into_libs=no
 diff --git libphobos/configure libphobos/configure
-index b1c8ecb..5c59bcd 100755
+index b1c8ecb5673..5c59bcdcda3 100755
 --- libphobos/configure
 +++ libphobos/configure
 @@ -707,6 +707,8 @@ get_gcc_base_ver
@@ -18028,7 +18029,7 @@ index b1c8ecb..5c59bcd 100755
    as_fn_error $? "conditional \"DRUNTIME_CPU_AARCH64\" was never defined.
  Usually this means the macro was only invoked conditionally." "$LINENO" 5
 diff --git libphobos/configure.ac libphobos/configure.ac
-index 3b5a830..b3e5998 100644
+index 3b5a830cccf..b3e5998f962 100644
 --- libphobos/configure.ac
 +++ libphobos/configure.ac
 @@ -93,6 +93,7 @@ AM_PROG_LIBTOOL
@@ -18040,7 +18041,7 @@ index 3b5a830..b3e5998 100644
  # libtool variables for Phobos shared and position-independent compiles.
  #
 diff --git libphobos/libdruntime/Makefile.am libphobos/libdruntime/Makefile.am
-index a2e2bff..0302b97 100644
+index a2e2bff9e44..0302b97575d 100644
 --- libphobos/libdruntime/Makefile.am
 +++ libphobos/libdruntime/Makefile.am
 @@ -126,8 +126,12 @@ ALL_DRUNTIME_SOURCES = $(DRUNTIME_DSOURCES) $(DRUNTIME_CSOURCES) \
@@ -18058,7 +18059,7 @@ index a2e2bff..0302b97 100644
  libgdruntime_la_DEPENDENCIES = $(DRTSTUFF)
  # Also override library link commands: This is not strictly
 diff --git libphobos/libdruntime/Makefile.in libphobos/libdruntime/Makefile.in
-index cb2e372..bf6c950 100644
+index cb2e372bca0..bf6c9506efa 100644
 --- libphobos/libdruntime/Makefile.in
 +++ libphobos/libdruntime/Makefile.in
 @@ -775,8 +775,11 @@ ALL_DRUNTIME_SOURCES = $(DRUNTIME_DSOURCES) $(DRUNTIME_CSOURCES) \
@@ -18075,7 +18076,7 @@ index cb2e372..bf6c950 100644
  libgdruntime_la_LIBADD = $(LIBATOMIC) $(LIBBACKTRACE)
  libgdruntime_la_DEPENDENCIES = $(DRTSTUFF)
 diff --git libphobos/src/Makefile.am libphobos/src/Makefile.am
-index f97ddcc..ff0c7cc 100644
+index f97ddccaca8..ff0c7cc0b7c 100644
 --- libphobos/src/Makefile.am
 +++ libphobos/src/Makefile.am
 @@ -43,8 +43,12 @@ toolexeclib_DATA = libgphobos.spec
@@ -18093,7 +18094,7 @@ index f97ddcc..ff0c7cc 100644
      ../libdruntime/libgdruntime_convenience.la $(LIBZ)
  libgphobos_la_DEPENDENCIES = \
 diff --git libphobos/src/Makefile.in libphobos/src/Makefile.in
-index 4f76e10..f0f08d7 100644
+index 4f76e1077d5..f0f08d7884a 100644
 --- libphobos/src/Makefile.in
 +++ libphobos/src/Makefile.in
 @@ -501,8 +501,11 @@ toolexeclib_DATA = libgphobos.spec
@@ -18110,7 +18111,7 @@ index 4f76e10..f0f08d7 100644
  libgphobos_la_LIBADD = \
      ../libdruntime/libgdruntime_convenience.la $(LIBZ)
 diff --git libphobos/testsuite/lib/libphobos.exp libphobos/testsuite/lib/libphobos.exp
-index 3be2092..2af430a 100644
+index 3be2092b12e..2af430a0e45 100644
 --- libphobos/testsuite/lib/libphobos.exp
 +++ libphobos/testsuite/lib/libphobos.exp
 @@ -90,6 +90,13 @@ proc libphobos-dg-test { prog do_what extra_tool_flags } {
@@ -18128,7 +18129,7 @@ index 3be2092..2af430a 100644
  }
  
 diff --git libquadmath/Makefile.am libquadmath/Makefile.am
-index 35dffb4..4bf4bf6 100644
+index 35dffb46f6e..4bf4bf6eebc 100644
 --- libquadmath/Makefile.am
 +++ libquadmath/Makefile.am
 @@ -36,8 +36,13 @@ endif
@@ -18147,7 +18148,7 @@ index 35dffb4..4bf4bf6 100644
  
  nodist_libsubinclude_HEADERS = quadmath.h quadmath_weak.h
 diff --git libquadmath/Makefile.in libquadmath/Makefile.in
-index 8c01121..b59aac7 100644
+index 8c011212258..b59aac7f1ac 100644
 --- libquadmath/Makefile.in
 +++ libquadmath/Makefile.in
 @@ -355,6 +355,7 @@ INSTALL_SCRIPT = @INSTALL_SCRIPT@
@@ -18171,7 +18172,7 @@ index 8c01121..b59aac7 100644
  @BUILD_LIBQUADMATH_TRUE@libquadmath_la_DEPENDENCIES = $(version_dep) $(libquadmath_la_LIBADD)
  @BUILD_LIBQUADMATH_TRUE@nodist_libsubinclude_HEADERS = quadmath.h quadmath_weak.h
 diff --git libquadmath/configure libquadmath/configure
-index 3191850..d171c57 100755
+index 31918507f62..d171c5736de 100755
 --- libquadmath/configure
 +++ libquadmath/configure
 @@ -644,11 +644,14 @@ LIBQUAD_USE_SYMVER_GNU_FALSE
@@ -18481,7 +18482,7 @@ index 3191850..d171c57 100755
    as_fn_error $? "conditional \"MAINTAINER_MODE\" was never defined.
  Usually this means the macro was only invoked conditionally." "$LINENO" 5
 diff --git libquadmath/configure.ac libquadmath/configure.ac
-index f9d745e..2431d69 100644
+index f9d745e60ca..2431d693d63 100644
 --- libquadmath/configure.ac
 +++ libquadmath/configure.ac
 @@ -59,6 +59,7 @@ AM_PROG_LIBTOOL
@@ -18502,7 +18503,7 @@ index f9d745e..2431d69 100644
  LIBQUAD_CHECK_MATH_H_SIGNGAM
  
 diff --git libsanitizer/asan/Makefile.am libsanitizer/asan/Makefile.am
-index 2e63855..79dee90 100644
+index 2e6385509b4..79dee90c461 100644
 --- libsanitizer/asan/Makefile.am
 +++ libsanitizer/asan/Makefile.am
 @@ -60,7 +60,12 @@ libasan_la_LIBADD += $(top_builddir)/libbacktrace/libsanitizer_libbacktrace.la
@@ -18520,7 +18521,7 @@ index 2e63855..79dee90 100644
  libasan_preinit.o: asan_preinit.o
  	cp $< $@
 diff --git libsanitizer/asan/Makefile.in libsanitizer/asan/Makefile.in
-index 25c7fd7..0619b42 100644
+index 25c7fd7b759..0619b42805b 100644
 --- libsanitizer/asan/Makefile.in
 +++ libsanitizer/asan/Makefile.in
 @@ -463,7 +463,12 @@ libasan_la_LIBADD =  \
@@ -18538,7 +18539,7 @@ index 25c7fd7..0619b42 100644
  # Work around what appears to be a GNU make bug handling MAKEFLAGS
  # values defined in terms of make variables, as is the case for CC and
 diff --git libsanitizer/configure libsanitizer/configure
-index 8bdde89..28dcb2b 100755
+index 8bdde896fe7..28dcb2bde65 100755
 --- libsanitizer/configure
 +++ libsanitizer/configure
 @@ -665,6 +665,8 @@ LSAN_SUPPORTED_FALSE
@@ -18790,7 +18791,7 @@ index 8bdde89..28dcb2b 100755
    as_fn_error $? "conditional \"TSAN_SUPPORTED\" was never defined.
  Usually this means the macro was only invoked conditionally." "$LINENO" 5
 diff --git libsanitizer/configure.ac libsanitizer/configure.ac
-index ac24b4b..9174549 100644
+index ac24b4b593b..91745491ab4 100644
 --- libsanitizer/configure.ac
 +++ libsanitizer/configure.ac
 @@ -85,6 +85,8 @@ esac
@@ -18803,7 +18804,7 @@ index ac24b4b..9174549 100644
  
  if test "${multilib}" = "yes"; then
 diff --git libsanitizer/hwasan/Makefile.am libsanitizer/hwasan/Makefile.am
-index 2226f68..be5e42c 100644
+index 2226f68ab29..be5e42cfcb4 100644
 --- libsanitizer/hwasan/Makefile.am
 +++ libsanitizer/hwasan/Makefile.am
 @@ -42,7 +42,11 @@ libhwasan_la_LIBADD += $(top_builddir)/libbacktrace/libsanitizer_libbacktrace.la
@@ -18820,7 +18821,7 @@ index 2226f68..be5e42c 100644
  # Work around what appears to be a GNU make bug handling MAKEFLAGS
  # values defined in terms of make variables, as is the case for CC and
 diff --git libsanitizer/hwasan/Makefile.in libsanitizer/hwasan/Makefile.in
-index 542af8f..5457cb5 100644
+index 542af8f193e..5457cb5db1e 100644
 --- libsanitizer/hwasan/Makefile.in
 +++ libsanitizer/hwasan/Makefile.in
 @@ -434,7 +434,10 @@ libhwasan_la_SOURCES = $(hwasan_files)
@@ -18836,7 +18837,7 @@ index 542af8f..5457cb5 100644
  # Work around what appears to be a GNU make bug handling MAKEFLAGS
  # values defined in terms of make variables, as is the case for CC and
 diff --git libsanitizer/lsan/Makefile.am libsanitizer/lsan/Makefile.am
-index f4db8e3..a37cc95 100644
+index f4db8e37683..a37cc95c56f 100644
 --- libsanitizer/lsan/Makefile.am
 +++ libsanitizer/lsan/Makefile.am
 @@ -40,8 +40,12 @@ if LIBBACKTRACE_SUPPORTED
@@ -18855,7 +18856,7 @@ index f4db8e3..a37cc95 100644
  	cp $< $@
  
 diff --git libsanitizer/lsan/Makefile.in libsanitizer/lsan/Makefile.in
-index 01de442..c8e9216 100644
+index 01de442637c..c8e9216e4d1 100644
 --- libsanitizer/lsan/Makefile.in
 +++ libsanitizer/lsan/Makefile.in
 @@ -410,7 +410,12 @@ liblsan_la_LIBADD =  \
@@ -18881,7 +18882,7 @@ index 01de442..c8e9216 100644
  	cp $< $@
  
 diff --git libsanitizer/tsan/Makefile.am libsanitizer/tsan/Makefile.am
-index fb20ff7..91837f4 100644
+index fb20ff7e311..91837f43eff 100644
 --- libsanitizer/tsan/Makefile.am
 +++ libsanitizer/tsan/Makefile.am
 @@ -57,7 +57,11 @@ libtsan_la_LIBADD += $(top_builddir)/libbacktrace/libsanitizer_libbacktrace.la
@@ -18898,7 +18899,7 @@ index fb20ff7..91837f4 100644
  libtsan_preinit.o: tsan_preinit.o
  	cp $< $@
 diff --git libsanitizer/tsan/Makefile.in libsanitizer/tsan/Makefile.in
-index ce11d24..550aae5 100644
+index ce11d2497b7..550aae54730 100644
 --- libsanitizer/tsan/Makefile.in
 +++ libsanitizer/tsan/Makefile.in
 @@ -462,7 +462,10 @@ libtsan_la_DEPENDENCIES =  \
@@ -18914,7 +18915,7 @@ index ce11d24..550aae5 100644
  # Work around what appears to be a GNU make bug handling MAKEFLAGS
  # values defined in terms of make variables, as is the case for CC and
 diff --git libsanitizer/ubsan/Makefile.am libsanitizer/ubsan/Makefile.am
-index 9654fb2..bad4ea7 100644
+index 9654fb2afc4..bad4ea73f8d 100644
 --- libsanitizer/ubsan/Makefile.am
 +++ libsanitizer/ubsan/Makefile.am
 @@ -35,7 +35,12 @@ if LIBBACKTRACE_SUPPORTED
@@ -18932,7 +18933,7 @@ index 9654fb2..bad4ea7 100644
  # Use special rules for files that require RTTI support.
  ubsan_handlers_cxx.% ubsan_type_hash.% ubsan_type_hash_itanium.% : AM_CXXFLAGS += -frtti
 diff --git libsanitizer/ubsan/Makefile.in libsanitizer/ubsan/Makefile.in
-index 2775c14..6983c00 100644
+index 2775c142213..6983c008f13 100644
 --- libsanitizer/ubsan/Makefile.in
 +++ libsanitizer/ubsan/Makefile.in
 @@ -397,7 +397,12 @@ libubsan_la_SOURCES = $(ubsan_files)
@@ -18950,7 +18951,7 @@ index 2775c14..6983c00 100644
  # Work around what appears to be a GNU make bug handling MAKEFLAGS
  # values defined in terms of make variables, as is the case for CC and
 diff --git libssp/Makefile.am libssp/Makefile.am
-index 6045c32..e5c6903 100644
+index 6045c320cfa..e5c6903767a 100644
 --- libssp/Makefile.am
 +++ libssp/Makefile.am
 @@ -49,8 +49,12 @@ libssp_la_SOURCES = \
@@ -18968,7 +18969,7 @@ index 6045c32..e5c6903 100644
  libssp_nonshared_la_SOURCES = \
  	ssp-local.c
 diff --git libssp/Makefile.in libssp/Makefile.in
-index bc8a0dc..1cf8636 100644
+index bc8a0dc2b28..1cf86361b96 100644
 --- libssp/Makefile.in
 +++ libssp/Makefile.in
 @@ -376,8 +376,11 @@ libssp_la_SOURCES = \
@@ -18985,7 +18986,7 @@ index bc8a0dc..1cf8636 100644
  libssp_nonshared_la_SOURCES = \
  	ssp-local.c
 diff --git libssp/configure libssp/configure
-index 10ba209..5d62fef 100755
+index 10ba209bde8..5d62fef54a1 100755
 --- libssp/configure
 +++ libssp/configure
 @@ -636,6 +636,8 @@ LIBOBJS
@@ -19141,7 +19142,7 @@ index 10ba209..5d62fef 100755
  : "${CONFIG_STATUS=./config.status}"
  ac_write_fail=0
 diff --git libssp/configure.ac libssp/configure.ac
-index f30f81c..90778e2 100644
+index f30f81c54f6..90778e2355d 100644
 --- libssp/configure.ac
 +++ libssp/configure.ac
 @@ -165,6 +165,8 @@ AC_SUBST(enable_static)
@@ -19154,7 +19155,7 @@ index f30f81c..90778e2 100644
  # Also toolexecdir, though it's only used in toolexeclibdir
  case ${version_specific_libs} in
 diff --git libstdc++-v3/configure libstdc++-v3/configure
-index 1d5ffd8..4969713 100755
+index 1d5ffd8df11..4969713cadf 100755
 --- libstdc++-v3/configure
 +++ libstdc++-v3/configure
 @@ -776,6 +776,8 @@ GLIBCXX_HOSTED_TRUE
@@ -19442,7 +19443,7 @@ index 1d5ffd8..4969713 100755
    as_fn_error $? "conditional \"GLIBCXX_HOSTED\" was never defined.
  Usually this means the macro was only invoked conditionally." "$LINENO" 5
 diff --git libstdc++-v3/configure.ac libstdc++-v3/configure.ac
-index 4d16b09..5d22155 100644
+index 4d16b094d7f..5d22155d61d 100644
 --- libstdc++-v3/configure.ac
 +++ libstdc++-v3/configure.ac
 @@ -97,6 +97,7 @@ AM_PROG_LIBTOOL
@@ -19454,7 +19455,7 @@ index 4d16b09..5d22155 100644
  if test "$enable_vtable_verify" = yes; then
    predep_objects_CXX="${predep_objects_CXX} ${glibcxx_builddir}/../libgcc/vtv_start.o"
 diff --git libstdc++-v3/src/Makefile.am libstdc++-v3/src/Makefile.am
-index f92a5274..9f5726c 100644
+index f92a52748c5..9f5726c2ca1 100644
 --- libstdc++-v3/src/Makefile.am
 +++ libstdc++-v3/src/Makefile.am
 @@ -122,8 +122,13 @@ libstdc___la_DEPENDENCIES = \
@@ -19473,7 +19474,7 @@ index f92a5274..9f5726c 100644
  libstdc___la_LINK = $(CXXLINK) $(libstdc___la_LDFLAGS) $(lt_host_flags)
  
 diff --git libstdc++-v3/src/Makefile.in libstdc++-v3/src/Makefile.in
-index 2fff462..b2f7cb8 100644
+index 2fff46209ad..b2f7cb80c0e 100644
 --- libstdc++-v3/src/Makefile.in
 +++ libstdc++-v3/src/Makefile.in
 @@ -534,8 +534,11 @@ libstdc___la_DEPENDENCIES = \
@@ -19490,7 +19491,7 @@ index 2fff462..b2f7cb8 100644
  libstdc___la_LINK = $(CXXLINK) $(libstdc___la_LDFLAGS) $(lt_host_flags)
  @GLIBCXX_LDBL_ALT128_COMPAT_FALSE@@GLIBCXX_LDBL_COMPAT_TRUE@LTCXXCOMPILE64 = $(LTCXXCOMPILE)
 diff --git libtool.m4 libtool.m4
-index 17f8e5f..5452de0 100644
+index 17f8e5f3074..5452de03793 100644
 --- libtool.m4
 +++ libtool.m4
 @@ -1039,6 +1039,45 @@ _LT_EOF
@@ -19588,7 +19589,7 @@ index 17f8e5f..5452de0 100644
  # ---------------------------------
  # Figure out "hidden" library dependencies from verbose
 diff --git libvtv/configure libvtv/configure
-index d64b4af..4280e3b 100755
+index d64b4af5c6b..4280e3b20a9 100755
 --- libvtv/configure
 +++ libvtv/configure
 @@ -640,6 +640,8 @@ VTV_CYGMIN_FALSE
@@ -19848,7 +19849,7 @@ index d64b4af..4280e3b 100755
    as_fn_error $? "conditional \"VTV_CYGMIN\" was never defined.
  Usually this means the macro was only invoked conditionally." "$LINENO" 5
 diff --git libvtv/configure.ac libvtv/configure.ac
-index f3b937e..50aaadb 100644
+index f3b937e4b10..50aaadbb3a3 100644
 --- libvtv/configure.ac
 +++ libvtv/configure.ac
 @@ -153,6 +153,7 @@ AM_PROG_LIBTOOL
@@ -19860,7 +19861,7 @@ index f3b937e..50aaadb 100644
  # For libtool versioning info, format is CURRENT:REVISION:AGE
  libtool_VERSION=1:0:0
 diff --git lto-plugin/Makefile.in lto-plugin/Makefile.in
-index 20611c6..b33ffed 100644
+index 20611c6b1e6..b33ffed6e48 100644
 --- lto-plugin/Makefile.in
 +++ lto-plugin/Makefile.in
 @@ -350,8 +350,8 @@ libexecsub_LTLIBRARIES = liblto_plugin.la
@@ -19875,7 +19876,7 @@ index 20611c6..b33ffed 100644
  	$(libiberty_pic)),,-Wc,$(libiberty)))
  # Can be simplified when libiberty becomes a normal convenience library.
 diff --git lto-plugin/configure lto-plugin/configure
-index baa84ad..9ad4873 100755
+index baa84adbb6c..9ad4873a947 100755
 --- lto-plugin/configure
 +++ lto-plugin/configure
 @@ -634,6 +634,8 @@ LTLIBOBJS
@@ -20061,7 +20062,7 @@ index baa84ad..9ad4873 100755
  : "${CONFIG_STATUS=./config.status}"
  ac_write_fail=0
 diff --git lto-plugin/configure.ac lto-plugin/configure.ac
-index 7e6f729..14a56c1 100644
+index 7e6f729e9dc..14a56c1e88e 100644
 --- lto-plugin/configure.ac
 +++ lto-plugin/configure.ac
 @@ -51,6 +51,7 @@ AC_SUBST(real_target_noncanonical)
@@ -20073,7 +20074,7 @@ index 7e6f729..14a56c1 100644
  AC_SUBST(target_noncanonical)
  AC_TYPE_INT64_T
 diff --git zlib/configure zlib/configure
-index f489f31..f7adce0 100755
+index f489f31bc70..f7adce0db2c 100755
 --- zlib/configure
 +++ zlib/configure
 @@ -639,6 +639,8 @@ TARGET_LIBRARY_FALSE
@@ -20228,7 +20229,7 @@ index f489f31..f7adce0 100755
    as_fn_error $? "conditional \"TARGET_LIBRARY\" was never defined.
  Usually this means the macro was only invoked conditionally." "$LINENO" 5
 diff --git zlib/configure.ac zlib/configure.ac
-index be1cfe2..2327d00 100644
+index be1cfe29651..2327d003a05 100644
 --- zlib/configure.ac
 +++ zlib/configure.ac
 @@ -64,6 +64,7 @@ GCC_CET_FLAGS(CET_FLAGS)

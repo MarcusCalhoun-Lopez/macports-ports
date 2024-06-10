@@ -5,8 +5,8 @@ PortGroup           gcc_build           1.0
 
 name                gcc11
 version             11.4.0
-subport ${name}     { revision 1 }
-subport lib${name}  { revision 1 }
+subport ${name}     { revision 2 }
+subport lib${name}  { revision 2 }
 epoch               2
 
 platforms           {darwin >= 10 < 22}
@@ -20,8 +20,8 @@ libgcc.depends_lib  port:libiconv
 
 if { ${os.platform} eq "darwin" } {
     # Patch generated from https://github.com/iains/gcc-11-branch
-    # git diff --no-prefix releases/gcc-11.3.0 gcc-11.3-darwin-r2
-    patchfiles-append  patch-darwin-gcc.diff
+    # git diff --no-prefix ff4bf326d03e750a8d4905ea49425fe7d15a04b8 gcc-11.4-darwin-r0
+    patchfiles-append   patch-darwin-gcc.diff
 }
 
 # see https://trac.macports.org/ticket/29067
