@@ -5,8 +5,8 @@ PortGroup           gcc_build           1.0
 
 name                gcc12
 version             12.3.0
-subport ${name}     { revision 4 }
-subport lib${name}  { revision 4 }
+subport ${name}     { revision 5 }
+subport lib${name}  { revision 5 }
 epoch               1
 
 platforms           {darwin >= 10}
@@ -16,13 +16,13 @@ checksums           rmd160  bcc2a72fbbee69d031e1ca31c7236c65352397d4 \
                     size    85491976
 
 if { ${os.platform} eq "darwin" } {
-    # Patch generated from https://github.com/iains/gcc-12-branch
-    # git diff --no-prefix releases/gcc-12.2.0 gcc-12.2-darwin-r0
+    # patch generated from https://github.com/iains/gcc-12-branch
+    #     git diff --no-prefix 8fc1a49c9312b05d925b7d21f1d2145d70818151 gcc-12.3-darwin-r0
     patchfiles-append   patch-darwin-gcc.diff
 }
 
 # see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=111632
-patchfiles-append   patch-avoid-over-poisoning.diff
+patchfiles-append       patch-avoid-over-poisoning.diff
 
 # see https://trac.macports.org/ticket/29067
 # see https://trac.macports.org/ticket/29104
