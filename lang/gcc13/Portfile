@@ -4,31 +4,24 @@ PortSystem                              1.0
 PortGroup           gcc_build           1.0
 
 name                gcc13
-version             13.2.0
+version             13.3.0
 subport ${name}     { revision 0 }
 subport lib${name}  { revision 0 }
 
 platforms           {darwin >= 10}
 
-checksums           rmd160  a6d646ed9765f973d3f63ef560edf4a50cf686c3 \
-                    sha256  e275e76442a6067341a27f04c5c6b83d8613144004c0413528863dc6b5c743da \
-                    size    87858592
+checksums           rmd160  a01df0d39af53b8bef8ff42f87469212589984ec \
+                    sha256  0845e9621c9543a13f484e94584a49ffc0129970e9914624235fc1d061a0c083 \
+                    size    87909952
 
 if { ${os.platform} eq "darwin" } {
-    # Patch generated from https://github.com/iains/gcc-13-branch
-    # git diff --no-prefix releases/gcc-13.1.0 gcc-13.1-darwin-r0
-    patchfiles-append      patch-darwin-gcc.diff
-    # GCC fixinc work-around for sys/ucred.h on OSX10.14.4 no longer seems to work ???
-    if { ${os.major} == 18 } {
-        patchfiles-append  patch-OSX10.14-ucred-atomic-define.diff
-    }
+    # patch generated from https://github.com/iains/gcc-13-branch
+    #     git diff --no-prefix b71f1de6e9cf7181a288c0f39f9b1ef6580cf5c8 gcc-13.3-darwin-r1
+    patchfiles-append   patch-darwin-gcc.diff
 }
 
 # see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=115416
 patchfiles-append       patch-disable-sys-header-missing-abort.diff
-
-# see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=111632
-patchfiles-append   patch-avoid-over-poisoning.diff
 
 # see https://trac.macports.org/ticket/29067
 # see https://trac.macports.org/ticket/29104

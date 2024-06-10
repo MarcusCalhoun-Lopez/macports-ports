@@ -2,7 +2,7 @@ diff --git gcc/Makefile.in gcc/Makefile.in
 index 6001c9e3b55..6aed2cda3ca 100644
 --- gcc/Makefile.in
 +++ gcc/Makefile.in
-@@ -532,11 +532,7 @@ LINKER_PLUGIN_API_H = $(srcdir)/../include/plugin-api.h
+@@ -535,11 +535,7 @@ LINKER_PLUGIN_API_H = $(srcdir)/../include/plugin-api.h
  # Default native SYSTEM_HEADER_DIR, to be overridden by targets.
  NATIVE_SYSTEM_HEADER_DIR = @NATIVE_SYSTEM_HEADER_DIR@
  # Default cross SYSTEM_HEADER_DIR, to be overridden by targets.
