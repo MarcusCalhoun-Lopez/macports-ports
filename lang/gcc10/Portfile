@@ -18,7 +18,7 @@ checksums           rmd160  5095b725b8846a4946495f5415aab02c3352d763 \
 if { ${os.platform} eq "darwin" } {
     # Patch generated from https://github.com/iains/gcc-10-branch
     # git diff --no-prefix  releases/gcc-10.4.0 gcc-10-4-darwin-pre-r0
-    patchfiles-append   patch-darwin-gcc-${version}.diff
+    patchfiles-append   patch-darwin-gcc.diff
     # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=92061
     patchfiles-append   patch-genconditions.diff
 }

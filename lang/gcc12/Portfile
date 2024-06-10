@@ -18,7 +18,7 @@ checksums           rmd160  bcc2a72fbbee69d031e1ca31c7236c65352397d4 \
 if { ${os.platform} eq "darwin" } {
     # Patch generated from https://github.com/iains/gcc-12-branch
     # git diff --no-prefix releases/gcc-12.2.0 gcc-12.2-darwin-r0
-    patchfiles-append   patch-darwin-gcc-${version}.diff
+    patchfiles-append   patch-darwin-gcc.diff
 }
 
 # see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=111632

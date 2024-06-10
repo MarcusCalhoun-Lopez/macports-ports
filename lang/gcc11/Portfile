@@ -21,7 +21,7 @@ libgcc.depends_lib  port:libiconv
 if { ${os.platform} eq "darwin" } {
     # Patch generated from https://github.com/iains/gcc-11-branch
     # git diff --no-prefix releases/gcc-11.3.0 gcc-11.3-darwin-r2
-    patchfiles-append  patch-darwin-gcc-${version}.diff
+    patchfiles-append  patch-darwin-gcc.diff
 }
 
 # see https://trac.macports.org/ticket/29067
