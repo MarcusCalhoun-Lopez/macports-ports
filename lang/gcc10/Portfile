@@ -4,20 +4,20 @@ PortSystem                              1.0
 PortGroup           gcc_build           1.0
 
 name                gcc10
-version             10.4.0
-subport ${name}     { revision 5 }
-subport lib${name}  { revision 5 }
+version             10.5.0
+subport ${name}     { revision 0 }
+subport lib${name}  { revision 0 }
 epoch               7
 
 platforms           {darwin >= 10 < 22}
 
-checksums           rmd160  5095b725b8846a4946495f5415aab02c3352d763 \
-                    sha256  c9297d5bcd7cb43f3dfc2fed5389e948c9312fd962ef6a4ce455cff963ebe4f1 \
-                    size    75018092
+checksums           rmd160  6903815a42b52e9539ac69b1da2f0c2b65d25bca \
+                    sha256  25109543fdf46f397c347b5d8b7a2c7e5694a5a51cce4b9c6e1ea8a71ca307c1 \
+                    size    77846412
 
 if { ${os.platform} eq "darwin" } {
     # Patch generated from https://github.com/iains/gcc-10-branch
-    # git diff --no-prefix  releases/gcc-10.4.0 gcc-10-4-darwin-pre-r0
+    # git diff --no-prefix d04fe5541c53cb16d1ca5c80da044b4c7633dbc6 gcc-10-5Dr0-pre-0
     patchfiles-append   patch-darwin-gcc.diff
     # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=92061
     patchfiles-append   patch-genconditions.diff
